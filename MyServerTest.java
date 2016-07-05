@@ -26,8 +26,7 @@ public class MyServerTest {
     }
 
     @Test
-    public void respondsWith200() throws IOException {
-        MyServer.main(new String[] {"something"});
-        assertEquals("HTTP/1.1 200 OK\n", outContent.toString());
+    public void generateHeader() throws IOException {
+        assertEquals("HTTP/1.1 200 OK", MyServer.generateHeader());
     }
 }

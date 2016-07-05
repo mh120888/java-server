@@ -13,7 +13,8 @@ public class MyServer {
                 Socket socket = server.accept();
                 try {
                     PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                    out.println("HTTP/1.1 200 OK");
+                    String output = generateHeader();
+                    out.println(output);
                 } finally {
                     socket.close();
                 }
@@ -25,5 +26,9 @@ public class MyServer {
         } finally {
             server.close();
         }
+    }
+
+    public static String generateHeader() {
+        return "HTTP/1.1 200 OK";
     }
 }
