@@ -1,8 +1,9 @@
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
+
+import java.net.*;
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -26,7 +27,20 @@ public class MyServerTest {
     }
 
     @Test
-    public void generateHeader() throws IOException {
-        assertEquals("HTTP/1.1 200 OK", MyServer.generateHeader());
+    public void testValidateMethodWithValidMethod() {
+        boolean result = MyServer.validateMethod("GET");
+        assertTrue("Valid method should return true", result);
+    }
+
+    @Test
+    public void testValidateMethodWithAnotherValidMethod() {
+        boolean result = MyServer.validateMethod("PUT");
+        assertTrue("Valid method should return true", result);
+    }
+
+    @Test
+    public void testValidateMethodWithInvalidMethod() {
+        boolean result = MyServer.validateMethod("NOTVALID");
+        assertFalse("Invalid method should return false", result);
     }
 }

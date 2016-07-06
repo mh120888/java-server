@@ -3,6 +3,7 @@
  */
 import java.io.*;
 import java.net.*;
+import java.util.Arrays;
 
 public class MyServer {
 
@@ -11,9 +12,11 @@ public class MyServer {
         try {
             while (true) {
                 Socket socket = server.accept();
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 try {
-                    PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                    String output = generateHeader();
+                    String input = in.readLine().trim();
+                    String output = generateIRL(input);
                     out.println(output);
                 } finally {
                     socket.close();
@@ -28,7 +31,17 @@ public class MyServer {
         }
     }
 
-    public static String generateHeader() {
-        return "HTTP/1.1 200 OK";
+    public static boolean validateMethod(String method) {
+        String[] validMethods = {"GET", "POST", "PUT", "PATCH", "DELETE" };
+        boolean result = Arrays.asList(validMethods).contains(method);
+        return result;
+    }
+
+    public static String generateIRL(String input) {
+        if (validateMethod(input.split(" ")[0])) {
+            return "HTTP/1.1 200 OK\n";
+        } else {
+            return "HTTP/1.1 404 Not Found\n";
+        }
     }
 }
