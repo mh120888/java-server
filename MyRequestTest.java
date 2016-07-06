@@ -46,4 +46,31 @@ public class MyRequestTest {
         MyRequest request = new MyRequest("GET /somepath HTTP/1.0");
         assertEquals("/somepath", request.path);
     }
+
+    @Test
+    public void newRequestHasAnHTTPVersionInstanceVariable() {
+        MyRequest request = new MyRequest("GET / HTTP/1.0");
+        assertEquals("HTTP/1.0", request.httpversion);
+    }
+
+    @Test
+    public void testValidateMethodWithValidMethod() {
+        MyRequest request = new MyRequest("GET / HTTP/1.0");
+        boolean result = request.validateMethod();
+        assertTrue("Valid method should return true", result);
+    }
+
+    @Test
+    public void testValidateMethodWithAnotherValidMethod() {
+        MyRequest request = new MyRequest("PUT / HTTP/1.0");
+        boolean result = request.validateMethod();
+        assertTrue("Valid method should return true", result);
+    }
+
+    @Test
+    public void testValidateMethodWithInvalidMethod() {
+        MyRequest request = new MyRequest("NOTVALID / HTTP/1.0");
+        boolean result = request.validateMethod();
+        assertFalse("Invalid method should return false", result);
+    }
 }
