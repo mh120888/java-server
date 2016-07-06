@@ -3,7 +3,6 @@
  */
 import java.io.*;
 import java.net.*;
-import java.util.Arrays;
 
 public class MyServer {
 
@@ -16,7 +15,8 @@ public class MyServer {
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 try {
                     String input = in.readLine().trim();
-                    String output = generateIRL(input);
+                    MyResponse response = new MyResponse(new MyRequest(input));
+                    String output = response.getResponse();
                     out.println(output);
                 } finally {
                     socket.close();
@@ -28,20 +28,6 @@ public class MyServer {
             System.exit(-1);
         } finally {
             server.close();
-        }
-    }
-
-    public static boolean validateMethod(String method) {
-        String[] validMethods = {"GET", "POST", "PUT", "PATCH", "DELETE" };
-        boolean result = Arrays.asList(validMethods).contains(method);
-        return result;
-    }
-
-    public static String generateIRL(String input) {
-        if (validateMethod(input.split(" ")[0])) {
-            return "HTTP/1.1 200 OK\n";
-        } else {
-            return "HTTP/1.1 404 Not Found\n";
         }
     }
 }
