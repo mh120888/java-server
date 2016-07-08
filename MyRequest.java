@@ -25,17 +25,22 @@ public class MyRequest {
     }
 
     public boolean validatePath() {
-        return (pathExists()|| method.equals("POST") || method.equals("PUT"));
+        return (isPathAResource() || isPathAProcess() || method.equals("POST") || method.equals("PUT"));
     }
 
     public boolean isCoffee() {
         return (path.equals("/coffee"));
     }
 
-    private boolean pathExists() {
+    private boolean isPathAResource() {
         File file = new File("/Users/matthewhiggins/Desktop/cob_spec/public");
         String[] fileNames = file.list();
-        boolean result = ((path.equals("/")) || path.equals("/tea") || Arrays.asList(fileNames).contains(path.replace("/", "")));
+        boolean result = ((path.equals("/")) || Arrays.asList(fileNames).contains(path.replace("/", "")));
         return result;
+    }
+
+    private boolean isPathAProcess() {
+        String[] pathsThatAreProcesses = {"/tea", "/coffee"};
+        return Arrays.asList(pathsThatAreProcesses).contains(path);
     }
 }
