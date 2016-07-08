@@ -28,20 +28,20 @@ public class MyResponseTest {
     public void defaultResponseIs200() {
         MyRequest request = new MyRequest("GET / HTTP/1.0");
         MyResponse response = new MyResponse(request);
-        assertEquals(response.getResponse(), "HTTP/1.1 200 OK\n");
+        assertTrue(response.getResponse().contains("HTTP/1.1 200 OK"));
     }
 
     @Test
     public void returns405ForInvalidMethod() {
         MyRequest request = new MyRequest("NOTAREALMETHOD / HTTP/1.0");
         MyResponse response = new MyResponse(request);
-        assertEquals(response.getResponse(), "HTTP/1.1 405 Method Not Allowed\n");
+        assertTrue(response.getResponse().contains("HTTP/1.1 405 Method Not Allowed"));
     }
 
     @Test
     public void returns404ForAnUnknownPath() {
         MyRequest request = new MyRequest("GET /foobar HTTP/1.0");
         MyResponse response = new MyResponse(request);
-        assertEquals(response.getResponse(), "HTTP/1.1 404 Not Found\n");
+        assertTrue(response.getResponse().contains("HTTP/1.1 404 Not Found"));
     }
 }
