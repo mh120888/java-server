@@ -28,10 +28,14 @@ public class MyRequest {
         return (pathExists()|| method.equals("POST") || method.equals("PUT"));
     }
 
+    public boolean isCoffee() {
+        return (path.equals("/coffee"));
+    }
+
     private boolean pathExists() {
         File file = new File("/Users/matthewhiggins/Desktop/cob_spec/public");
         String[] fileNames = file.list();
-        boolean result = ((path.equals("/")) || Arrays.asList(fileNames).contains(path.replace("/", "")));
+        boolean result = ((path.equals("/")) || path.equals("/tea") || Arrays.asList(fileNames).contains(path.replace("/", "")));
         return result;
     }
 }

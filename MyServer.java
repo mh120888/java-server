@@ -16,7 +16,7 @@ public class MyServer {
                 try {
                     String input = in.readLine().trim();
                     MyResponse response = new MyResponse(new MyRequest(input));
-                    String output = response.getResponse();
+                    String output = response.buildResponse();
                     out.println(output);
                 } finally {
                     socket.close();

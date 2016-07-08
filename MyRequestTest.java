@@ -26,12 +26,14 @@ public class MyRequestTest {
     @Test
     public void newRequestHasAMethodInstanceVariable() {
         MyRequest request = new MyRequest("GET / HTTP/1.0");
+
         assertEquals("GET", request.method);
     }
 
     @Test
     public void newRequestHasTheCorrectMethodInstanceVariable() {
         MyRequest request = new MyRequest("POST / HTTP/1.0");
+
         assertEquals(true, request.method.equals("POST"));
     }
 
@@ -44,12 +46,14 @@ public class MyRequestTest {
     @Test
     public void newRequestHasTheCorrectPathInstanceVariable() {
         MyRequest request = new MyRequest("GET /somepath HTTP/1.0");
+
         assertEquals("/somepath", request.path);
     }
 
     @Test
     public void newRequestHasAnHTTPVersionInstanceVariable() {
         MyRequest request = new MyRequest("GET / HTTP/1.0");
+
         assertEquals("HTTP/1.0", request.httpversion);
     }
 
@@ -57,6 +61,7 @@ public class MyRequestTest {
     public void testValidateMethodWithValidMethod() {
         MyRequest request = new MyRequest("GET / HTTP/1.0");
         boolean result = request.validateMethod();
+
         assertTrue("Valid method should return true", result);
     }
 
@@ -64,6 +69,7 @@ public class MyRequestTest {
     public void testValidateMethodWithAnotherValidMethod() {
         MyRequest request = new MyRequest("PUT / HTTP/1.0");
         boolean result = request.validateMethod();
+
         assertTrue("Valid method should return true", result);
     }
 
@@ -71,6 +77,7 @@ public class MyRequestTest {
     public void testValidateMethodWithInvalidMethod() {
         MyRequest request = new MyRequest("NOTVALID / HTTP/1.0");
         boolean result = request.validateMethod();
+
         assertFalse("Invalid method should return false", result);
     }
 
@@ -78,13 +85,23 @@ public class MyRequestTest {
     public void validatePathIsTrueForValidPath() {
         MyRequest request = new MyRequest("GET / HTTP/1.0");
         boolean result = request.validatePath();
+
         assertTrue("Valid path should return true", result);
+    }
+
+    @Test
+    public void validatePathIsTrueForTea() {
+        MyRequest request = new MyRequest("GET /tea HTTP/1.0");
+        boolean result = request.validatePath();
+
+        assertTrue("Tea should be a valid path", result);
     }
 
     @Test
     public void validatePathIsFalseForInvalidPath() {
         MyRequest request = new MyRequest("GET /foobar HTTP/1.0");
         boolean result = request.validatePath();
+
         assertFalse("This should be false", result);
     }
 
@@ -92,6 +109,7 @@ public class MyRequestTest {
     public void validatePathForPOSTRequestAlwaysReturnsTrue() {
         MyRequest request = new MyRequest("POST /foobar HTTP/1.0");
         boolean result = request.validatePath();
+
         assertTrue("This should be true", result);
     }
 
@@ -99,6 +117,7 @@ public class MyRequestTest {
     public void validatePathForPUTRequestAlwaysReturnsTrue() {
         MyRequest request = new MyRequest("PUT /foobar HTTP/1.0");
         boolean result = request.validatePath();
+
         assertTrue("This should be true", result);
     }
 
@@ -106,6 +125,23 @@ public class MyRequestTest {
     public void validatePathForHEADRequestReturnsFalseForInvalidPath() {
         MyRequest request = new MyRequest("HEAD /foobar HTTP/1.0");
         boolean result = request.validatePath();
+
         assertFalse("This should be false", result);
+    }
+
+    @Test
+    public void isCoffeeReturnsTrueIfPathIsCoffee() {
+        MyRequest request = new MyRequest("GET /coffee HTTP/1.0");
+        boolean result = request.isCoffee();
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void isCoffeeReturnsFalseIfPathIsNotCoffee() {
+        MyRequest request = new MyRequest("GET /notcoffee HTTP/1.0");
+        boolean result = request.isCoffee();
+
+        assertFalse(result);
     }
 }
