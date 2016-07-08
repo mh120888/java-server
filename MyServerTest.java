@@ -28,8 +28,8 @@ public class MyServerTest {
     public void fileTest() {
         File file = new File("/Users/matthewhiggins/Desktop/cob_spec/public");
         String[] fileNames = file.list();
-        boolean result = Arrays.asList(fileNames).contains("/" + "file2");
-        boolean fileExists = file.exists();
+        boolean result = Arrays.asList(fileNames).contains("file2");
+//        boolean fileExists = file.exists();
         assertTrue("Does not contain the specified file", result);
     }
 }

@@ -21,18 +21,17 @@ public class MyRequest {
 
     public boolean validateMethod() {
         String[] validMethods = {"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"};
-        boolean result = Arrays.asList(validMethods).contains(method);
-        return result;
+        return Arrays.asList(validMethods).contains(method);
     }
 
     public boolean validatePath() {
+        return (pathExists()|| method.equals("POST") || method.equals("PUT"));
+    }
+
+    private boolean pathExists() {
         File file = new File("/Users/matthewhiggins/Desktop/cob_spec/public");
         String[] fileNames = file.list();
-        boolean result = Arrays.asList(fileNames).contains(path.replace("/", ""));
-        if (method.equals("POST") || method.equals("PUT") || result || (path.equals("/"))) {
-            return true;
-        } else {
-            return false;
-        }
+        boolean result = ((path.equals("/")) || Arrays.asList(fileNames).contains(path.replace("/", "")));
+        return result;
     }
 }
