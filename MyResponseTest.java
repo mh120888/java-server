@@ -72,4 +72,29 @@ public class MyResponseTest {
 
         assertTrue(response.buildResponse().contains("HTTP/1.1 200 OK"));
     }
+
+    @Test
+    public void requestToLogsWithoutProperCredentialsReturns401() {
+        MyRequest request = new MyRequest("GET /logs HTTP/1.0");
+        MyResponse response = new MyResponse(request);
+
+        assertTrue(response.buildResponse().contains("HTTP/1.1 401 Unauthorized"));
+    }
+
+    @Test
+    public void requestToLogsWithoutProperCredentialsReturnsWWWAuthenticateHeader() {
+        MyRequest request = new MyRequest("GET /logs HTTP/1.0");
+        MyResponse response = new MyResponse(request);
+
+        assertTrue(response.buildResponse().contains("WWW-Authenticate: Basic realm=\"User Visible Realm\""));
+    }
+
+    @Test
+    public void getIndexResponseIncludesLinksToOtherResourcesInPublic() {
+        MyRequest request = new MyRequest("GET / HTTPS/1.0");
+        MyResponse response = new MyResponse(request);
+
+        assertTrue(response.buildResponse().contains("<a href=\"/file1\">file1</a>"));
+    }
 }
+

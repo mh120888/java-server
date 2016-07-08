@@ -10,14 +10,14 @@ public class MyServer {
         ServerSocket server = new ServerSocket(5000);
         try {
             while (true) {
-                Socket socket = server.accept();
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                try {
-                    String input = in.readLine().trim();
-                    MyResponse response = new MyResponse(new MyRequest(input));
-                    String output = response.buildResponse();
-                    out.println(output);
+            Socket socket = server.accept();
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            try {
+                String input = in.readLine().trim();
+                MyResponse response = new MyResponse(new MyRequest(input));
+                String output = response.buildResponse();
+                out.println(output);
                 } finally {
                     socket.close();
                 }

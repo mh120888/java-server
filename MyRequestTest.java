@@ -40,6 +40,7 @@ public class MyRequestTest {
     @Test
     public void newRequestHasAPathInstanceVariable() {
         MyRequest request = new MyRequest("GET / HTTP/1.0");
+
         assertEquals("/", request.path);
     }
 
@@ -141,6 +142,22 @@ public class MyRequestTest {
     public void isCoffeeReturnsFalseIfPathIsNotCoffee() {
         MyRequest request = new MyRequest("GET /notcoffee HTTP/1.0");
         boolean result = request.isCoffee();
+
+        assertFalse(result);
+    }
+
+    @Test
+    public void requiresAuthorizationReturnsTrueForAProtectedResource() {
+        MyRequest request = new MyRequest("GET /logs HTTP/1.0");
+        boolean result = request.requiresAuthorization();
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void requiresAuthorizationReturnsFalseForAnUnrotectedResource() {
+        MyRequest request = new MyRequest("GET / HTTP/1.0");
+        boolean result = request.requiresAuthorization();
 
         assertFalse(result);
     }

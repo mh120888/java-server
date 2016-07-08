@@ -32,6 +32,11 @@ public class MyRequest {
         return (path.equals("/coffee"));
     }
 
+    public boolean requiresAuthorization() {
+        String[] pathsThatRequireAuthorization = {"/logs"};
+        return Arrays.asList(pathsThatRequireAuthorization).contains(path);
+    }
+
     private boolean isPathAResource() {
         File file = new File("/Users/matthewhiggins/Desktop/cob_spec/public");
         String[] fileNames = file.list();
