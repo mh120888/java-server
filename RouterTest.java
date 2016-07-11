@@ -20,11 +20,27 @@ public class RouterTest {
 
     }
 
-//    @Test
-//    public void getEndpointReturnsStaticResourceEndpointForAStaticResource() {
-//        HashMap<String, String> request = HTTPRequestParser.parse("GET / HTTP/1.0");
-//        Endpoint endpoint = Router.getEndpoint(request);
-//
-//        assertTrue(endpoint instanceof StaticResourceEndpoint);
-//    }
+    @Test
+    public void getEndpointReturnsStaticResourceEndpointForAStaticResource() {
+        HashMap<String, String> request = HTTPRequestParser.parse("GET / HTTP/1.0");
+        Endpoint endpoint = Router.getEndpoint(request);
+
+        assertTrue(endpoint instanceof StaticResourceEndpoint);
+    }
+
+    @Test
+    public void getEndpointReturnsCoffeeEndpointWhenAppropriate() {
+        HashMap<String, String> request = HTTPRequestParser.parse("GET /coffee HTTP/1.0");
+        Endpoint endpoint = Router.getEndpoint(request);
+
+        assertTrue(endpoint instanceof CoffeeEndpoint);
+    }
+
+    @Test
+    public void getEndpointReturnsNotFoundEndpointWhenPathIsNotRecognized() {
+        HashMap<String, String> request = HTTPRequestParser.parse("GET /foobar HTTP/1.0");
+        Endpoint endpoint = Router.getEndpoint(request);
+
+        assertTrue(endpoint instanceof NotFoundEndpoint);
+    }
 }

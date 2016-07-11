@@ -3,7 +3,7 @@ import java.util.HashMap;
 /**
  * Created by matthewhiggins on 7/11/16.
  */
-public class NotFoundEndpoint {
+public class NotFoundEndpoint implements Endpoint {
     public NotFoundEndpoint() {}
 
     public HashMap<String, String> getResponseData(HashMap<String, String> requestData) {
