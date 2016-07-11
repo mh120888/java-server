@@ -5,15 +5,17 @@ import java.util.HashMap;
  * Created by matthewhiggins on 7/11/16.
  */
 public class StaticResourceEndpoint {
-    public static HashMap<String, String> getResponseData(HashMap<String, String> requestData) {
+    public StaticResourceEndpoint() {}
+
+    public HashMap<String, String> getResponseData(HashMap<String, String> requestData) {
         HashMap<String, String> responseData = new HashMap<>();
         responseData.put("responseLine", getRequestLine(requestData));
         responseData.put("body", getBody(requestData));
 
         return responseData;
-    };
+    }
 
-    private static String getRequestLine(HashMap<String, String> requestData) {
+    private String getRequestLine(HashMap<String, String> requestData) {
         String method = requestData.get("method");
         String path = requestData.get("path");
 
@@ -24,7 +26,7 @@ public class StaticResourceEndpoint {
         }
     }
 
-    private static String getBody(HashMap<String, String> requestData) {
+    private String getBody(HashMap<String, String> requestData) {
         String method = requestData.get("method");
         String body = "";
 

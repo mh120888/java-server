@@ -22,48 +22,54 @@ public class StaticResourceEndpointTest {
 
     @Test
     public void getReponseDataReturnsCorrectResponseLineForGet() {
+        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
         HashMap<String, String> request = HTTPRequestParser.parse("GET / HTTP/1.0");
-        HashMap<String, String> response = StaticResourceEndpoint.getResponseData(request);
+        HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
     }
 
     @Test
     public void getResponseDataReturns405ForInvalidMethods() {
+        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
         HashMap<String, String> request = HTTPRequestParser.parse("NOTAREALMETHOD / HTTP/1.0");
-        HashMap<String, String> response = StaticResourceEndpoint.getResponseData(request);
+        HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("HTTP/1.1 405 Method Not Allowed", response.get("responseLine"));
     }
 
     @Test
     public void getIndexResponseIncludesLinksToOtherResourcesInPublic() {
+        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
         HashMap<String, String> request = HTTPRequestParser.parse("GET / HTTP/1.0");
-        HashMap<String, String> response = StaticResourceEndpoint.getResponseData(request);
+        HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertTrue(response.get("body").contains("<a href=\"/file1\">file1</a>"));
     }
 
     @Test
     public void postRequestWithNoParamsReturnsA405() {
+        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
         HashMap<String, String> request = HTTPRequestParser.parse("POST / HTTP/1.0");
-        HashMap<String, String> response = StaticResourceEndpoint.getResponseData(request);
+        HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("HTTP/1.1 405 Method Not Allowed", response.get("responseLine"));
     }
 
     @Test
     public void postRequestWithParamsReturnsA200() {
+        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
         HashMap<String, String> request = HTTPRequestParser.parse("POST / HTTP/1.0\r\n\nsomeParam=something");
-        HashMap<String, String> response = StaticResourceEndpoint.getResponseData(request);
+        HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
     }
 
     @Test
     public void putRequestWithParamsReturnsA200() {
+        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
         HashMap<String, String> request = HTTPRequestParser.parse("PUT / HTTP/1.0\r\n\nsomeParam=something");
-        HashMap<String, String> response = StaticResourceEndpoint.getResponseData(request);
+        HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
     }

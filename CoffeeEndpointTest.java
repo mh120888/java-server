@@ -22,24 +22,27 @@ public class CoffeeEndpointTest {
 
     @Test
     public void returns418ForGETCoffee() {
+        CoffeeEndpoint endpoint = new CoffeeEndpoint();
         HashMap<String, String> request = HTTPRequestParser.parse("GET /coffee HTTP/1.0");
-        HashMap<String, String> response = CoffeeEndpoint.getResponseData(request);
+        HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("HTTP/1.1 418", response.get("responseLine"));
     }
 
     @Test
     public void bodyContainsCorrectStringIfPathIsCoffee() {
+        CoffeeEndpoint endpoint = new CoffeeEndpoint();
         HashMap<String, String> request = HTTPRequestParser.parse("GET /coffee HTTP/1.0");
-        HashMap<String, String> response = CoffeeEndpoint.getResponseData(request);
+        HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertTrue(response.get("body").contains("I'm a teapot"));
     }
 
     @Test
     public void returns200ForGETTea() {
+        CoffeeEndpoint endpoint = new CoffeeEndpoint();
         HashMap<String, String> request = HTTPRequestParser.parse("GET /tea HTTP/1.0");
-        HashMap<String, String> response = CoffeeEndpoint.getResponseData(request);
+        HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
     }

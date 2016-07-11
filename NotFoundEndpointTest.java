@@ -22,8 +22,10 @@ public class NotFoundEndpointTest {
 
     @Test
     public void returnsAStatusOf404() {
+        NotFoundEndpoint endpoint = new NotFoundEndpoint();
+
         HashMap<String, String> request = HTTPRequestParser.parse("GET /foobar HTTP/1.0");
-        HashMap<String, String> response = NotFoundEndpoint.getResponseData(request);
+        HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("HTTP/1.1 404 Not Found", response.get("responseLine"));
     }
