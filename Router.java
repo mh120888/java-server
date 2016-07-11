@@ -15,6 +15,8 @@ public class Router {
             return new StaticResourceEndpoint();
         } else if (path.equals("/coffee") || path.equals("/tea")) {
             return new CoffeeEndpoint();
+        } else if (path.equals("/form")) {
+            return new PostableEndpoint();
         } else {
             return new NotFoundEndpoint();
         }

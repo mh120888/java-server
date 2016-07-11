@@ -5,7 +5,7 @@ import java.util.HashMap;
  */
 public class HTTPRequestParser {
     public static HashMap<String, String> parse(String request) {
-        String[] breakUpRequest = request.split("\r\n\n");
+        String[] breakUpRequest = request.split("\n\n");
 
         String[] splitIRL = breakUpRequest[0].split(" ");
         HashMap<String, String> result = new HashMap<>();
@@ -15,7 +15,7 @@ public class HTTPRequestParser {
         result.put("httpVersion", splitIRL[2]);
 
         if (breakUpRequest.length > 1) {
-            result.put("body", "username=zurfyx&pass=password");
+            result.put("body", breakUpRequest[1]);
         }
 
         return result;

@@ -57,7 +57,7 @@ public class HTTPRequestParserTest {
 
     @Test
     public void parseReturnsRequestBodyForPOSTRequestsWithParams() {
-        HashMap<String, String> result = HTTPRequestParser.parse("POST / HTTP/1.0\r\n\nusername=zurfyx&pass=password");
+        HashMap<String, String> result = HTTPRequestParser.parse("POST / HTTP/1.0\n\nusername=zurfyx&pass=password");
 
         assertEquals("username=zurfyx&pass=password", result.get("body"));
     }

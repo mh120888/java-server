@@ -19,7 +19,7 @@ public class StaticResourceEndpoint implements Endpoint {
         String method = requestData.get("method");
         String path = requestData.get("path");
 
-        if (method.equals("GET") || ((method.equals("POST") || method.equals("PUT")) && requestData.containsKey("body"))) {
+        if (method.equals("GET") || method.equals("HEAD") || (method.equals("POST") || (method.equals("PUT"))) && requestData.containsKey("body")) {
             return "HTTP/1.1 200 OK";
         } else {
             return "HTTP/1.1 405 Method Not Allowed";
