@@ -43,4 +43,28 @@ public class StaticResourceEndpointTest {
 
         assertTrue(response.get("body").contains("<a href=\"/file1\">file1</a>"));
     }
+
+    @Test
+    public void postRequestWithNoParamsReturnsA405() {
+        HashMap<String, String> request = HTTPRequestParser.parse("POST / HTTP/1.0");
+        HashMap<String, String> response = StaticResourceEndpoint.getResponseData(request);
+
+        assertEquals("HTTP/1.1 405 Method Not Allowed", response.get("responseLine"));
+    }
+
+    @Test
+    public void postRequestWithParamsReturnsA200() {
+        HashMap<String, String> request = HTTPRequestParser.parse("POST / HTTP/1.0\r\n\nsomeParam=something");
+        HashMap<String, String> response = StaticResourceEndpoint.getResponseData(request);
+
+        assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
+    }
+
+    @Test
+    public void putRequestWithParamsReturnsA200() {
+        HashMap<String, String> request = HTTPRequestParser.parse("PUT / HTTP/1.0\r\n\nsomeParam=something");
+        HashMap<String, String> response = StaticResourceEndpoint.getResponseData(request);
+
+        assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
+    }
 }

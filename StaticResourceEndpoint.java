@@ -17,7 +17,7 @@ public class StaticResourceEndpoint {
         String method = requestData.get("method");
         String path = requestData.get("path");
 
-        if (method.equals("GET")) {
+        if (method.equals("GET") || ((method.equals("POST") || method.equals("PUT")) && requestData.containsKey("body"))) {
             return "HTTP/1.1 200 OK";
         } else {
             return "HTTP/1.1 405 Method Not Allowed";
@@ -26,17 +26,17 @@ public class StaticResourceEndpoint {
 
     private static String getBody(HashMap<String, String> requestData) {
         String method = requestData.get("method");
-        String response = "";
+        String body = "";
 
         if (method.equals("GET")) {
             File file = new File(Endpoint.FILEPATH);
             String[] fileNames = file.list();
 
             for (String fileName : fileNames) {
-                response += ("<a href=\"/" + fileName + "\">" + fileName + "</a>\n");
+                body += ("<a href=\"/" + fileName + "\">" + fileName + "</a>\n");
             }
         }
 
-        return response;
+        return body;
     }
 }

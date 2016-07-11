@@ -54,4 +54,18 @@ public class HTTPRequestParserTest {
 
         assertEquals("HTTP/1.0", result.get("httpVersion"));
     }
+
+    @Test
+    public void parseReturnsRequestBodyForPOSTRequestsWithParams() {
+        HashMap<String, String> result = HTTPRequestParser.parse("POST / HTTP/1.0\r\n\nusername=zurfyx&pass=password");
+
+        assertEquals("username=zurfyx&pass=password", result.get("body"));
+    }
+
+    @Test
+    public void parseReturnsNoBodyForGetRequests() {
+        HashMap<String, String> result = HTTPRequestParser.parse("GET / HTTP/1.0");
+
+        assertEquals(null, result.get("body"));
+    }
 }
