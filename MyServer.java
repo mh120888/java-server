@@ -3,6 +3,7 @@
  */
 import java.io.*;
 import java.net.*;
+import java.util.HashMap;
 
 public class MyServer {
 
@@ -14,9 +15,16 @@ public class MyServer {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             try {
-                String input = in.readLine().trim();
-                MyResponse response = new MyResponse(new MyRequest(input));
-                String output = response.buildResponse();
+                String input = "";
+                String currentLine = in.readLine().trim();
+                while (!currentLine.isEmpty()) {
+                    input += currentLine + "\n\n";
+                    currentLine = in.readLine();
+                }
+                HashMap<String, String> parsedRequest = HTTPRequestParser.parse(input);
+                Endpoint endpoint = Router.getEndpoint(parsedRequest);
+                HashMap<String, String> responseData = endpoint.getResponseData(parsedRequest);
+                String output = HTTPResponseBuilder.buildResponse(responseData);
                 out.println(output);
                 } finally {
                     socket.close();
