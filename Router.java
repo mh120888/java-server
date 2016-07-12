@@ -10,6 +10,7 @@ public class Router {
         File file = new File(Endpoint.FILEPATH);
         String[] fileNames = file.list();
         String path = request.get("path");
+        Logger.addLog(request.get("method") + " " + path + " " + request.get("httpVersion"));
 
         if (Arrays.asList(fileNames).contains(path.replace("/", "")) || path.equals("/")) {
             return new StaticResourceEndpoint();

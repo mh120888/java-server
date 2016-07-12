@@ -3,6 +3,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -58,5 +59,15 @@ public class RouterTest {
         Endpoint endpoint = Router.getEndpoint(request);
 
         assertTrue(endpoint instanceof LogsEndpoint);
+    }
+
+    @Test
+    public void allRequestsAreLoggedAfterBeingRoutes() {
+        String requestLine = "GET /logs HTTP/1.1";
+        HashMap<String, String> request = HTTPRequestParser.parse(requestLine);
+        Router.getEndpoint(request);
+        List<String> log = Logger.getLog();
+
+        assertEquals(true, log.contains(requestLine));
     }
 }
