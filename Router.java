@@ -17,6 +17,8 @@ public class Router {
             return new CoffeeEndpoint();
         } else if (path.equals("/form")) {
             return new PostableEndpoint();
+        } else if (path.equals("/logs")) {
+            return new LogsEndpoint();
         } else {
             return new NotFoundEndpoint();
         }

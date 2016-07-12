@@ -51,4 +51,12 @@ public class RouterTest {
 
         assertTrue(endpoint instanceof PostableEndpoint);
     }
+
+    @Test
+    public void getEndpointReturnsLogsEndpointWhenAppropriatePathIsRequested() {
+        HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1");
+        Endpoint endpoint = Router.getEndpoint(request);
+
+        assertTrue(endpoint instanceof LogsEndpoint);
+    }
 }
