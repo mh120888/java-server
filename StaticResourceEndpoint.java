@@ -1,5 +1,10 @@
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 
 /**
@@ -8,15 +13,19 @@ import java.util.HashMap;
 public class StaticResourceEndpoint implements Endpoint {
     public StaticResourceEndpoint() {}
 
+    public enum Filetype {
+        DIRECTORY, IMAGE, OTHER
+    }
+
     public HashMap<String, String> getResponseData(HashMap<String, String> requestData) {
         HashMap<String, String> responseData = new HashMap<>();
-        responseData.put("responseLine", getRequestLine(requestData));
+        responseData.put("responseLine", getResponseLine(requestData));
         responseData.put("body", getBody(requestData));
 
         return responseData;
     }
 
-    private String getRequestLine(HashMap<String, String> requestData) {
+    private String getResponseLine(HashMap<String, String> requestData) {
         String method = requestData.get("method");
         String path = requestData.get("path");
 
@@ -46,15 +55,50 @@ public class StaticResourceEndpoint implements Endpoint {
     private String getBody(HashMap<String, String> requestData) {
         String method = requestData.get("method");
         String body = "";
+        if (!method.equals("GET")) {
+            return body;
+        }
+        String path = requestData.get("path");
+        Filetype filetype = getFiletype(path);
+        switch (getFiletype(path)) {
+            case DIRECTORY:
+                File file = new File(Endpoint.FILEPATH);
+                String[] fileNames = file.list();
 
-        if (method.equals("GET")) {
-            File file = new File(Endpoint.FILEPATH);
-            String[] fileNames = file.list();
-
-            for (String fileName : fileNames) {
-                body += ("<a href=\"/" + fileName + "\">" + fileName + "</a>\n");
-            }
+                for (String fileName : fileNames) {
+                    body += ("<a href=\"/" + fileName + "\">" + fileName + "</a>\n");
+                }
+                break;
+            default:
+                try {
+                    String filePath = Endpoint.FILEPATH + path;
+                    byte[] imageContents = Files.readAllBytes(Paths.get(filePath));
+                    body = new String(imageContents, Charset.defaultCharset());
+//                body += Base64.getEncoder().encodeToString(imageContents);
+                } catch (IOException e) {
+                    System.err.println(e);
+                }
+                break;
         }
         return body;
+    }
+
+    public Filetype getFiletype(String path) {
+        String[] splitUpPath = path.split("\\.");
+        String[] imageExtensions = {"png", "jpeg", "gif"};
+
+        if (isPathADirectory(path)) {
+            return Filetype.DIRECTORY;
+        } else if (Arrays.asList(imageExtensions).contains(splitUpPath[splitUpPath.length - 1])) {
+            return Filetype.IMAGE;
+        } else {
+            return Filetype.OTHER;
+        }
+    }
+
+    public boolean isPathADirectory(String path) {
+        String filePath = Endpoint.FILEPATH + path;
+        File file = new File(filePath);
+        return file.isDirectory();
     }
 }
