@@ -1,4 +1,5 @@
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -19,11 +20,27 @@ public class StaticResourceEndpoint implements Endpoint {
         String method = requestData.get("method");
         String path = requestData.get("path");
 
-        if (method.equals("GET") || method.equals("HEAD") || (method.equals("POST") || (method.equals("PUT"))) && requestData.containsKey("body")) {
+        if (isAcceptableMethodWithoutParams(method) || requestData.containsKey("body") && isAcceptableMethodWithParams(method)) {
             return "HTTP/1.1 200 OK";
         } else {
             return "HTTP/1.1 405 Method Not Allowed";
         }
+    }
+
+    private boolean isAcceptableMethodWithoutParams(String method) {
+        String[] acceptableMethodsWithoutParams = {"GET", "HEAD"};
+
+        return isAcceptableMethod(method, acceptableMethodsWithoutParams);
+    }
+
+    private boolean isAcceptableMethodWithParams(String method) {
+        String[] acceptableMethodsWithParams = {"POST", "PUT"};
+
+        return isAcceptableMethod(method, acceptableMethodsWithParams);
+    }
+
+    private boolean isAcceptableMethod(String method, String[] listOfMethods) {
+        return Arrays.asList(listOfMethods).contains(method);
     }
 
     private String getBody(HashMap<String, String> requestData) {
@@ -38,7 +55,6 @@ public class StaticResourceEndpoint implements Endpoint {
                 body += ("<a href=\"/" + fileName + "\">" + fileName + "</a>\n");
             }
         }
-
         return body;
     }
 }
