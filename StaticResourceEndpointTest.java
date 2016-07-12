@@ -137,6 +137,5 @@ public class StaticResourceEndpointTest {
         HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals(true, response.get("body").contains(new String(imageContents)));
-//        assertEquals(true, response.get("body").contains(Base64.getEncoder().encodeToString(imageContents)));
     }
 }

@@ -74,7 +74,6 @@ public class StaticResourceEndpoint implements Endpoint {
                     String filePath = Endpoint.FILEPATH + path;
                     byte[] imageContents = Files.readAllBytes(Paths.get(filePath));
                     body = new String(imageContents, Charset.defaultCharset());
-//                body += Base64.getEncoder().encodeToString(imageContents);
                 } catch (IOException e) {
                     System.err.println(e);
                 }
