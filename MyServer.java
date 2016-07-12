@@ -16,8 +16,8 @@ public class MyServer {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             try {
                 String input = "";
-                String currentLine = in.readLine();
-                while (!currentLine.equals("")) {
+                String currentLine = in.readLine().trim();
+                while (!currentLine.isEmpty()) {
                     input += currentLine + "\n\n";
                     currentLine = in.readLine();
                 }

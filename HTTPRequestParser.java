@@ -15,7 +15,7 @@ public class HTTPRequestParser {
         result.put("httpVersion", splitIRL[2]);
 
         if (breakUpRequest.length > 1) {
-            result.put("body", breakUpRequest[1]);
+            result.put("body", breakUpRequest[breakUpRequest.length - 1]);
         }
 
         return result;

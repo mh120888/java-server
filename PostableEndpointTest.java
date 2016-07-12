@@ -34,4 +34,14 @@ public class PostableEndpointTest {
 
         assertEquals("HTTP/1.1 405 Method Not Allowed", response.get("responseLine"));
     }
+
+    @Test
+    public void getResponseDataReturnsCorrectBodyContentForPostWithParams() {
+        PostableEndpoint endpoint = new PostableEndpoint();
+        endpoint.getResponseData(HTTPRequestParser.parse("POST /form HTTP/1.1\n\ndata=something"));
+        HashMap<String, String> request = HTTPRequestParser.parse("GET /form HTTP/1.1");
+        HashMap<String, String> response = endpoint.getResponseData(request);
+
+        assertEquals("data=something", response.get("body"));
+    }
 }
