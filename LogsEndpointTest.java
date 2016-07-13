@@ -40,4 +40,28 @@ public class LogsEndpointTest {
 
         assertEquals("GET /logs HTTP/1.1", response.get("body"));
     }
+
+    @Test
+    public void isAuthorizedReturnsTrueForCorrectCredentials() {
+        LogsEndpoint endpoint = new LogsEndpoint();
+        HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1\n\nAuthorization: Basic YWRtaW46aHVudGVyMg==");
+
+        assertTrue(endpoint.isAuthorized(request));
+    }
+
+    @Test
+    public void isAuthorizedReturnsFalseWithNoCredentials() {
+        LogsEndpoint endpoint = new LogsEndpoint();
+        HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1");
+
+        assertFalse(endpoint.isAuthorized(request));
+    }
+
+    @Test
+    public void isAuthorizedReturnsFalseForIncorrectCredentials() {
+        LogsEndpoint endpoint = new LogsEndpoint();
+        HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1\n\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
+
+        assertFalse(endpoint.isAuthorized(request));
+    }
 }
