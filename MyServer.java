@@ -18,7 +18,7 @@ public class MyServer {
                 String input = "";
                 String currentLine = in.readLine().trim();
                 while (!currentLine.isEmpty()) {
-                    input += currentLine + "\n\n";
+                    input += currentLine + "\n";
                     currentLine = in.readLine();
                 }
                 HashMap<String, String> parsedRequest = HTTPRequestParser.parse(input);

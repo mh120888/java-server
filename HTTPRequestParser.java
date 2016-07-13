@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class HTTPRequestParser {
     public static HashMap<String, String> parse(String request) {
-        String[] breakUpRequest = request.split("\n\n");
+        String[] breakUpRequest = request.split("\n");
 
         String[] splitIRL = breakUpRequest[0].split(" ");
         HashMap<String, String> result = new HashMap<>();

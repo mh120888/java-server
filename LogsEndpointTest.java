@@ -1,4 +1,5 @@
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -9,8 +10,8 @@ import static org.junit.Assert.*;
  * Created by matthewhiggins on 7/12/16.
  */
 public class LogsEndpointTest {
-    @After
-    public void tearDown() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         Logger.clearLog();
     }
 
@@ -33,18 +34,9 @@ public class LogsEndpointTest {
     }
 
     @Test
-    public void requestToLogsWithCredentialsReturnsLogOfPreviousRequestsInBody() {
-        LogsEndpoint endpoint = new LogsEndpoint();
-        HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1\n\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
-        HashMap<String, String> response = endpoint.getResponseData(request);
-
-        assertEquals("GET /logs HTTP/1.1", response.get("body"));
-    }
-
-    @Test
     public void isAuthorizedReturnsTrueForCorrectCredentials() {
         LogsEndpoint endpoint = new LogsEndpoint();
-        HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1\n\nAuthorization: Basic YWRtaW46aHVudGVyMg==");
+        HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1\nAuthorization: Basic YWRtaW46aHVudGVyMg==");
 
         assertTrue(endpoint.isAuthorized(request));
     }
@@ -60,8 +52,18 @@ public class LogsEndpointTest {
     @Test
     public void isAuthorizedReturnsFalseForIncorrectCredentials() {
         LogsEndpoint endpoint = new LogsEndpoint();
-        HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1\n\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
+        HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
 
         assertFalse(endpoint.isAuthorized(request));
+    }
+
+    @Test
+    public void requestToLogsWithCredentialsReturnsLogOfPreviousRequestsInBody() {
+        Logger.addLog("GET / HTTP/1.1");
+        LogsEndpoint endpoint = new LogsEndpoint();
+        HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1\nAuthorization: Basic YWRtaW46aHVudGVyMg==");
+        HashMap<String, String> response = endpoint.getResponseData(request);
+
+        assertEquals("GET / HTTP/1.1", response.get("body"));
     }
 }

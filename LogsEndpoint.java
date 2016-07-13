@@ -20,16 +20,13 @@ public class LogsEndpoint implements Endpoint {
     }
 
     public boolean isAuthorized(HashMap<String, String> requestData) {
+        String encodedCredentials = "";
         if (requestData.containsKey("headers")) {
             HashMap<String, String> parsedHeaders = HeaderParser.parse(requestData.get("headers"));
             if (parsedHeaders.containsKey("Authorization")) {
-                String encodedCredentials = parsedHeaders.get("Authorization").replace("Basic ", "");
-                return BasicAuthorizer.isAuthorized(encodedCredentials, correctCredentials);
-            } else {
-                return false;
+                encodedCredentials = parsedHeaders.get("Authorization").replace("Basic ", "");
             }
-        } else {
-            return false;
         }
+        return BasicAuthorizer.isAuthorized(encodedCredentials, correctCredentials);
     }
 }

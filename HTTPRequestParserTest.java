@@ -64,7 +64,7 @@ public class HTTPRequestParserTest {
 
     @Test
     public void parseReturnsAuthorizationHeaderIfGiven() {
-        HashMap<String, String> result = HTTPRequestParser.parse("POST / HTTP/1.1\n\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
+        HashMap<String, String> result = HTTPRequestParser.parse("POST / HTTP/1.1\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
 
         assertEquals("Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==", result.get("headers"));
     }
