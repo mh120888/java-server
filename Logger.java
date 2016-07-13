@@ -14,4 +14,8 @@ public class Logger {
     public static void addLog(String request) {
         requestLog.add(request);
     }
+
+    public static void clearLog() {
+        requestLog = new ArrayList<String>() {};
+    }
 }

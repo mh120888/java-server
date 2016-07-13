@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 public class RouterTest {
     @Before
     public void setUp() throws Exception {
-
+        Logger.clearLog();
     }
 
     @After
@@ -66,8 +66,7 @@ public class RouterTest {
         String requestLine = "GET /logs HTTP/1.1";
         HashMap<String, String> request = HTTPRequestParser.parse(requestLine);
         Router.getEndpoint(request);
-        List<String> log = Logger.getLog();
 
-        assertEquals(true, log.contains(requestLine));
+        assertEquals(true, Logger.getLog().contains(requestLine));
     }
 }
