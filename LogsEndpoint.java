@@ -7,7 +7,7 @@ public class LogsEndpoint implements Endpoint {
     public HashMap<String, String> getResponseData(HashMap<String, String> requestData) {
         HashMap<String, String> response = new HashMap<>();
 
-        if (requestData.containsKey("headers")) {
+        if (requestData.containsKey("headers") && requestData.get("headers").contains("Authorization")) {
             response.put("responseLine", "HTTP/1.1 200 OK");
             response.put("body", String.join("\n", Logger.getLog()));
         } else {

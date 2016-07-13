@@ -35,7 +35,7 @@ public class LogsEndpointTest {
     @Test
     public void requestToLogsWithCredentialsReturnsLogOfPreviousRequestsInBody() {
         LogsEndpoint endpoint = new LogsEndpoint();
-        HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
+        HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1\n\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("GET /logs HTTP/1.1", response.get("body"));

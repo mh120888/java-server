@@ -13,7 +13,9 @@ public class LoggerTest {
     public void requestLogContainsPreviousRequest() {
         String request = "POST / HTTP/1.1";
         Logger.addLog(request);
+
         List<String> log = Logger.getLog();
+
         assertEquals(true, log.contains(request));
     }
 
@@ -21,9 +23,10 @@ public class LoggerTest {
     public void clearLoggerEmptiesTheLog() {
         String request = "POST / HTTP/1.1";
         Logger.addLog(request);
-        Logger.clearLog();
 
+        Logger.clearLog();
         List<String> log = Logger.getLog();
+
         assertEquals(false, log.contains(request));
     }
 }

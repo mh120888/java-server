@@ -16,15 +16,12 @@ public class HTTPRequestParser {
         result.put("path", splitIRL[1]);
         result.put("httpVersion", splitIRL[2]);
 
-        String[] headersArray = breakUpRequest[0].split("\n");
-        String[] headers = Arrays.copyOfRange(headersArray, 1, headersArray.length);
-
-        if (headers.length > 0) {
-            result.put("headers", String.join("\n", headers));
-        }
-
         if (breakUpRequest.length > 1) {
-            result.put("body", breakUpRequest[breakUpRequest.length - 1]);
+            String[] headers = Arrays.copyOfRange(breakUpRequest, 1, breakUpRequest.length);
+            String headerContent = String.join("\n", headers).trim();
+            if (!headerContent.isEmpty()) {
+                result.put("headers", String.join("\n", headers));
+            }
         }
 
         return result;
