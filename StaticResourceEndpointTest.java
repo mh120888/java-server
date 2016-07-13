@@ -69,24 +69,24 @@ public class StaticResourceEndpointTest {
 
         assertEquals("HTTP/1.1 405 Method Not Allowed", response.get("responseLine"));
     }
-
-    @Test
-    public void postRequestWithParamsReturnsA200() {
-        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
-        HashMap<String, String> request = HTTPRequestParser.parse("POST / HTTP/1.0\n\nsomeParam=something");
-        HashMap<String, String> response = endpoint.getResponseData(request);
-
-        assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
-    }
-
-    @Test
-    public void putRequestWithParamsReturnsA200() {
-        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
-        HashMap<String, String> request = HTTPRequestParser.parse("PUT / HTTP/1.1\n\nsomeParam=something");
-        HashMap<String, String> response = endpoint.getResponseData(request);
-
-        assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
-    }
+//
+//    @Test
+//    public void postRequestWithParamsReturnsA200() {
+//        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
+//        HashMap<String, String> request = HTTPRequestParser.parse("POST / HTTP/1.0\n\nsomeParam=something");
+//        HashMap<String, String> response = endpoint.getResponseData(request);
+//
+//        assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
+//    }
+//
+//    @Test
+//    public void putRequestWithParamsReturnsA200() {
+//        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
+//        HashMap<String, String> request = HTTPRequestParser.parse("PUT / HTTP/1.1\n\nsomeParam=something");
+//        HashMap<String, String> response = endpoint.getResponseData(request);
+//
+//        assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
+//    }
 
     @Test
     public void isPathADirectoryReturnsTrueForADirectory() {

@@ -10,6 +10,7 @@ public class Router {
         File file = new File(Endpoint.FILEPATH);
         String[] fileNames = file.list();
         String path = request.get("path");
+        Logger.addLog(request.get("method") + " " + path + " " + request.get("httpVersion"));
 
         if (Arrays.asList(fileNames).contains(path.replace("/", "")) || path.equals("/")) {
             return new StaticResourceEndpoint();
@@ -17,6 +18,8 @@ public class Router {
             return new CoffeeEndpoint();
         } else if (path.equals("/form")) {
             return new PostableEndpoint();
+        } else if (path.equals("/logs")) {
+            return new LogsEndpoint();
         } else {
             return new NotFoundEndpoint();
         }

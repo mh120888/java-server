@@ -3,6 +3,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -12,7 +13,7 @@ import static org.junit.Assert.*;
 public class RouterTest {
     @Before
     public void setUp() throws Exception {
-
+        Logger.clearLog();
     }
 
     @After
@@ -50,5 +51,22 @@ public class RouterTest {
         Endpoint endpoint = Router.getEndpoint(request);
 
         assertTrue(endpoint instanceof PostableEndpoint);
+    }
+
+    @Test
+    public void getEndpointReturnsLogsEndpointWhenAppropriatePathIsRequested() {
+        HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1");
+        Endpoint endpoint = Router.getEndpoint(request);
+
+        assertTrue(endpoint instanceof LogsEndpoint);
+    }
+
+    @Test
+    public void allRequestsAreLoggedAfterBeingRoutes() {
+        String requestLine = "GET /logs HTTP/1.1";
+        HashMap<String, String> request = HTTPRequestParser.parse(requestLine);
+        Router.getEndpoint(request);
+
+        assertEquals(true, Logger.getLog().contains(requestLine));
     }
 }

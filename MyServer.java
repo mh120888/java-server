@@ -18,7 +18,7 @@ public class MyServer {
                 String input = "";
                 String currentLine = in.readLine().trim();
                 while (!currentLine.isEmpty()) {
-                    input += currentLine + "\n\n";
+                    input += currentLine + "\n";
                     currentLine = in.readLine();
                 }
                 HashMap<String, String> parsedRequest = HTTPRequestParser.parse(input);
@@ -26,6 +26,7 @@ public class MyServer {
                 HashMap<String, String> responseData = endpoint.getResponseData(parsedRequest);
                 String output = HTTPResponseBuilder.buildResponse(responseData);
                 out.println(output);
+//                out.println(parsedRequest);
                 } finally {
                     socket.close();
                 }
