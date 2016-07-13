@@ -39,4 +39,20 @@ public class ParameterParserTest {
 
         assertEquals("alsoFoobar", result.get("secondParam"));
     }
+
+    @Test
+    public void parseReplacesPercent20WithSpace() {
+        String path = "/pathwithoneparam?singleParam=two%20words";
+        HashMap<String, String> result = ParameterParser.parse(path);
+
+        assertEquals("two words", result.get("singleParam"));
+    }
+
+    @Test
+    public void parseReplacesPercent3CWithLessThanSymbol() {
+        String path = "/pathwithoneparam?lessThan=%3C";
+        HashMap<String, String> result = ParameterParser.parse(path);
+
+        assertEquals("<", result.get("lessThan"));
+    }
 }
