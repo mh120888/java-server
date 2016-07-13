@@ -69,4 +69,12 @@ public class RouterTest {
 
         assertEquals(true, Logger.getLog().contains(requestLine));
     }
+
+    @Test
+    public void requestToParametersReturnsParametersEndpoint() {
+        HashMap<String, String> request = HTTPRequestParser.parse("GET /parameters HTTP/1.1");
+        Endpoint endpoint = Router.getEndpoint(request);
+
+        assertTrue(endpoint instanceof ParametersEndpoint);
+    }
 }

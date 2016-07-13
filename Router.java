@@ -20,6 +20,8 @@ public class Router {
             return new PostableEndpoint();
         } else if (path.equals("/logs")) {
             return new LogsEndpoint();
+        } else if (path.contains("/parameters")) {
+            return new ParametersEndpoint();
         } else {
             return new NotFoundEndpoint();
         }
