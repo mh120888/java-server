@@ -3,7 +3,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -24,41 +23,41 @@ public class RouterTest {
     @Test
     public void getEndpointReturnsStaticResourceEndpointForAStaticResource() {
         HashMap<String, String> request = HTTPRequestParser.parse("GET / HTTP/1.1");
-        Endpoint endpoint = Router.getEndpoint(request);
+        ResourceHandler resourceHandler = Router.getEndpoint(request);
 
-        assertTrue(endpoint instanceof StaticResourceEndpoint);
+        assertTrue(resourceHandler instanceof StaticResourceHandler);
     }
 
     @Test
     public void getEndpointReturnsCoffeeEndpointWhenAppropriate() {
         HashMap<String, String> request = HTTPRequestParser.parse("GET /coffee HTTP/1.1");
-        Endpoint endpoint = Router.getEndpoint(request);
+        ResourceHandler resourceHandler = Router.getEndpoint(request);
 
-        assertTrue(endpoint instanceof CoffeeEndpoint);
+        assertTrue(resourceHandler instanceof CoffeeResourceHandler);
     }
 
     @Test
     public void getEndpointReturnsNotFoundEndpointWhenPathIsNotRecognized() {
         HashMap<String, String> request = HTTPRequestParser.parse("GET /foobar HTTP/1.1");
-        Endpoint endpoint = Router.getEndpoint(request);
+        ResourceHandler resourceHandler = Router.getEndpoint(request);
 
-        assertTrue(endpoint instanceof NotFoundEndpoint);
+        assertTrue(resourceHandler instanceof NotFoundResourceHandler);
     }
 
     @Test
     public void getEndpointReturnsPostableEndpointWhenAppropriate() {
         HashMap<String, String> request = HTTPRequestParser.parse("POST /form HTTP/1.1");
-        Endpoint endpoint = Router.getEndpoint(request);
+        ResourceHandler resourceHandler = Router.getEndpoint(request);
 
-        assertTrue(endpoint instanceof PostableEndpoint);
+        assertTrue(resourceHandler instanceof PostableResourceHandler);
     }
 
     @Test
     public void getEndpointReturnsLogsEndpointWhenAppropriatePathIsRequested() {
         HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1");
-        Endpoint endpoint = Router.getEndpoint(request);
+        ResourceHandler resourceHandler = Router.getEndpoint(request);
 
-        assertTrue(endpoint instanceof LogsEndpoint);
+        assertTrue(resourceHandler instanceof LogsResourceHandler);
     }
 
     @Test
@@ -73,16 +72,16 @@ public class RouterTest {
     @Test
     public void requestToParametersReturnsParametersEndpoint() {
         HashMap<String, String> request = HTTPRequestParser.parse("GET /parameters HTTP/1.1");
-        Endpoint endpoint = Router.getEndpoint(request);
+        ResourceHandler resourceHandler = Router.getEndpoint(request);
 
-        assertTrue(endpoint instanceof ParametersEndpoint);
+        assertTrue(resourceHandler instanceof ParametersResourceHandler);
     }
 
     @Test
     public void getEndpointReturnsOptionsEndPointWhenAppropriate() {
         HashMap<String, String> request = HTTPRequestParser.parse("GET /method_options HTTP/1.1");
-        Endpoint endpoint = Router.getEndpoint(request);
+        ResourceHandler resourceHandler = Router.getEndpoint(request);
 
-        assertTrue(endpoint instanceof OptionsEndpoint);
+        assertTrue(resourceHandler instanceof OptionsResourceHandler);
     }
 }

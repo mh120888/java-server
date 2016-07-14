@@ -3,8 +3,8 @@ import java.util.HashMap;
 /**
  * Created by matthewhiggins on 7/11/16.
  */
-public class CoffeeEndpoint implements Endpoint {
-    public CoffeeEndpoint() {}
+public class CoffeeResourceHandler implements ResourceHandler {
+    public CoffeeResourceHandler() {}
 
     public HashMap<String, String> getResponseData(HashMap<String, String> requestData) {
         HashMap<String, String> responseData = new HashMap<>();

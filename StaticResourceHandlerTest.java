@@ -4,9 +4,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Base64;
 import java.util.HashMap;
 
 import static org.junit.Assert.*;
@@ -14,7 +12,7 @@ import static org.junit.Assert.*;
 /**
  * Created by matthewhiggins on 7/11/16.
  */
-public class StaticResourceEndpointTest {
+public class StaticResourceHandlerTest {
     @Before
     public void setUp() throws Exception {
 
@@ -27,7 +25,7 @@ public class StaticResourceEndpointTest {
 
     @Test
     public void getReponseDataReturnsCorrectResponseLineForGet() {
-        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
+        StaticResourceHandler endpoint = new StaticResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("GET / HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
@@ -36,7 +34,7 @@ public class StaticResourceEndpointTest {
 
     @Test
     public void getResponseDataReturns200ForHeadRequest() {
-        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
+        StaticResourceHandler endpoint = new StaticResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("HEAD / HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
@@ -45,7 +43,7 @@ public class StaticResourceEndpointTest {
 
     @Test
     public void getResponseDataReturns405ForInvalidMethods() {
-        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
+        StaticResourceHandler endpoint = new StaticResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("NOTAREALMETHOD / HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
@@ -54,7 +52,7 @@ public class StaticResourceEndpointTest {
 
     @Test
     public void getIndexResponseIncludesLinksToOtherResourcesInPublic() {
-        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
+        StaticResourceHandler endpoint = new StaticResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("GET / HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
@@ -63,7 +61,7 @@ public class StaticResourceEndpointTest {
 
     @Test
     public void postRequestWithNoParamsReturnsA405() {
-        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
+        StaticResourceHandler endpoint = new StaticResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("POST / HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
@@ -72,7 +70,7 @@ public class StaticResourceEndpointTest {
 //
 //    @Test
 //    public void postRequestWithParamsReturnsA200() {
-//        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
+//        StaticResourceHandler endpoint = new StaticResourceHandler();
 //        HashMap<String, String> request = HTTPRequestParser.parse("POST / HTTP/1.0\n\nsomeParam=something");
 //        HashMap<String, String> response = endpoint.getResponseData(request);
 //
@@ -81,7 +79,7 @@ public class StaticResourceEndpointTest {
 //
 //    @Test
 //    public void putRequestWithParamsReturnsA200() {
-//        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
+//        StaticResourceHandler endpoint = new StaticResourceHandler();
 //        HashMap<String, String> request = HTTPRequestParser.parse("PUT / HTTP/1.1\n\nsomeParam=something");
 //        HashMap<String, String> response = endpoint.getResponseData(request);
 //
@@ -90,7 +88,7 @@ public class StaticResourceEndpointTest {
 
     @Test
     public void isPathADirectoryReturnsTrueForADirectory() {
-        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
+        StaticResourceHandler endpoint = new StaticResourceHandler();
         String path = "/";
 
         assertEquals(true, endpoint.isPathADirectory(path));
@@ -98,7 +96,7 @@ public class StaticResourceEndpointTest {
 
     @Test
     public void isPathADirectoryReturnsFalseForAFile() {
-        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
+        StaticResourceHandler endpoint = new StaticResourceHandler();
         String path = "/file1";
 
         assertEquals(false, endpoint.isPathADirectory(path));
@@ -106,32 +104,32 @@ public class StaticResourceEndpointTest {
 
     @Test
     public void getFiletypeReturnsDIRECTORYForADirectory() {
-        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
+        StaticResourceHandler endpoint = new StaticResourceHandler();
         String path = "/";
 
-        assertEquals(StaticResourceEndpoint.Filetype.DIRECTORY, endpoint.getFiletype(path));
+        assertEquals(StaticResourceHandler.Filetype.DIRECTORY, endpoint.getFiletype(path));
     }
 
     @Test
     public void getFiletypeReturnsIMAGEForAnImage() {
-        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
+        StaticResourceHandler endpoint = new StaticResourceHandler();
         String path = "/image.png";
 
-        assertEquals(StaticResourceEndpoint.Filetype.IMAGE, endpoint.getFiletype(path));
+        assertEquals(StaticResourceHandler.Filetype.IMAGE, endpoint.getFiletype(path));
     }
 
     @Test
     public void getFiletypeReturnsOTHERForATextFile() {
-        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
+        StaticResourceHandler endpoint = new StaticResourceHandler();
         String path = "/text-file.txt";
 
-        assertEquals(StaticResourceEndpoint.Filetype.OTHER, endpoint.getFiletype(path));
+        assertEquals(StaticResourceHandler.Filetype.OTHER, endpoint.getFiletype(path));
     }
 
     @Test
     public void getRequestForAnExistingFileReturnsTheContentsOfThatFile() throws IOException {
-        StaticResourceEndpoint endpoint = new StaticResourceEndpoint();
-        String path = Endpoint.FILEPATH + "/image.png";
+        StaticResourceHandler endpoint = new StaticResourceHandler();
+        String path = ResourceHandler.FILEPATH + "/image.png";
         byte[] imageContents = Files.readAllBytes(Paths.get(path));
         HashMap<String, String> request = HTTPRequestParser.parse("GET /image.png HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);

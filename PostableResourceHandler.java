@@ -3,7 +3,7 @@ import java.util.HashMap;
 /**
  * Created by matthewhiggins on 7/11/16.
  */
-public class PostableEndpoint implements Endpoint {
+public class PostableResourceHandler implements ResourceHandler {
     private static String data = "";
 
     public HashMap<String, String> getResponseData(HashMap<String, String> requestData) {

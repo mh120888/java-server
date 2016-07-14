@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 /**
  * Created by matthewhiggins on 7/11/16.
  */
-public class NotFoundEndpointTest {
+public class NotFoundResourceHandlerTest {
     @Before
     public void setUp() throws Exception {
 
@@ -22,7 +22,7 @@ public class NotFoundEndpointTest {
 
     @Test
     public void returnsAStatusOf404() {
-        NotFoundEndpoint endpoint = new NotFoundEndpoint();
+        NotFoundResourceHandler endpoint = new NotFoundResourceHandler();
 
         HashMap<String, String> request = HTTPRequestParser.parse("GET /foobar HTTP/1.0");
         HashMap<String, String> response = endpoint.getResponseData(request);

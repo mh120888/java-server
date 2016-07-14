@@ -7,10 +7,10 @@ import static org.junit.Assert.*;
 /**
  * Created by matthewhiggins on 7/14/16.
  */
-public class OptionsEndpointTest {
+public class OptionsResourceHandlerTest {
     @Test
     public void getReponseDataReturnsCorrectResponseLineForGET() {
-        OptionsEndpoint endpoint = new OptionsEndpoint();
+        OptionsResourceHandler endpoint = new OptionsResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("GET /pathdoesnotmatter HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
@@ -19,7 +19,7 @@ public class OptionsEndpointTest {
 
     @Test
     public void getReponseDataReturnsCorrectResponseLineForOPTIONS() {
-        OptionsEndpoint endpoint = new OptionsEndpoint();
+        OptionsResourceHandler endpoint = new OptionsResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("OPTIONS /pathdoesnotmatter HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
@@ -28,7 +28,7 @@ public class OptionsEndpointTest {
 
     @Test
     public void getResponseDataReturnsAResponseWithAnAllowHeader() {
-        OptionsEndpoint endpoint = new OptionsEndpoint();
+        OptionsResourceHandler endpoint = new OptionsResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("GET /pathdoesnotmatter HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
         HashMap<String, String> headers = HeaderParser.parse(response.get("headers"));
@@ -38,7 +38,7 @@ public class OptionsEndpointTest {
 
     @Test
     public void getResponseDataReturnsAResponseWithAllowHeaderWithMethodsAllowedForGivenPath() {
-        OptionsEndpoint endpoint = new OptionsEndpoint();
+        OptionsResourceHandler endpoint = new OptionsResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("GET /method_options HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
         HashMap<String, String> headers = HeaderParser.parse(response.get("headers"));
@@ -51,7 +51,7 @@ public class OptionsEndpointTest {
 
     @Test
     public void getResponseDataReturnsAResponseWithAllowHeaderWithMethodsAllowedForADifferentPath() {
-        OptionsEndpoint endpoint = new OptionsEndpoint();
+        OptionsResourceHandler endpoint = new OptionsResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("GET /method_options2 HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
         HashMap<String, String> headers = HeaderParser.parse(response.get("headers"));
@@ -64,7 +64,7 @@ public class OptionsEndpointTest {
 
     @Test
     public void getResponseDataReturnsAResponseWithAllowHeaderWithoutMethodsNotAllowedForPath() {
-        OptionsEndpoint endpoint = new OptionsEndpoint();
+        OptionsResourceHandler endpoint = new OptionsResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("GET /method_options2 HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
         HashMap<String, String> headers = HeaderParser.parse(response.get("headers"));

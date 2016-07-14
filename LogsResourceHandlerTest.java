@@ -1,4 +1,3 @@
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -9,7 +8,7 @@ import static org.junit.Assert.*;
 /**
  * Created by matthewhiggins on 7/12/16.
  */
-public class LogsEndpointTest {
+public class LogsResourceHandlerTest {
     @Before
     public void setUp() throws Exception {
         Logger.clearLog();
@@ -17,7 +16,7 @@ public class LogsEndpointTest {
 
     @Test
     public void getLogsWithoutCredentialsReturnsA401() {
-        LogsEndpoint endpoint = new LogsEndpoint();
+        LogsResourceHandler endpoint = new LogsResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
@@ -26,7 +25,7 @@ public class LogsEndpointTest {
 
     @Test
     public void requestToLogsWithoutProperCredentialsReturnsWWWAuthenticateHeader() {
-        LogsEndpoint endpoint = new LogsEndpoint();
+        LogsResourceHandler endpoint = new LogsResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
@@ -35,7 +34,7 @@ public class LogsEndpointTest {
 
     @Test
     public void isAuthorizedReturnsTrueForCorrectCredentials() {
-        LogsEndpoint endpoint = new LogsEndpoint();
+        LogsResourceHandler endpoint = new LogsResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1\nAuthorization: Basic YWRtaW46aHVudGVyMg==");
 
         assertTrue(endpoint.isAuthorized(request));
@@ -43,7 +42,7 @@ public class LogsEndpointTest {
 
     @Test
     public void isAuthorizedReturnsFalseWithNoCredentials() {
-        LogsEndpoint endpoint = new LogsEndpoint();
+        LogsResourceHandler endpoint = new LogsResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1");
 
         assertFalse(endpoint.isAuthorized(request));
@@ -51,7 +50,7 @@ public class LogsEndpointTest {
 
     @Test
     public void isAuthorizedReturnsFalseForIncorrectCredentials() {
-        LogsEndpoint endpoint = new LogsEndpoint();
+        LogsResourceHandler endpoint = new LogsResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
 
         assertFalse(endpoint.isAuthorized(request));
@@ -60,7 +59,7 @@ public class LogsEndpointTest {
     @Test
     public void requestToLogsWithCredentialsReturnsLogOfPreviousRequestsInBody() {
         Logger.addLog("GET / HTTP/1.1");
-        LogsEndpoint endpoint = new LogsEndpoint();
+        LogsResourceHandler endpoint = new LogsResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("GET /logs HTTP/1.1\nAuthorization: Basic YWRtaW46aHVudGVyMg==");
         HashMap<String, String> response = endpoint.getResponseData(request);
 

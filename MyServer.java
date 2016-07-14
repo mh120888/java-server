@@ -22,8 +22,8 @@ public class MyServer {
                     currentLine = in.readLine();
                 }
                 HashMap<String, String> parsedRequest = HTTPRequestParser.parse(input);
-                Endpoint endpoint = Router.getEndpoint(parsedRequest);
-                HashMap<String, String> responseData = endpoint.getResponseData(parsedRequest);
+                ResourceHandler resourceHandler = Router.getEndpoint(parsedRequest);
+                HashMap<String, String> responseData = resourceHandler.getResponseData(parsedRequest);
                 String output = HTTPResponseBuilder.buildResponse(responseData);
                 out.println(output);
                 } finally {

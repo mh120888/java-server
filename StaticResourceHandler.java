@@ -9,8 +9,8 @@ import java.util.HashMap;
 /**
  * Created by matthewhiggins on 7/11/16.
  */
-public class StaticResourceEndpoint implements Endpoint {
-    public StaticResourceEndpoint() {}
+public class StaticResourceHandler implements ResourceHandler {
+    public StaticResourceHandler() {}
 
     public enum Filetype {
         DIRECTORY, IMAGE, OTHER
@@ -58,10 +58,9 @@ public class StaticResourceEndpoint implements Endpoint {
             return body;
         }
         String path = requestData.get("path");
-        Filetype filetype = getFiletype(path);
         switch (getFiletype(path)) {
             case DIRECTORY:
-                File file = new File(Endpoint.FILEPATH);
+                File file = new File(ResourceHandler.FILEPATH);
                 String[] fileNames = file.list();
 
                 for (String fileName : fileNames) {
@@ -70,7 +69,7 @@ public class StaticResourceEndpoint implements Endpoint {
                 break;
             default:
                 try {
-                    String filePath = Endpoint.FILEPATH + path;
+                    String filePath = ResourceHandler.FILEPATH + path;
                     byte[] imageContents = Files.readAllBytes(Paths.get(filePath));
                     body = new String(imageContents, Charset.defaultCharset());
                 } catch (IOException e) {
@@ -95,7 +94,7 @@ public class StaticResourceEndpoint implements Endpoint {
     }
 
     public boolean isPathADirectory(String path) {
-        String filePath = Endpoint.FILEPATH + path;
+        String filePath = ResourceHandler.FILEPATH + path;
         File file = new File(filePath);
         return file.isDirectory();
     }

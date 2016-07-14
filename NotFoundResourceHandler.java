@@ -3,8 +3,8 @@ import java.util.HashMap;
 /**
  * Created by matthewhiggins on 7/11/16.
  */
-public class NotFoundEndpoint implements Endpoint {
-    public NotFoundEndpoint() {}
+public class NotFoundResourceHandler implements ResourceHandler {
+    public NotFoundResourceHandler() {}
 
     public HashMap<String, String> getResponseData(HashMap<String, String> requestData) {
         HashMap<String, String> responseData = new HashMap<>();

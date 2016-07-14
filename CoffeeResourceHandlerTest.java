@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 /**
  * Created by matthewhiggins on 7/11/16.
  */
-public class CoffeeEndpointTest {
+public class CoffeeResourceHandlerTest {
     @Before
     public void setUp() throws Exception {
 
@@ -22,7 +22,7 @@ public class CoffeeEndpointTest {
 
     @Test
     public void returns418ForGETCoffee() {
-        CoffeeEndpoint endpoint = new CoffeeEndpoint();
+        CoffeeResourceHandler endpoint = new CoffeeResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("GET /coffee HTTP/1.0");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
@@ -31,7 +31,7 @@ public class CoffeeEndpointTest {
 
     @Test
     public void bodyContainsCorrectStringIfPathIsCoffee() {
-        CoffeeEndpoint endpoint = new CoffeeEndpoint();
+        CoffeeResourceHandler endpoint = new CoffeeResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("GET /coffee HTTP/1.0");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
@@ -40,7 +40,7 @@ public class CoffeeEndpointTest {
 
     @Test
     public void returns200ForGETTea() {
-        CoffeeEndpoint endpoint = new CoffeeEndpoint();
+        CoffeeResourceHandler endpoint = new CoffeeResourceHandler();
         HashMap<String, String> request = HTTPRequestParser.parse("GET /tea HTTP/1.0");
         HashMap<String, String> response = endpoint.getResponseData(request);
 

@@ -3,7 +3,7 @@ import java.util.HashMap;
 /**
  * Created by matthewhiggins on 7/14/16.
  */
-public class OptionsEndpoint implements Endpoint {
+public class OptionsResourceHandler implements ResourceHandler {
 
     public HashMap<String, String> getResponseData(HashMap<String, String> requestData) {
         HashMap<String, String> responseData = new HashMap<>();

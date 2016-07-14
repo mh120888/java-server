@@ -3,7 +3,7 @@ import java.util.HashMap;
 /**
  * Created by matthewhiggins on 7/12/16.
  */
-public class LogsEndpoint implements Endpoint {
+public class LogsResourceHandler implements ResourceHandler {
     private String correctCredentials = "admin:hunter2";
 
     public HashMap<String, String> getResponseData(HashMap<String, String> requestData) {

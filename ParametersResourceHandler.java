@@ -4,7 +4,7 @@ import java.util.Map;
 /**
  * Created by matthewhiggins on 7/13/16.
  */
-public class ParametersEndpoint implements Endpoint {
+public class ParametersResourceHandler implements ResourceHandler {
     public HashMap<String, String> getResponseData(HashMap<String, String> requestData) {
         HashMap<String, String> responseData = new HashMap<>();
         String method = requestData.get("method");
