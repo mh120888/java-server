@@ -14,11 +14,11 @@ public class Router {
 
         if (Arrays.asList(fileNames).contains(path.replace("/", "")) || path.equals("/")) {
             return new StaticResourceEndpoint();
-        } else if (path.equals("/coffee") || path.equals("/tea")) {
+        } else if (path.contains("/coffee") || path.contains("/tea")) {
             return new CoffeeEndpoint();
-        } else if (path.equals("/form")) {
+        } else if (path.contains("/form")) {
             return new PostableEndpoint();
-        } else if (path.equals("/logs")) {
+        } else if (path.contains("/logs")) {
             return new LogsEndpoint();
         } else if (path.contains("/parameters")) {
             return new ParametersEndpoint();
