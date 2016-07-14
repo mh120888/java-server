@@ -26,7 +26,6 @@ public class MyServer {
                 HashMap<String, String> responseData = endpoint.getResponseData(parsedRequest);
                 String output = HTTPResponseBuilder.buildResponse(responseData);
                 out.println(output);
-//                out.println(parsedRequest);
                 } finally {
                     socket.close();
                 }

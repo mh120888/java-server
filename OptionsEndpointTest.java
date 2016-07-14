@@ -1,7 +1,6 @@
 import org.junit.Test;
 
 import java.util.HashMap;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -56,7 +55,7 @@ public class OptionsEndpointTest {
         HashMap<String, String> request = HTTPRequestParser.parse("GET /method_options2 HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
         HashMap<String, String> headers = HeaderParser.parse(response.get("headers"));
-        String[] acceptedMethods = {"GET", "HEAD"};
+        String[] acceptedMethods = {"GET", "OPTIONS"};
 
         for (String method : acceptedMethods) {
             assertEquals(true, headers.get("Allow").contains(method));
@@ -69,12 +68,11 @@ public class OptionsEndpointTest {
         HashMap<String, String> request = HTTPRequestParser.parse("GET /method_options2 HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
         HashMap<String, String> headers = HeaderParser.parse(response.get("headers"));
-        String[] disallowedMethods = {"POST", "OPTIONS", "PUT"};
+        String[] disallowedMethods = {"POST", "HEAD", "PUT"};
 
         for (String method : disallowedMethods) {
             assertEquals(false, headers.get("Allow").contains(method));
         }
+
     }
 }
-
-//Allow: GET,OPTIONS

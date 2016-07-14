@@ -10,17 +10,21 @@ public class OptionsEndpoint implements Endpoint {
         String[] methods = acceptedMethods(requestData.get("path"));
 
         responseData.put("responseLine", "HTTP/1.1 200 OK");
-        responseData.put("headers", "Allow: " + String.join(",", methods));
+        responseData.put("headers", buildHeaders(requestData.get("path")));
 
         return responseData;
     }
 
+    private String buildHeaders(String path) {
+        String header = "";
+        header += "Allow: " + String.join(",", acceptedMethods(path));
+        return header;
+    }
+
     private String[] acceptedMethods(String path) {
-        String [] methodsThatAreAcceptable = {"GET","HEAD","POST","OPTIONS","PUT"};
-        if (path.equals("/method_options2")) {
-            String[] methods = {"GET","OPTIONS"};
-            return methods;
+        switch (path) {
+            case "/method_options": return new String[] {"GET","HEAD","POST","OPTIONS","PUT"};
+            default:                return new String[] {"GET","OPTIONS"};
         }
-        return methodsThatAreAcceptable;
     }
 }
