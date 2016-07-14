@@ -22,6 +22,8 @@ public class Router {
             return new LogsEndpoint();
         } else if (path.contains("/parameters")) {
             return new ParametersEndpoint();
+        } else if (path.contains("/method_options")) {
+            return new OptionsEndpoint();
         } else {
             return new NotFoundEndpoint();
         }
