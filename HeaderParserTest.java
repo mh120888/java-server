@@ -28,4 +28,11 @@ public class HeaderParserTest {
 
         assertEquals(2, result.size());
     }
+
+    @Test
+    public void parseReturnsCorrectResultWhenHeaderValueAlsoContainsColons() {
+        HashMap<String, String> result = HeaderParser.parse("Some header: some value\nAnother header: foo:bar");
+
+        assertEquals("foo:bar", result.get("Another header"));
+    }
 }

@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -10,7 +11,10 @@ public class HeaderParser {
 
         for (String headerPair : separateHeaders) {
             String[] separatePair = headerPair.split(":");
-            result.put(separatePair[0], separatePair[1].trim());
+            String headerName = separatePair[0];
+            String headerValue = String.join(":", Arrays.copyOfRange(separatePair, 1, separatePair.length)).trim();
+
+            result.put(headerName, headerValue);
         }
 
         return result;

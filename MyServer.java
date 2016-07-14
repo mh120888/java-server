@@ -7,8 +7,12 @@ import java.util.HashMap;
 
 public class MyServer {
 
+    private static int port = 5000;
+    private static String host = "localhost";
+    private static String protocol = "http";
+
     public static void main(String[] args) throws IOException {
-        ServerSocket server = new ServerSocket(5000);
+        ServerSocket server = new ServerSocket(port);
         try {
             while (true) {
             Socket socket = server.accept();
@@ -37,5 +41,10 @@ public class MyServer {
         } finally {
             server.close();
         }
+    }
+
+    public static String getLocation(String path) {
+        String location = protocol + "://" + host + ":" + Integer.toString(port) + "/";
+        return location;
     }
 }

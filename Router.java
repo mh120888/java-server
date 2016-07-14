@@ -24,6 +24,8 @@ public class Router {
             return new ParametersResourceHandler();
         } else if (path.contains("/method_options")) {
             return new OptionsResourceHandler();
+        } else if (path.contains("/redirect")) {
+            return new RedirectResourceHandler();
         } else {
             return new NotFoundResourceHandler();
         }

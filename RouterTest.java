@@ -84,4 +84,12 @@ public class RouterTest {
 
         assertTrue(resourceHandler instanceof OptionsResourceHandler);
     }
+
+    @Test
+    public void getEndpointReturnsRedirectResourceHandlerWhenAppropriate() {
+        HashMap<String, String> request = HTTPRequestParser.parse("GET /redirect HTTP/1.1");
+        ResourceHandler resourceHandler = Router.getEndpoint(request);
+
+        assertTrue(resourceHandler instanceof RedirectResourceHandler);
+    }
 }
