@@ -1,6 +1,8 @@
 /**
  * Created by matthewhiggins on 7/5/16.
  */
+import com.sun.corba.se.spi.activation.Server;
+
 import java.io.*;
 import java.net.*;
 import java.util.HashMap;
@@ -8,7 +10,8 @@ import java.util.HashMap;
 public class MyServer {
 
     public static void main(String[] args) throws IOException {
-        ServerSocket server = new ServerSocket(5000);
+        HashMap<String, String> options = CommandLineArgsParser.groupOptions(args);
+        ServerSocket server = createNewServerSocket(options);
         try {
             while (true) {
             Socket socket = server.accept();
@@ -37,5 +40,17 @@ public class MyServer {
         } finally {
             server.close();
         }
+    }
+
+    private static ServerSocket createNewServerSocket(HashMap<String, String> options) throws IOException {
+        int port = 5000;
+        if (options.containsKey("-p")) {
+            try {
+                port = Integer.parseInt(options.get("-p"));
+            } catch (NumberFormatException e) {
+                port = 5000;
+            }
+        }
+        return new ServerSocket(port);
     }
 }
