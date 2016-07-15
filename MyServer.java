@@ -12,7 +12,8 @@ public class MyServer {
 
     public static void main(String[] args) throws IOException {
         HashMap<String, String> options = CommandLineArgsParser.groupOptions(args);
-        ServerSocket server = createNewServerSocket(options);
+        int port = getPortNumber(options);
+        ServerSocket server = new ServerSocket(port);
         updateFilepath(options);
 
         try {
@@ -38,14 +39,14 @@ public class MyServer {
             }
         }
         catch (IOException e) {
-            System.out.println("Could not listen on that port");
+            System.out.println("Could not listen on port " + port);
             System.exit(-1);
         } finally {
             server.close();
         }
     }
 
-    private static ServerSocket createNewServerSocket(HashMap<String, String> options) throws IOException {
+    private static int getPortNumber(HashMap<String, String> options) {
         int port = 5000;
         if (options.containsKey("-p")) {
             try {
@@ -54,7 +55,7 @@ public class MyServer {
                 port = 5000;
             }
         }
-        return new ServerSocket(port);
+        return port;
     }
 
     private static void updateFilepath(HashMap<String, String> options) {
