@@ -8,10 +8,13 @@ import java.net.*;
 import java.util.HashMap;
 
 public class MyServer {
+    public static String FILEPATH = "/Users/matthewhiggins/Desktop/cob_spec/public";
 
     public static void main(String[] args) throws IOException {
         HashMap<String, String> options = CommandLineArgsParser.groupOptions(args);
         ServerSocket server = createNewServerSocket(options);
+        updateFilepath(options);
+
         try {
             while (true) {
             Socket socket = server.accept();
@@ -35,7 +38,7 @@ public class MyServer {
             }
         }
         catch (IOException e) {
-            System.out.println("Could not listen on port 5000");
+            System.out.println("Could not listen on that port");
             System.exit(-1);
         } finally {
             server.close();
@@ -52,5 +55,16 @@ public class MyServer {
             }
         }
         return new ServerSocket(port);
+    }
+
+    private static void updateFilepath(HashMap<String, String> options) {
+        String directory = options.get("-d");
+        if (directory == null) {
+            return;
+        }
+        File file = new File(directory);
+        if (file.exists()) {
+            FILEPATH = directory;
+        }
     }
 }
