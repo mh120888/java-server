@@ -18,21 +18,21 @@ public class MyServer {
 
         try {
             while (true) {
-            Socket socket = server.accept();
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            try {
-                String input = "";
-                String currentLine = in.readLine().trim();
-                while (!currentLine.isEmpty()) {
-                    input += currentLine + "\n";
-                    currentLine = in.readLine();
-                }
-                HashMap<String, String> parsedRequest = HTTPRequestParser.parse(input);
-                ResourceHandler resourceHandler = Router.getEndpoint(parsedRequest);
-                HashMap<String, String> responseData = resourceHandler.getResponseData(parsedRequest);
-                String output = HTTPResponseBuilder.buildResponse(responseData);
-                out.println(output);
+                Socket socket = server.accept();
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                try {
+                    String input = "";
+                    String currentLine = in.readLine().trim();
+                    while (!currentLine.isEmpty()) {
+                        input += currentLine + "\n";
+                        currentLine = in.readLine();
+                    }
+                    HashMap<String, String> parsedRequest = HTTPRequestParser.parse(input);
+                    ResourceHandler resourceHandler = Router.getEndpoint(parsedRequest);
+                    HashMap<String, String> responseData = resourceHandler.getResponseData(parsedRequest);
+                    String output = HTTPResponseBuilder.buildResponse(responseData);
+                    out.println(output);
                 } finally {
                     socket.close();
                 }
@@ -69,3 +69,5 @@ public class MyServer {
         }
     }
 }
+
+
