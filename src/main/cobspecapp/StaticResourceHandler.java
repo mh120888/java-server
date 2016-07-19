@@ -64,7 +64,7 @@ public class StaticResourceHandler implements ResourceHandler {
         String path = requestData.get("path");
         switch (getFiletype(path)) {
             case DIRECTORY:
-                File file = new File(MyServer.FILEPATH);
+                File file = new File(MyServer.publicDirectory);
                 String[] fileNames = file.list();
 
                 for (String fileName : fileNames) {
@@ -73,7 +73,7 @@ public class StaticResourceHandler implements ResourceHandler {
                 break;
             default:
                 try {
-                    String filePath = MyServer.FILEPATH + path;
+                    String filePath = MyServer.publicDirectory + path;
                     byte[] imageContents = Files.readAllBytes(Paths.get(filePath));
                     body = new String(imageContents, Charset.defaultCharset());
                 } catch (IOException e) {
@@ -98,7 +98,7 @@ public class StaticResourceHandler implements ResourceHandler {
     }
 
     public boolean isPathADirectory(String path) {
-        String filePath = MyServer.FILEPATH + path;
+        String filePath = MyServer.publicDirectory + path;
         File file = new File(filePath);
         return file.isDirectory();
     }

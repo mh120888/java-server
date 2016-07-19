@@ -11,7 +11,7 @@ import java.util.HashMap;
  */
 public class Router {
     public static ResourceHandler getEndpoint(HashMap<String, String> request) {
-        File file = new File(MyServer.FILEPATH);
+        File file = new File(MyServer.publicDirectory);
         String[] fileNames = file.list();
         String path = request.get("path");
         Logger.addLog(request.get("method") + " " + path + " " + request.get("httpVersion"));

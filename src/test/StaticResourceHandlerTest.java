@@ -136,7 +136,7 @@ public class StaticResourceHandlerTest {
     @Test
     public void getRequestForAnExistingFileReturnsTheContentsOfThatFile() throws IOException {
         StaticResourceHandler endpoint = new StaticResourceHandler();
-        String path = MyServer.FILEPATH + "/image.png";
+        String path = MyServer.publicDirectory + "/image.png";
         byte[] imageContents = Files.readAllBytes(Paths.get(path));
         HashMap<String, String> request = HTTPRequestParser.parse("GET /image.png HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);

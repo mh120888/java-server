@@ -2,6 +2,8 @@ package server; /**
  * Created by matthewhiggins on 7/5/16.
  */
 
+import app.Application;
+import cobspecapp.CobSpecApp;
 import cobspecapp.ResourceHandler;
 import cobspecapp.Router;
 
@@ -11,17 +13,15 @@ import java.net.Socket;
 import java.util.HashMap;
 
 public class MyServer {
-    public static String FILEPATH = "/Users/matthewhiggins/Desktop/cob_spec/public";
+    public static String publicDirectory = "/Users/matthewhiggins/Desktop/cob_spec/public";
 
     private static int port = 5000;
     private static String host = "localhost";
     private static String protocol = "http";
 
     public static void main(String[] args) throws IOException {
-        HashMap<String, String> options = CommandLineArgsParser.groupOptions(args);
-        port = getPortNumber(options);
+        setOptions(args);
         ServerSocket server = new ServerSocket(port);
-        updateFilepath(options);
         try {
             while (true) {
                 Socket socket = server.accept();
@@ -34,10 +34,9 @@ public class MyServer {
                         input += currentLine + "\n";
                         currentLine = in.readLine();
                     }
-                    HashMap<String, String> parsedRequest = HTTPRequestParser.parse(input);
-                    ResourceHandler resourceHandler = Router.getEndpoint(parsedRequest);
-                    HashMap<String, String> responseData = resourceHandler.getResponseData(parsedRequest);
-                    String output = HTTPResponseBuilder.buildResponse(responseData);
+                    Application app = new CobSpecApp();
+                    HashMap<String, String> response = app.getResponse(HTTPRequestParser.parse(input));
+                    String output = HTTPResponseBuilder.buildResponse(response);
                     out.println(output);
                 } finally {
                     socket.close();
@@ -55,6 +54,12 @@ public class MyServer {
     public static String getLocation(String path) {
         String location = protocol + "://" + host + ":" + Integer.toString(port) + "/";
         return location;
+    }
+
+    private static void setOptions(String[] args) {
+        HashMap<String, String> options = CommandLineArgsParser.groupOptions(args);
+        port = getPortNumber(options);
+        updateFilepath(options);
     }
 
     private static int getPortNumber(HashMap<String, String> options) {
@@ -76,7 +81,7 @@ public class MyServer {
         }
         File file = new File(directory);
         if (file.exists()) {
-            FILEPATH = directory;
+            publicDirectory = directory;
         }
     }
 }
