@@ -1,5 +1,9 @@
 package test;
 
+import app.Application;
+import mocks.MockApplication;
+import mocks.MockOutputStream;
+import mocks.MockPrintStream;
 import org.junit.Assert;
 import org.junit.Test;
 import server.MyServer;
@@ -49,4 +53,13 @@ public class MyServerTest {
         Assert.assertEquals("", result);
     }
 
+    @Test
+    public void generateOutputWritesToOutputStream() throws Exception {
+        String input = "Something random, doesn't matter";
+        MockPrintStream out = new MockPrintStream(new MockOutputStream());
+        Application app = new MockApplication("Random response");
+        MyServer.generateOutput(input, out, app);
+
+        Assert.assertEquals("Random response", out.lastMessage);
+    }
 }
