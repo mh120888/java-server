@@ -21,23 +21,17 @@ public class MyServer {
 
     public static void main(String[] args) throws IOException {
         setOptions(args);
+        runServer(new CobSpecApp());
+    }
+
+    public static void runServer(Application app) throws IOException {
         ServerSocket server = new ServerSocket(port);
         try {
             while (true) {
                 Socket socket = server.accept();
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 try {
-                    String input = "";
-                    String currentLine = in.readLine().trim();
-                    while (!currentLine.isEmpty()) {
-                        input += currentLine + "\n";
-                        currentLine = in.readLine();
-                    }
-                    Application app = new CobSpecApp();
-                    HashMap<String, String> response = app.getResponse(HTTPRequestParser.parse(input));
-                    String output = HTTPResponseBuilder.buildResponse(response);
-                    out.println(output);
+                    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    generateOutput(readInInput(in), new PrintStream(socket.getOutputStream()), app);
                 } finally {
                     socket.close();
                 }
@@ -49,6 +43,22 @@ public class MyServer {
         } finally {
             server.close();
         }
+    }
+
+    public static void generateOutput(String input, PrintStream out, Application app) throws IOException {
+        HashMap<String, String> response = app.getResponse(HTTPRequestParser.parse(input));
+        String output = HTTPResponseBuilder.buildResponse(response);
+        out.println(output);
+    }
+
+    public static String readInInput(BufferedReader in) throws IOException {
+        String input = "";
+        String currentLine = in.readLine();
+        while (currentLine != null && !currentLine.trim().isEmpty()) {
+            input += currentLine.trim() + "\n";
+            currentLine = in.readLine();
+        }
+        return input;
     }
 
     public static String getLocation(String path) {
@@ -85,6 +95,8 @@ public class MyServer {
         }
     }
 }
+
+
 
 //maybe these go into the same package with the server?
 //depends on request parser

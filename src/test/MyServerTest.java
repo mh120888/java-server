@@ -1,7 +1,10 @@
 package test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import org.junit.Assert;
+import org.junit.Test;
+import server.MyServer;
+
+import java.io.*;
 
 /**
  * Created by matthewhiggins on 7/5/16.
@@ -22,12 +25,28 @@ public class MyServerTest {
         System.setErr(null);
     }
 
-//    @Test
-//    public void fileTest() {
-//        File file = new File("/Users/matthewhiggins/Desktop/cob_spec/public");
-//        String[] fileNames = file.list();
-//        boolean result = Arrays.asList(fileNames).contains("file2");
-//        boolean fileExists = file.exists();
-//        assertTrue("Does not contain the specified file", result);
-//    }
+    @Test
+    public void readInInputTrimsEachLineAndEndsItWithANewlineCharacter() throws Exception {
+        BufferedReader in = new BufferedReader(new StringReader("Some string with whitespace at the end    "));
+        String result = MyServer.readInInput(in);
+
+        Assert.assertEquals("Some string with whitespace at the end\n", result);
+    }
+
+    @Test
+    public void readInInputWorksProperlyForMultiLineInput() throws Exception {
+        BufferedReader in = new BufferedReader(new StringReader("Line one\nLine two   "));
+        String result = MyServer.readInInput(in);
+
+        Assert.assertEquals("Line one\nLine two\n", result);
+    }
+
+    @Test
+    public void readInInputIgnoresAnythingAfterAnEmptyLine() throws Exception {
+        BufferedReader in = new BufferedReader(new StringReader("     \nLine two\nLine three   "));
+        String result = MyServer.readInInput(in);
+
+        Assert.assertEquals("", result);
+    }
+
 }
