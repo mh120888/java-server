@@ -10,10 +10,11 @@ import java.util.Arrays;
  */
 public class Router {
     public static ResourceHandler getEndpoint(AbstractHttpRequest request, String publicDirectory) {
+        Logger.addLog(request.getInitialRequestLine());
+
         File file = new File(publicDirectory);
         String[] fileNames = file.list();
         String path = request.getPath();
-        Logger.addLog(request.getMethod() + " " + path + " " + request.getVersion());
 
         if (Arrays.asList(fileNames).contains(path.replace("/", "")) || path.equals("/")) {
             return new StaticResourceHandler(publicDirectory);

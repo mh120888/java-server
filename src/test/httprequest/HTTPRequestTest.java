@@ -133,4 +133,18 @@ public class HTTPRequestTest {
 
         Assert.assertEquals("http://localhost:5000/", request.getBaseLocation());
     }
+
+    @Test
+    public void getInitialRequestLineReturnsTheFirstLineOfTheRequest() {
+        HTTPRequest request = new HTTPRequest("GET / HTTP/1.1\n");
+
+        Assert.assertEquals("GET / HTTP/1.1", request.getInitialRequestLine());
+    }
+
+    @Test
+    public void getInitialRequestLineIncludesParams() {
+        HTTPRequest request = new HTTPRequest("GET /some-path?somerandomparam=33 HTTP/1.1\n");
+
+        Assert.assertEquals("GET /some-path?somerandomparam=33 HTTP/1.1", request.getInitialRequestLine());
+    }
 }

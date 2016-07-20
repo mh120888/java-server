@@ -16,4 +16,5 @@ public abstract class AbstractHttpRequest {
     public abstract String getParam(String paramName);
     public abstract boolean paramExists(String paramName);
     public abstract String getBaseLocation();
+    public abstract String getInitialRequestLine();
 }
