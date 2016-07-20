@@ -1,4 +1,4 @@
-package test;
+package cobspecapp;
 
 import org.junit.Test;
 import main.CommandLineArgsParser;
