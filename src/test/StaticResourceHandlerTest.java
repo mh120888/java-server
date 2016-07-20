@@ -20,6 +20,8 @@ import static org.junit.Assert.assertTrue;
  * Created by matthewhiggins on 7/11/16.
  */
 public class StaticResourceHandlerTest {
+    public static String publicDirectory = "/Users/matthewhiggins/Desktop/cob_spec/public";
+
     @Before
     public void setUp() throws Exception {
 
@@ -32,7 +34,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void getReponseDataReturnsCorrectResponseLineForGet() {
-        StaticResourceHandler endpoint = new StaticResourceHandler();
+        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         HashMap<String, String> request = HTTPRequestParser.parse("GET / HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
@@ -41,7 +43,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void getResponseDataReturns200ForHeadRequest() {
-        StaticResourceHandler endpoint = new StaticResourceHandler();
+        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         HashMap<String, String> request = HTTPRequestParser.parse("HEAD / HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
@@ -50,7 +52,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void getResponseDataReturns405ForInvalidMethods() {
-        StaticResourceHandler endpoint = new StaticResourceHandler();
+        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         HashMap<String, String> request = HTTPRequestParser.parse("NOTAREALMETHOD / HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
@@ -59,7 +61,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void getIndexResponseIncludesLinksToOtherResourcesInPublic() {
-        StaticResourceHandler endpoint = new StaticResourceHandler();
+        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         HashMap<String, String> request = HTTPRequestParser.parse("GET / HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
@@ -68,7 +70,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void postRequestWithNoParamsReturnsA405() {
-        StaticResourceHandler endpoint = new StaticResourceHandler();
+        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         HashMap<String, String> request = HTTPRequestParser.parse("POST / HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
@@ -95,7 +97,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void isPathADirectoryReturnsTrueForADirectory() {
-        StaticResourceHandler endpoint = new StaticResourceHandler();
+        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         String path = "/";
 
         Assert.assertEquals(true, endpoint.isPathADirectory(path));
@@ -103,7 +105,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void isPathADirectoryReturnsFalseForAFile() {
-        StaticResourceHandler endpoint = new StaticResourceHandler();
+        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         String path = "/file1";
 
         Assert.assertEquals(false, endpoint.isPathADirectory(path));
@@ -111,7 +113,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void getFiletypeReturnsDIRECTORYForADirectory() {
-        StaticResourceHandler endpoint = new StaticResourceHandler();
+        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         String path = "/";
 
         Assert.assertEquals(StaticResourceHandler.Filetype.DIRECTORY, endpoint.getFiletype(path));
@@ -119,7 +121,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void getFiletypeReturnsIMAGEForAnImage() {
-        StaticResourceHandler endpoint = new StaticResourceHandler();
+        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         String path = "/image.png";
 
         Assert.assertEquals(StaticResourceHandler.Filetype.IMAGE, endpoint.getFiletype(path));
@@ -127,7 +129,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void getFiletypeReturnsOTHERForATextFile() {
-        StaticResourceHandler endpoint = new StaticResourceHandler();
+        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         String path = "/text-file.txt";
 
         Assert.assertEquals(StaticResourceHandler.Filetype.OTHER, endpoint.getFiletype(path));
@@ -135,8 +137,8 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void getRequestForAnExistingFileReturnsTheContentsOfThatFile() throws IOException {
-        StaticResourceHandler endpoint = new StaticResourceHandler();
-        String path = MyServer.publicDirectory + "/image.png";
+        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+        String path = publicDirectory + "/image.png";
         byte[] imageContents = Files.readAllBytes(Paths.get(path));
         HashMap<String, String> request = HTTPRequestParser.parse("GET /image.png HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);

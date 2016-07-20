@@ -4,8 +4,6 @@ package server; /**
 
 import app.Application;
 import cobspecapp.CobSpecApp;
-import cobspecapp.ResourceHandler;
-import cobspecapp.Router;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -13,7 +11,7 @@ import java.net.Socket;
 import java.util.HashMap;
 
 public class MyServer {
-    public static String publicDirectory = "/Users/matthewhiggins/Desktop/cob_spec/public";
+    private static String publicDirectory = "/Users/matthewhiggins/Desktop/cob_spec/public";
 
     private static int port = 5000;
     private static String host = "localhost";
@@ -21,7 +19,7 @@ public class MyServer {
 
     public static void main(String[] args) throws IOException {
         setOptions(args);
-        runServer(new CobSpecApp());
+        runServer(new CobSpecApp(publicDirectory));
     }
 
     public static void runServer(Application app) throws IOException {
@@ -36,8 +34,7 @@ public class MyServer {
                     socket.close();
                 }
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("Could not listen on port " + port);
             System.exit(-1);
         } finally {
