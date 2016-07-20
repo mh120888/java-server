@@ -4,6 +4,7 @@ package server; /**
 
 import abstracthttprequest.AbstractHttpRequest;
 import app.Application;
+import cobspecapp.CobSpecApp;
 import httprequest.HTTPRequest;
 
 import java.io.*;
@@ -12,11 +13,12 @@ import java.net.Socket;
 import java.util.HashMap;
 
 public class MyServer {
+    private static String publicDirectory = "/Users/matthewhiggins/Desktop/cob_spec/public";
     private static int port = 5000;
 
-    public static void go(int portNumber, Application app) throws IOException {
-        port = portNumber;
-        runServer(app);
+    public static void main(String[] args) throws IOException {
+        setOptions(args);
+        runServer(new CobSpecApp(publicDirectory));
     }
 
     public static void runServer(Application app) throws IOException {
@@ -54,5 +56,34 @@ public class MyServer {
             currentLine = in.readLine();
         }
         return input;
+    }
+
+    private static void setOptions(String[] args) {
+        HashMap<String, String> options = CommandLineArgsParser.groupOptions(args);
+        port = setPortNumber(options);
+        setPublicDirectory(options);
+    }
+
+    private static int setPortNumber(HashMap<String, String> options) {
+        int port = 5000;
+        if (options.containsKey("-p")) {
+            try {
+                port = Integer.parseInt(options.get("-p"));
+            } catch (NumberFormatException e) {
+                port = 5000;
+            }
+        }
+        return port;
+    }
+
+    private static void setPublicDirectory(HashMap<String, String> options) {
+        String directory = options.get("-d");
+        if (directory == null) {
+            return;
+        }
+        File file = new File(directory);
+        if (file.exists()) {
+            publicDirectory = directory;
+        }
     }
 }
