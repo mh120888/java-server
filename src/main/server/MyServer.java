@@ -65,11 +65,11 @@ public class MyServer {
 
     private static void setOptions(String[] args) {
         HashMap<String, String> options = CommandLineArgsParser.groupOptions(args);
-        port = getPortNumber(options);
-        updateFilepath(options);
+        port = setPortNumber(options);
+        setPublicDirectory(options);
     }
 
-    private static int getPortNumber(HashMap<String, String> options) {
+    private static int setPortNumber(HashMap<String, String> options) {
         int port = 5000;
         if (options.containsKey("-p")) {
             try {
@@ -81,7 +81,7 @@ public class MyServer {
         return port;
     }
 
-    private static void updateFilepath(HashMap<String, String> options) {
+    private static void setPublicDirectory(HashMap<String, String> options) {
         String directory = options.get("-d");
         if (directory == null) {
             return;
