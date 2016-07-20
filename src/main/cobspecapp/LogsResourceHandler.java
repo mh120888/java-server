@@ -1,7 +1,6 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHttpRequest;
-import server.HeaderParser;
 
 import java.util.HashMap;
 

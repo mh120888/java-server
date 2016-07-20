@@ -1,7 +1,6 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHttpRequest;
-import server.ParameterParser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +19,7 @@ public class ParametersResourceHandler implements ResourceHandler {
             responseData.put("responseLine", "HTTP/1.1 405 Method Not Allowed");
         }
 
-        Map<String, String> parameters = ParameterParser.parse(requestData.getPath());
+        Map<String, String> parameters = requestData.getAllParams();
 
         if (parameters.size() > 0) {
             String body = "";

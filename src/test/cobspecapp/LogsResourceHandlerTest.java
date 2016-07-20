@@ -4,7 +4,6 @@ import abstracthttprequest.AbstractHttpRequest;
 import httprequest.HTTPRequest;
 import org.junit.Before;
 import org.junit.Test;
-import server.HTTPRequestParser;
 
 import java.util.HashMap;
 

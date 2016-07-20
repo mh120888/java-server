@@ -70,4 +70,60 @@ public class HTTPRequestTest {
 
         Assert.assertFalse(request.headerExists("does not exist"));
     }
+
+    @Test
+    public void getAllParamsReturnsNoParamsIfNoneWerePassed() {
+        HTTPRequest request = new HTTPRequest("GET /path-with-no-params HTTP/1.1\n");
+
+        Assert.assertEquals(0, request.getAllParams().size());
+    }
+
+    @Test
+    public void getAllParamsReturnsTheCorrectNumberOfParamsForARequestWithParams() {
+        HTTPRequest request = new HTTPRequest("GET /path-with-two-params?firstParam=foobar&secondParam=alsoFoobar HTTP/1.1\n");
+
+        Assert.assertEquals(2, request.getAllParams().size());
+    }
+
+    @Test
+    public void getAllParamsContainsASpecificParamThatWasPassed() {
+        HTTPRequest request = new HTTPRequest("GET /path-with-two-params?firstParam=foobar&secondParam=alsoFoobar HTTP/1.1\n");
+
+        Assert.assertEquals("foobar", request.getAllParams().get("firstParam"));
+    }
+
+    @Test
+    public void paramExistsReturnsTrueForAParamThatExists() {
+        HTTPRequest request = new HTTPRequest("GET /path-with-two-params?firstParam=foobar&secondParam=alsoFoobar HTTP/1.1\n");
+
+        Assert.assertTrue(request.paramExists("firstParam"));
+    }
+
+    @Test
+    public void paramExistsReturnsFalseForAParamThatDoesNotExist() {
+        HTTPRequest request = new HTTPRequest("GET /path-with-two-params?firstParam=foobar&secondParam=alsoFoobar HTTP/1.1\n");
+
+        Assert.assertFalse(request.paramExists("notreal"));
+    }
+
+    @Test
+    public void getParamRetrievesTheValueOfASpecificParam() {
+        HTTPRequest request = new HTTPRequest("GET /path-with-two-params?firstParam=foobar&secondParam=alsoFoobar HTTP/1.1\n");
+
+        Assert.assertEquals("alsoFoobar", request.getParam("secondParam"));
+    }
+
+    @Test
+    public void paramValueHas20ReplacedWithASpace() {
+        HTTPRequest request = new HTTPRequest("GET /pathwithoneparam?singleParam=two%20words HTTP/1.1\n");
+
+        Assert.assertEquals("two words", request.getParam("singleParam"));
+    }
+
+    @Test
+    public void paramValueHasPercent3CReplacedWithASpace() {
+        HTTPRequest request = new HTTPRequest("GET /pathwithoneparam?lessThan=%3C HTTP/1.1\n");
+
+        Assert.assertEquals("<", request.getParam("lessThan"));
+    }
 }
