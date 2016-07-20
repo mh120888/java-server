@@ -1,5 +1,7 @@
 package cobspecapp;
 
+import abstracthttprequest.AbstractHttpRequest;
+import httprequest.HTTPRequest;
 import org.junit.Test;
 import server.HTTPRequestParser;
 import server.HeaderParser;
@@ -15,7 +17,7 @@ public class RedirectResourceHandlerTest {
     @Test
     public void getResponseDataReturnsA302Response() {
         RedirectResourceHandler endpoint = new RedirectResourceHandler();
-        HashMap<String, String> request = HTTPRequestParser.parse("GET /pathdoesnotmatter HTTP/1.1");
+        AbstractHttpRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("HTTP/1.1 302 Found", response.get("responseLine"));
@@ -24,7 +26,7 @@ public class RedirectResourceHandlerTest {
     @Test
     public void getResponseDataReturnsResponseContainingLocationHeader() {
         RedirectResourceHandler endpoint = new RedirectResourceHandler();
-        HashMap<String, String> request = HTTPRequestParser.parse("GET /pathdoesnotmatter HTTP/1.1");
+        AbstractHttpRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
         HashMap<String, String> headers = HeaderParser.parse(response.get("headers"));
 
@@ -34,7 +36,7 @@ public class RedirectResourceHandlerTest {
     @Test
     public void getResponseDataReturnsResponseContainingLocationHeaderWithCorrectValue() {
         RedirectResourceHandler endpoint = new RedirectResourceHandler();
-        HashMap<String, String> request = HTTPRequestParser.parse("GET /pathdoesnotmatter HTTP/1.1");
+        AbstractHttpRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
         HashMap<String, String> headers = HeaderParser.parse(response.get("headers"));
 

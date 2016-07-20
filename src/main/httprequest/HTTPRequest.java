@@ -52,4 +52,8 @@ public class HTTPRequest extends AbstractHttpRequest {
     public String getHeader(String headerName) {
         return headers.get(headerName);
     }
+
+    public boolean headerExists(String headerName) {
+        return headers.containsKey(headerName);
+    }
 }

@@ -2,7 +2,9 @@ package server; /**
  * Created by matthewhiggins on 7/5/16.
  */
 
+import abstracthttprequest.AbstractHttpRequest;
 import app.Application;
+import httprequest.HTTPRequest;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -40,7 +42,8 @@ public class MyServer {
     }
 
     public static void generateOutput(String input, PrintStream out, Application app) throws IOException {
-        HashMap<String, String> response = app.getResponse(HTTPRequestParser.parse(input));
+        AbstractHttpRequest request = new HTTPRequest(input);
+        HashMap<String, String> response = app.getResponse(request);
         String output = HTTPResponseBuilder.buildResponse(response);
         out.println(output);
     }

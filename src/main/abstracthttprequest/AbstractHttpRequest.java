@@ -10,4 +10,6 @@ public abstract class AbstractHttpRequest {
     public abstract String getMethod();
     public abstract String getVersion();
     public abstract HashMap<String, String> getAllHeaders();
+    public abstract String getHeader(String headerName);
+    public abstract boolean headerExists(String headerName);
 }

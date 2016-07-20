@@ -1,5 +1,7 @@
 package cobspecapp;
 
+import abstracthttprequest.AbstractHttpRequest;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -22,7 +24,7 @@ public class StaticResourceHandler implements ResourceHandler {
         DIRECTORY, IMAGE, OTHER
     }
 
-    public HashMap<String, String> getResponseData(HashMap<String, String> requestData) {
+    public HashMap<String, String> getResponseData(AbstractHttpRequest requestData) {
         HashMap<String, String> responseData = new HashMap<>();
         responseData.put("responseLine", getResponseLine(requestData));
         responseData.put("body", getBody(requestData));
@@ -30,11 +32,12 @@ public class StaticResourceHandler implements ResourceHandler {
         return responseData;
     }
 
-    private String getResponseLine(HashMap<String, String> requestData) {
-        String method = requestData.get("method");
-        String path = requestData.get("path");
+    private String getResponseLine(AbstractHttpRequest requestData) {
+        String method = requestData.getMethod();
 
-        if (isAcceptableMethodWithoutParams(method) || requestData.containsKey("body") && isAcceptableMethodWithParams(method)) {
+        if (isAcceptableMethodWithoutParams(method))
+//        (isAcceptableMethodWithoutParams(method) || requestData.containsKey("body") && isAcceptableMethodWithParams(method))
+        {
             return "HTTP/1.1 200 OK";
         } else {
             return "HTTP/1.1 405 Method Not Allowed";
@@ -57,13 +60,13 @@ public class StaticResourceHandler implements ResourceHandler {
         return Arrays.asList(listOfMethods).contains(method);
     }
 
-    private String getBody(HashMap<String, String> requestData) {
-        String method = requestData.get("method");
+    private String getBody(AbstractHttpRequest requestData) {
+        String method = requestData.getMethod();
         String body = "";
         if (!method.equals("GET")) {
             return body;
         }
-        String path = requestData.get("path");
+        String path = requestData.getPath();
         switch (getFiletype(path)) {
             case DIRECTORY:
                 File file = new File(publicDirectory);

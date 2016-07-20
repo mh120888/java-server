@@ -1,5 +1,7 @@
 package cobspecapp;
 
+import abstracthttprequest.AbstractHttpRequest;
+import httprequest.HTTPRequest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +29,7 @@ public class CoffeeResourceHandlerTest {
     @Test
     public void returns418ForGETCoffee() {
         CoffeeResourceHandler endpoint = new CoffeeResourceHandler();
-        HashMap<String, String> request = HTTPRequestParser.parse("GET /coffee HTTP/1.0");
+        AbstractHttpRequest request = new HTTPRequest("GET /coffee HTTP/1.0");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("HTTP/1.1 418", response.get("responseLine"));
@@ -36,7 +38,7 @@ public class CoffeeResourceHandlerTest {
     @Test
     public void bodyContainsCorrectStringIfPathIsCoffee() {
         CoffeeResourceHandler endpoint = new CoffeeResourceHandler();
-        HashMap<String, String> request = HTTPRequestParser.parse("GET /coffee HTTP/1.0");
+        AbstractHttpRequest request = new HTTPRequest("GET /coffee HTTP/1.0");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertTrue(response.get("body").contains("I'm a teapot"));
@@ -45,7 +47,7 @@ public class CoffeeResourceHandlerTest {
     @Test
     public void returns200ForGETTea() {
         CoffeeResourceHandler endpoint = new CoffeeResourceHandler();
-        HashMap<String, String> request = HTTPRequestParser.parse("GET /tea HTTP/1.0");
+        AbstractHttpRequest request = new HTTPRequest("GET /tea HTTP/1.0");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));

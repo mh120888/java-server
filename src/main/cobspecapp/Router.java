@@ -1,18 +1,19 @@
 package cobspecapp;
 
+import abstracthttprequest.AbstractHttpRequest;
+
 import java.io.File;
 import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * Created by matthewhiggins on 7/11/16.
  */
 public class Router {
-    public static ResourceHandler getEndpoint(HashMap<String, String> request, String publicDirectory) {
+    public static ResourceHandler getEndpoint(AbstractHttpRequest request, String publicDirectory) {
         File file = new File(publicDirectory);
         String[] fileNames = file.list();
-        String path = request.get("path");
-        Logger.addLog(request.get("method") + " " + path + " " + request.get("httpVersion"));
+        String path = request.getPath();
+        Logger.addLog(request.getMethod() + " " + path + " " + request.getVersion());
 
         if (Arrays.asList(fileNames).contains(path.replace("/", "")) || path.equals("/")) {
             return new StaticResourceHandler(publicDirectory);

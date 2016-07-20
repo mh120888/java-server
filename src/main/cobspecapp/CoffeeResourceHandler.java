@@ -1,5 +1,7 @@
 package cobspecapp;
 
+import abstracthttprequest.AbstractHttpRequest;
+
 import java.util.HashMap;
 
 /**
@@ -8,12 +10,10 @@ import java.util.HashMap;
 public class CoffeeResourceHandler implements ResourceHandler {
     public CoffeeResourceHandler() {}
 
-    public HashMap<String, String> getResponseData(HashMap<String, String> requestData) {
+    public HashMap<String, String> getResponseData(AbstractHttpRequest requestData) {
         HashMap<String, String> responseData = new HashMap<>();
-        String method = requestData.get("method");
-        String path = requestData.get("path");
 
-        if (path.equals("/coffee")) {
+        if (requestData.getPath().equals("/coffee")) {
             responseData.put("responseLine", "HTTP/1.1 418");
             responseData.put("body", "I'm a teapot");
         } else {
