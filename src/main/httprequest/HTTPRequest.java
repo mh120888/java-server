@@ -104,4 +104,8 @@ public class HTTPRequest extends AbstractHttpRequest {
     public String getParam(String paramName) {
         return params.get(paramName);
     }
+
+    public String getBaseLocation() {
+        return "http://localhost:5000/";
+    }
 }

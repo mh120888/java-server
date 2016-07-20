@@ -1,7 +1,8 @@
 package cobspecapp;
 
+import abstracthttprequest.AbstractHttpRequest;
+import httprequest.HTTPRequest;
 import org.junit.Test;
-import server.HTTPRequestParser;
 
 import java.util.HashMap;
 
@@ -23,7 +24,7 @@ public class PostableResourceHandlerTest {
     @Test
     public void getResponseDataReturns200ForGET() {
         PostableResourceHandler endpoint = new PostableResourceHandler();
-        HashMap<String, String> request = HTTPRequestParser.parse("GET /form HTTP/1.1");
+        AbstractHttpRequest request = new HTTPRequest("GET /form HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
@@ -32,7 +33,7 @@ public class PostableResourceHandlerTest {
     @Test
     public void getResponseDataReturnsA405ForPostWithoutParams() {
         PostableResourceHandler endpoint = new PostableResourceHandler();
-        HashMap<String, String> request = HTTPRequestParser.parse("POST /form HTTP/1.1");
+        AbstractHttpRequest request = new HTTPRequest("POST /form HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("HTTP/1.1 405 Method Not Allowed", response.get("responseLine"));

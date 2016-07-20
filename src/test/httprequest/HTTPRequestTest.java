@@ -126,4 +126,11 @@ public class HTTPRequestTest {
 
         Assert.assertEquals("<", request.getParam("lessThan"));
     }
+
+    @Test
+    public void getBaseLocationReturnsTheCorrectDefaultLocation() {
+        HTTPRequest request = new HTTPRequest("GET / HTTP/1.1\n");
+
+        Assert.assertEquals("http://localhost:5000/", request.getBaseLocation());
+    }
 }

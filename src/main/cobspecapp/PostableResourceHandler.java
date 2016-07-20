@@ -35,9 +35,10 @@ public class PostableResourceHandler implements ResourceHandler {
 //        else if (requestData.containsKey("body")) {
 //            responseData.put("responseLine", "HTTP/1.1 200 OK");
 //            data = requestData.get("body");
-//        } else {
-//            responseData.put("responseLine", "HTTP/1.1 405 Method Not Allowed");
 //        }
+        else {
+                responseData.put("responseLine", "HTTP/1.1 405 Method Not Allowed");
+        }
         return responseData;
     }
 }

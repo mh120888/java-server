@@ -13,8 +13,6 @@ import java.util.HashMap;
 
 public class MyServer {
     private static int port = 5000;
-    private static String host = "localhost";
-    private static String protocol = "http";
 
     public static void go(int portNumber, Application app) throws IOException {
         port = portNumber;
@@ -56,10 +54,5 @@ public class MyServer {
             currentLine = in.readLine();
         }
         return input;
-    }
-
-    public static String getLocation(String path) {
-        String location = protocol + "://" + host + ":" + Integer.toString(port) + "/";
-        return location;
     }
 }
