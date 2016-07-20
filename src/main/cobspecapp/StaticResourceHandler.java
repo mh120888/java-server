@@ -14,7 +14,11 @@ import java.util.HashMap;
  * Created by matthewhiggins on 7/11/16.
  */
 public class StaticResourceHandler implements ResourceHandler {
-    public StaticResourceHandler() {}
+    public StaticResourceHandler(String filepath) {
+        publicDirectory = filepath;
+    }
+
+    public static String publicDirectory;
 
     public enum Filetype {
         DIRECTORY, IMAGE, OTHER
@@ -64,7 +68,7 @@ public class StaticResourceHandler implements ResourceHandler {
         String path = requestData.get("path");
         switch (getFiletype(path)) {
             case DIRECTORY:
-                File file = new File(MyServer.FILEPATH);
+                File file = new File(publicDirectory);
                 String[] fileNames = file.list();
 
                 for (String fileName : fileNames) {
@@ -73,7 +77,7 @@ public class StaticResourceHandler implements ResourceHandler {
                 break;
             default:
                 try {
-                    String filePath = MyServer.FILEPATH + path;
+                    String filePath = publicDirectory + path;
                     byte[] imageContents = Files.readAllBytes(Paths.get(filePath));
                     body = new String(imageContents, Charset.defaultCharset());
                 } catch (IOException e) {
@@ -98,7 +102,7 @@ public class StaticResourceHandler implements ResourceHandler {
     }
 
     public boolean isPathADirectory(String path) {
-        String filePath = MyServer.FILEPATH + path;
+        String filePath = publicDirectory + path;
         File file = new File(filePath);
         return file.isDirectory();
     }
