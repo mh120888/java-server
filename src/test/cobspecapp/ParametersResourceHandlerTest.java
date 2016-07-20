@@ -1,6 +1,5 @@
-package test;
+package cobspecapp;
 
-import cobspecapp.ParametersResourceHandler;
 import org.junit.Test;
 import server.HTTPRequestParser;
 

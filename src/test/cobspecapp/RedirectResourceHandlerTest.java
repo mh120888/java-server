@@ -1,6 +1,5 @@
-package test;
+package cobspecapp;
 
-import cobspecapp.RedirectResourceHandler;
 import org.junit.Test;
 import server.HTTPRequestParser;
 import server.HeaderParser;

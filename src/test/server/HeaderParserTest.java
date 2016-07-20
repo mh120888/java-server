@@ -1,7 +1,6 @@
-package test;
+package server;
 
 import org.junit.Test;
-import server.HeaderParser;
 
 import java.util.HashMap;
 

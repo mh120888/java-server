@@ -1,6 +1,5 @@
-package test;
+package cobspecapp;
 
-import cobspecapp.PostableResourceHandler;
 import org.junit.Test;
 import server.HTTPRequestParser;
 

@@ -27,7 +27,7 @@ public class ParametersResourceHandler implements ResourceHandler {
             for (Map.Entry<String, String> entry : parameters.entrySet()) {
                 body += entry.getKey() + " = " + entry.getValue() + "\n";
             }
-            responseData.put("boy", body);
+            responseData.put("body", body);
         }
 
         return responseData;

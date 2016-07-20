@@ -1,7 +1,6 @@
-package test;
+package server;
 
 import org.junit.Test;
-import server.ParameterParser;
 
 import java.util.HashMap;
 

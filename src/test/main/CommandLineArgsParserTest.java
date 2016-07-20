@@ -1,7 +1,6 @@
-package cobspecapp;
+package main;
 
 import org.junit.Test;
-import main.CommandLineArgsParser;
 
 import java.util.HashMap;
 

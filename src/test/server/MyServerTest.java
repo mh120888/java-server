@@ -1,4 +1,4 @@
-package test;
+package server;
 
 import app.Application;
 import mocks.MockApplication;
@@ -6,7 +6,6 @@ import mocks.MockOutputStream;
 import mocks.MockPrintStream;
 import org.junit.Assert;
 import org.junit.Test;
-import server.MyServer;
 
 import java.io.*;
 

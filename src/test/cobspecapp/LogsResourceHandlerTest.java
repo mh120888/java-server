@@ -1,7 +1,5 @@
-package test;
+package cobspecapp;
 
-import cobspecapp.Logger;
-import cobspecapp.LogsResourceHandler;
 import org.junit.Before;
 import org.junit.Test;
 import server.HTTPRequestParser;

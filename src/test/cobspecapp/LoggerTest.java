@@ -1,6 +1,5 @@
-package test;
+package cobspecapp;
 
-import cobspecapp.Logger;
 import org.junit.Test;
 
 import java.util.List;

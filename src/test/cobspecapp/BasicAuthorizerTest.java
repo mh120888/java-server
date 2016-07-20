@@ -1,6 +1,5 @@
-package test;
+package cobspecapp;
 
-import cobspecapp.BasicAuthorizer;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
