@@ -1,7 +1,5 @@
 package cobspecapp;
 
-import server.MyServer;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,8 +33,3 @@ public class Router {
         }
     }
 }
-
-//depends on
-//all resource handler implementations
-//cobspecapp.ResourceHandler interface (for its return value)
-//server.MyServer (to get filepath)

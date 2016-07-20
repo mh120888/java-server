@@ -1,7 +1,7 @@
 package test;
 
 import org.junit.Test;
-import server.CommandLineArgsParser;
+import main.CommandLineArgsParser;
 
 import java.util.HashMap;
 

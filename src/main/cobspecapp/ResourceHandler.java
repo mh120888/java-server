@@ -8,6 +8,3 @@ import java.util.HashMap;
 public interface ResourceHandler {
     public HashMap<String, String> getResponseData(HashMap<String, String> requestData);
 }
-
-//depends on nothing
-//0

@@ -3,7 +3,6 @@ package server; /**
  */
 
 import app.Application;
-import cobspecapp.CobSpecApp;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -11,15 +10,13 @@ import java.net.Socket;
 import java.util.HashMap;
 
 public class MyServer {
-    private static String publicDirectory = "/Users/matthewhiggins/Desktop/cob_spec/public";
-
     private static int port = 5000;
     private static String host = "localhost";
     private static String protocol = "http";
 
-    public static void main(String[] args) throws IOException {
-        setOptions(args);
-        runServer(new CobSpecApp(publicDirectory));
+    public static void go(int portNumber, Application app) throws IOException {
+        port = portNumber;
+        runServer(app);
     }
 
     public static void runServer(Application app) throws IOException {
@@ -62,43 +59,4 @@ public class MyServer {
         String location = protocol + "://" + host + ":" + Integer.toString(port) + "/";
         return location;
     }
-
-    private static void setOptions(String[] args) {
-        HashMap<String, String> options = CommandLineArgsParser.groupOptions(args);
-        port = setPortNumber(options);
-        setPublicDirectory(options);
-    }
-
-    private static int setPortNumber(HashMap<String, String> options) {
-        int port = 5000;
-        if (options.containsKey("-p")) {
-            try {
-                port = Integer.parseInt(options.get("-p"));
-            } catch (NumberFormatException e) {
-                port = 5000;
-            }
-        }
-        return port;
-    }
-
-    private static void setPublicDirectory(HashMap<String, String> options) {
-        String directory = options.get("-d");
-        if (directory == null) {
-            return;
-        }
-        File file = new File(directory);
-        if (file.exists()) {
-            publicDirectory = directory;
-        }
-    }
 }
-
-
-
-//maybe these go into the same package with the server?
-//depends on request parser
-//depends on http response builder
-
-//maybe instead of depending on a router, and then on the rh interface, i can create an abstraction called Application that simply responds to a method called getResponse, given the request data
-//depends on router
-//depends on resource handler interface (but not implementations)

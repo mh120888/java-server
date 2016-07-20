@@ -4,7 +4,7 @@ import server.HeaderParser;
 
 import java.util.HashMap;
 
-/**
+/**L
  * Created by matthewhiggins on 7/12/16.
  */
 public class LogsResourceHandler implements ResourceHandler {
