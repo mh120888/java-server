@@ -1,14 +1,11 @@
 package cobspecapp;
 
-import abstracthttprequest.AbstractHttpRequest;
+import abstracthttprequest.AbstractHTTPRequest;
 import httprequest.HTTPRequest;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import server.HTTPRequestParser;
-
-import java.util.HashMap;
 
 import static org.junit.Assert.assertTrue;
 
@@ -30,7 +27,7 @@ public class RouterTest {
 
     @Test
     public void getEndpointReturnsStaticResourceEndpointForAStaticResource() {
-        AbstractHttpRequest request = new HTTPRequest("GET / HTTP/1.1");
+        AbstractHTTPRequest request = new HTTPRequest("GET / HTTP/1.1");
         ResourceHandler resourceHandler = Router.getEndpoint(request, publicDirectory);
 
         assertTrue(resourceHandler instanceof StaticResourceHandler);
@@ -38,7 +35,7 @@ public class RouterTest {
 
     @Test
     public void getEndpointReturnsCoffeeEndpointWhenAppropriate() {
-        AbstractHttpRequest request = new HTTPRequest("GET /coffee HTTP/1.1");
+        AbstractHTTPRequest request = new HTTPRequest("GET /coffee HTTP/1.1");
         ResourceHandler resourceHandler = Router.getEndpoint(request, publicDirectory);
 
         assertTrue(resourceHandler instanceof CoffeeResourceHandler);
@@ -46,7 +43,7 @@ public class RouterTest {
 
     @Test
     public void getEndpointReturnsNotFoundEndpointWhenPathIsNotRecognized() {
-        AbstractHttpRequest request = new HTTPRequest("GET /foobar HTTP/1.1");
+        AbstractHTTPRequest request = new HTTPRequest("GET /foobar HTTP/1.1");
         ResourceHandler resourceHandler = Router.getEndpoint(request, publicDirectory);
 
         assertTrue(resourceHandler instanceof NotFoundResourceHandler);
@@ -54,7 +51,7 @@ public class RouterTest {
 
     @Test
     public void getEndpointReturnsPostableEndpointWhenAppropriate() {
-        AbstractHttpRequest request = new HTTPRequest("POST /form HTTP/1.1");
+        AbstractHTTPRequest request = new HTTPRequest("POST /form HTTP/1.1");
         ResourceHandler resourceHandler = Router.getEndpoint(request, publicDirectory);
 
         assertTrue(resourceHandler instanceof PostableResourceHandler);
@@ -62,7 +59,7 @@ public class RouterTest {
 
     @Test
     public void getEndpointReturnsLogsEndpointWhenAppropriatePathIsRequested() {
-        AbstractHttpRequest request = new HTTPRequest("GET /logs HTTP/1.1");
+        AbstractHTTPRequest request = new HTTPRequest("GET /logs HTTP/1.1");
         ResourceHandler resourceHandler = Router.getEndpoint(request, publicDirectory);
 
         assertTrue(resourceHandler instanceof LogsResourceHandler);
@@ -71,7 +68,7 @@ public class RouterTest {
     @Test
     public void allRequestsAreLoggedAfterBeingRoutes() {
         String requestLine = "GET /logs HTTP/1.1";
-        AbstractHttpRequest request = new HTTPRequest(requestLine);
+        AbstractHTTPRequest request = new HTTPRequest(requestLine);
         Router.getEndpoint(request, publicDirectory);
 
         Assert.assertEquals(true, Logger.getLog().contains(requestLine));
@@ -79,7 +76,7 @@ public class RouterTest {
 
     @Test
     public void requestToParametersReturnsParametersEndpoint() {
-        AbstractHttpRequest request = new HTTPRequest("GET /parameters HTTP/1.1");
+        AbstractHTTPRequest request = new HTTPRequest("GET /parameters HTTP/1.1");
         ResourceHandler resourceHandler = Router.getEndpoint(request, publicDirectory);
 
         assertTrue(resourceHandler instanceof ParametersResourceHandler);
@@ -87,7 +84,7 @@ public class RouterTest {
 
     @Test
     public void getEndpointReturnsOptionsEndPointWhenAppropriate() {
-        AbstractHttpRequest request = new HTTPRequest("GET /method_options HTTP/1.1");
+        AbstractHTTPRequest request = new HTTPRequest("GET /method_options HTTP/1.1");
         ResourceHandler resourceHandler = Router.getEndpoint(request, publicDirectory);
 
         assertTrue(resourceHandler instanceof OptionsResourceHandler);
@@ -95,7 +92,7 @@ public class RouterTest {
 
     @Test
     public void getEndpointReturnsRedirectResourceHandlerWhenAppropriate() {
-        AbstractHttpRequest request = new HTTPRequest("GET /redirect HTTP/1.1");
+        AbstractHTTPRequest request = new HTTPRequest("GET /redirect HTTP/1.1");
         ResourceHandler resourceHandler = Router.getEndpoint(request, publicDirectory);
 
         assertTrue(resourceHandler instanceof RedirectResourceHandler);

@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import abstracthttprequest.AbstractHttpRequest;
+import abstracthttprequest.AbstractHTTPRequest;
 
 import java.util.HashMap;
 
@@ -25,7 +25,7 @@ public class PostableResourceHandler implements ResourceHandler {
         return responseData;
     }
 
-    public HashMap<String, String> getResponseData(AbstractHttpRequest requestData) {
+    public HashMap<String, String> getResponseData(AbstractHTTPRequest requestData) {
         HashMap<String, String> responseData = new HashMap<>();
 
         if (requestData.getMethod().equals("GET")) {

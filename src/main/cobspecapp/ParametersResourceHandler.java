@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import abstracthttprequest.AbstractHttpRequest;
+import abstracthttprequest.AbstractHTTPRequest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class ParametersResourceHandler implements ResourceHandler {
 
-    public HashMap<String, String> getResponseData(AbstractHttpRequest requestData) {
+    public HashMap<String, String> getResponseData(AbstractHTTPRequest requestData) {
         HashMap<String, String> responseData = new HashMap<>();
 
         if (requestData.getMethod().equals("GET")) {

@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import abstracthttprequest.AbstractHttpRequest;
+import abstracthttprequest.AbstractHTTPRequest;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class StaticResourceHandler implements ResourceHandler {
         DIRECTORY, IMAGE, OTHER
     }
 
-    public HashMap<String, String> getResponseData(AbstractHttpRequest requestData) {
+    public HashMap<String, String> getResponseData(AbstractHTTPRequest requestData) {
         HashMap<String, String> responseData = new HashMap<>();
         responseData.put("responseLine", getResponseLine(requestData));
         responseData.put("body", getBody(requestData));
@@ -32,7 +32,7 @@ public class StaticResourceHandler implements ResourceHandler {
         return responseData;
     }
 
-    private String getResponseLine(AbstractHttpRequest requestData) {
+    private String getResponseLine(AbstractHTTPRequest requestData) {
         String method = requestData.getMethod();
 
         if (isAcceptableMethodWithoutParams(method))
@@ -60,7 +60,7 @@ public class StaticResourceHandler implements ResourceHandler {
         return Arrays.asList(listOfMethods).contains(method);
     }
 
-    private String getBody(AbstractHttpRequest requestData) {
+    private String getBody(AbstractHTTPRequest requestData) {
         String method = requestData.getMethod();
         String body = "";
         if (!method.equals("GET")) {

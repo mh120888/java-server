@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import abstracthttprequest.AbstractHttpRequest;
+import abstracthttprequest.AbstractHTTPRequest;
 
 import java.util.HashMap;
 
@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class LogsResourceHandler implements ResourceHandler {
     private String correctCredentials = "admin:hunter2";
 
-    public HashMap<String, String> getResponseData(AbstractHttpRequest requestData) {
+    public HashMap<String, String> getResponseData(AbstractHTTPRequest requestData) {
         HashMap<String, String> response = new HashMap<>();
 
         if (isAuthorized(requestData)) {
@@ -23,7 +23,7 @@ public class LogsResourceHandler implements ResourceHandler {
         return response;
     }
 
-    public boolean isAuthorized(AbstractHttpRequest requestData) {
+    public boolean isAuthorized(AbstractHTTPRequest requestData) {
         String encodedCredentials = "";
         if (requestData.headerExists("Authorization")) {
             encodedCredentials = requestData.getHeader("Authorization").replace("Basic ", "");

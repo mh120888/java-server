@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import abstracthttprequest.AbstractHttpRequest;
+import abstracthttprequest.AbstractHTTPRequest;
 import httprequest.HTTPRequest;
 import org.junit.Test;
 
@@ -24,7 +24,7 @@ public class PostableResourceHandlerTest {
     @Test
     public void getResponseDataReturns200ForGET() {
         PostableResourceHandler endpoint = new PostableResourceHandler();
-        AbstractHttpRequest request = new HTTPRequest("GET /form HTTP/1.1");
+        AbstractHTTPRequest request = new HTTPRequest("GET /form HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
@@ -33,7 +33,7 @@ public class PostableResourceHandlerTest {
     @Test
     public void getResponseDataReturnsA405ForPostWithoutParams() {
         PostableResourceHandler endpoint = new PostableResourceHandler();
-        AbstractHttpRequest request = new HTTPRequest("POST /form HTTP/1.1");
+        AbstractHTTPRequest request = new HTTPRequest("POST /form HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("HTTP/1.1 405 Method Not Allowed", response.get("responseLine"));

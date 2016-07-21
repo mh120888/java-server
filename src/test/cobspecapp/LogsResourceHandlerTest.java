@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import abstracthttprequest.AbstractHttpRequest;
+import abstracthttprequest.AbstractHTTPRequest;
 import httprequest.HTTPRequest;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +21,7 @@ public class LogsResourceHandlerTest {
     @Test
     public void getLogsWithoutCredentialsReturnsA401() {
         LogsResourceHandler endpoint = new LogsResourceHandler();
-        AbstractHttpRequest request = new HTTPRequest("GET /logs HTTP/1.1");
+        AbstractHTTPRequest request = new HTTPRequest("GET /logs HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("HTTP/1.1 401 Unauthorized", response.get("responseLine"));
@@ -30,7 +30,7 @@ public class LogsResourceHandlerTest {
     @Test
     public void requestToLogsWithoutProperCredentialsReturnsWWWAuthenticateHeader() {
         LogsResourceHandler endpoint = new LogsResourceHandler();
-        AbstractHttpRequest request = new HTTPRequest("GET /logs HTTP/1.1");
+        AbstractHTTPRequest request = new HTTPRequest("GET /logs HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals(true, response.get("headers").contains("WWW-Authenticate: Basic realm=\"User Visible Realm\""));
@@ -39,7 +39,7 @@ public class LogsResourceHandlerTest {
     @Test
     public void isAuthorizedReturnsTrueForCorrectCredentials() {
         LogsResourceHandler endpoint = new LogsResourceHandler();
-        AbstractHttpRequest request = new HTTPRequest("GET /logs HTTP/1.1\nAuthorization: Basic YWRtaW46aHVudGVyMg==");
+        AbstractHTTPRequest request = new HTTPRequest("GET /logs HTTP/1.1\nAuthorization: Basic YWRtaW46aHVudGVyMg==");
 
         assertTrue(endpoint.isAuthorized(request));
     }
@@ -47,7 +47,7 @@ public class LogsResourceHandlerTest {
     @Test
     public void isAuthorizedReturnsFalseWithNoCredentials() {
         LogsResourceHandler endpoint = new LogsResourceHandler();
-        AbstractHttpRequest request = new HTTPRequest("GET /logs HTTP/1.1");
+        AbstractHTTPRequest request = new HTTPRequest("GET /logs HTTP/1.1");
 
         assertFalse(endpoint.isAuthorized(request));
     }
@@ -55,7 +55,7 @@ public class LogsResourceHandlerTest {
     @Test
     public void isAuthorizedReturnsFalseForIncorrectCredentials() {
         LogsResourceHandler endpoint = new LogsResourceHandler();
-        AbstractHttpRequest request = new HTTPRequest("GET /logs HTTP/1.1\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
+        AbstractHTTPRequest request = new HTTPRequest("GET /logs HTTP/1.1\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
 
         assertFalse(endpoint.isAuthorized(request));
     }
@@ -64,7 +64,7 @@ public class LogsResourceHandlerTest {
     public void requestToLogsWithCredentialsReturnsLogOfPreviousRequestsInBody() {
         Logger.addLog("GET / HTTP/1.1");
         LogsResourceHandler endpoint = new LogsResourceHandler();
-        AbstractHttpRequest request = new HTTPRequest("GET /logs HTTP/1.1\nAuthorization: Basic YWRtaW46aHVudGVyMg==");
+        AbstractHTTPRequest request = new HTTPRequest("GET /logs HTTP/1.1\nAuthorization: Basic YWRtaW46aHVudGVyMg==");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("GET / HTTP/1.1", response.get("body"));

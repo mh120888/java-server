@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import abstracthttprequest.AbstractHttpRequest;
+import abstracthttprequest.AbstractHTTPRequest;
 
 import java.util.HashMap;
 
@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class NotFoundResourceHandler implements ResourceHandler {
     public NotFoundResourceHandler() {}
 
-    public HashMap<String, String> getResponseData(AbstractHttpRequest requestData) {
+    public HashMap<String, String> getResponseData(AbstractHTTPRequest requestData) {
         HashMap<String, String> responseData = new HashMap<>();
         responseData.put("responseLine", "HTTP/1.1 404 Not Found");
 

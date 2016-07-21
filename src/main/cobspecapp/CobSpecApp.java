@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import abstracthttprequest.AbstractHttpRequest;
+import abstracthttprequest.AbstractHTTPRequest;
 import app.Application;
 
 import java.util.HashMap;
@@ -15,7 +15,7 @@ public class CobSpecApp extends Application {
         publicDirectory = filepath;
     }
 
-    public HashMap<String, String> getResponse(AbstractHttpRequest request) {
+    public HashMap<String, String> getResponse(AbstractHTTPRequest request) {
         ResourceHandler resourceHandler = Router.getEndpoint(request, publicDirectory);
         HashMap<String, String> responseData = resourceHandler.getResponseData(request);
         return responseData;

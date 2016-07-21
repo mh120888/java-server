@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import abstracthttprequest.AbstractHttpRequest;
+import abstracthttprequest.AbstractHTTPRequest;
 import httprequest.HTTPRequest;
 import org.junit.Test;
 import server.HeaderParser;
@@ -16,7 +16,7 @@ public class OptionsResourceHandlerTest {
     @Test
     public void getReponseDataReturnsCorrectResponseLineForGET() {
         OptionsResourceHandler endpoint = new OptionsResourceHandler();
-        AbstractHttpRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
+        AbstractHTTPRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
@@ -25,7 +25,7 @@ public class OptionsResourceHandlerTest {
     @Test
     public void getReponseDataReturnsCorrectResponseLineForOPTIONS() {
         OptionsResourceHandler endpoint = new OptionsResourceHandler();
-        AbstractHttpRequest request = new HTTPRequest("OPTIONS /pathdoesnotmatter HTTP/1.1");
+        AbstractHTTPRequest request = new HTTPRequest("OPTIONS /pathdoesnotmatter HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
 
         assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
@@ -34,7 +34,7 @@ public class OptionsResourceHandlerTest {
     @Test
     public void getResponseDataReturnsAResponseWithAnAllowHeader() {
         OptionsResourceHandler endpoint = new OptionsResourceHandler();
-        AbstractHttpRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
+        AbstractHTTPRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
         HashMap<String, String> headers = HeaderParser.parse(response.get("headers"));
 
@@ -44,7 +44,7 @@ public class OptionsResourceHandlerTest {
     @Test
     public void getResponseDataReturnsAResponseWithAllowHeaderWithMethodsAllowedForGivenPath() {
         OptionsResourceHandler endpoint = new OptionsResourceHandler();
-        AbstractHttpRequest request = new HTTPRequest("GET /method_options HTTP/1.1");
+        AbstractHTTPRequest request = new HTTPRequest("GET /method_options HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
         HashMap<String, String> headers = HeaderParser.parse(response.get("headers"));
         String[] acceptedMethods = {"GET", "HEAD", "POST", "OPTIONS", "PUT"};
@@ -57,7 +57,7 @@ public class OptionsResourceHandlerTest {
     @Test
     public void getResponseDataReturnsAResponseWithAllowHeaderWithMethodsAllowedForADifferentPath() {
         OptionsResourceHandler endpoint = new OptionsResourceHandler();
-        AbstractHttpRequest request = new HTTPRequest("GET /method_options2 HTTP/1.1");
+        AbstractHTTPRequest request = new HTTPRequest("GET /method_options2 HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
         HashMap<String, String> headers = HeaderParser.parse(response.get("headers"));
         String[] acceptedMethods = {"GET", "OPTIONS"};
@@ -70,7 +70,7 @@ public class OptionsResourceHandlerTest {
     @Test
     public void getResponseDataReturnsAResponseWithAllowHeaderWithoutMethodsNotAllowedForPath() {
         OptionsResourceHandler endpoint = new OptionsResourceHandler();
-        AbstractHttpRequest request = new HTTPRequest("GET /method_options2 HTTP/1.1");
+        AbstractHTTPRequest request = new HTTPRequest("GET /method_options2 HTTP/1.1");
         HashMap<String, String> response = endpoint.getResponseData(request);
         HashMap<String, String> headers = HeaderParser.parse(response.get("headers"));
         String[] disallowedMethods = {"POST", "HEAD", "PUT"};

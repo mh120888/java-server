@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import abstracthttprequest.AbstractHttpRequest;
+import abstracthttprequest.AbstractHTTPRequest;
 
 import java.io.File;
 import java.util.Arrays;
@@ -9,7 +9,7 @@ import java.util.Arrays;
  * Created by matthewhiggins on 7/11/16.
  */
 public class Router {
-    public static ResourceHandler getEndpoint(AbstractHttpRequest request, String publicDirectory) {
+    public static ResourceHandler getEndpoint(AbstractHTTPRequest request, String publicDirectory) {
         Logger.addLog(request.getInitialRequestLine());
 
         File file = new File(publicDirectory);
