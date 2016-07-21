@@ -6,6 +6,7 @@ import abstracthttprequest.AbstractHTTPRequest;
 import app.Application;
 import cobspecapp.CobSpecApp;
 import httprequest.HTTPRequest;
+import httpresponse.HTTPResponse;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -43,9 +44,9 @@ public class MyServer {
 
     public static void generateOutput(String input, PrintStream out, Application app) throws IOException {
         AbstractHTTPRequest request = new HTTPRequest(input);
-        HashMap<String, String> response = app.getResponse(request);
-        String output = HTTPResponseBuilder.buildResponse(response);
-        out.println(output);
+//        HashMap<String, String> response = app.getResponse(request);
+//        String output = HTTPResponseBuilder.buildResponse(response);
+        out.println(app.getResponse(request, new HTTPResponse()));
     }
 
     public static String readInInput(BufferedReader in) throws IOException {

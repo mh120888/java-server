@@ -2,6 +2,7 @@ package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
 import httprequest.HTTPRequest;
+import httpresponse.HTTPResponse;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -36,18 +37,18 @@ public class StaticResourceHandlerTest {
         StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
 
         AbstractHTTPRequest request = new HTTPRequest("GET / HTTP/1.1");
-        HashMap<String, String> response = endpoint.getResponseData(request);
+        String response = endpoint.getResponseData(request, new HTTPResponse());
 
-        assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
+        assertTrue(response.contains("HTTP/1.1 200"));
     }
 
     @Test
     public void getResponseDataReturns200ForHeadRequest() {
         StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         AbstractHTTPRequest request = new HTTPRequest("HEAD / HTTP/1.1");
-        HashMap<String, String> response = endpoint.getResponseData(request);
+        String response = endpoint.getResponseData(request, new HTTPResponse());
 
-        assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
+        assertTrue(response.contains("HTTP/1.1 200"));
     }
 
     @Test
@@ -55,9 +56,10 @@ public class StaticResourceHandlerTest {
         StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         AbstractHTTPRequest request = new HTTPRequest("NOTAREALMETHOD / HTTP/1.1");
 
-        HashMap<String, String> response = endpoint.getResponseData(request);
+        String response = endpoint.getResponseData(request, new HTTPResponse());
 
-        assertEquals("HTTP/1.1 405 Method Not Allowed", response.get("responseLine"));
+        assertTrue(response.contains("HTTP/1.1 405"));
+
     }
 
     @Test
@@ -65,18 +67,20 @@ public class StaticResourceHandlerTest {
         StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         AbstractHTTPRequest request = new HTTPRequest("GET / HTTP/1.1");
 
-        HashMap<String, String> response = endpoint.getResponseData(request);
+        String response = endpoint.getResponseData(request, new HTTPResponse());
 
-        assertTrue(response.get("body").contains("<a href=\"/file1\">file1</a>"));
+        assertTrue(response.contains("<a href=\"/file1\">file1</a>"));
+
     }
 
     @Test
     public void postRequestWithNoParamsReturnsA405() {
         StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         AbstractHTTPRequest request = new HTTPRequest("POST / HTTP/1.1");
-        HashMap<String, String> response = endpoint.getResponseData(request);
 
-        assertEquals("HTTP/1.1 405 Method Not Allowed", response.get("responseLine"));
+        String response = endpoint.getResponseData(request, new HTTPResponse());
+
+        assertTrue(response.contains("HTTP/1.1 405"));
     }
 //
 //    @Test
@@ -143,8 +147,8 @@ public class StaticResourceHandlerTest {
         String path = publicDirectory + "/image.png";
         byte[] imageContents = Files.readAllBytes(Paths.get(path));
         AbstractHTTPRequest request = new HTTPRequest("GET /image.png HTTP/1.1");
-        HashMap<String, String> response = endpoint.getResponseData(request);
+        String response = endpoint.getResponseData(request, new HTTPResponse());
 
-        assertEquals(true, response.get("body").contains(new String(imageContents)));
+        assertEquals(true, response.contains(new String(imageContents)));
     }
 }

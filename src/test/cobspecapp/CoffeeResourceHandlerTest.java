@@ -2,13 +2,13 @@ package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
 import httprequest.HTTPRequest;
+import httpresponse.HTTPResponse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -28,28 +28,28 @@ public class CoffeeResourceHandlerTest {
     @Test
     public void returns418ForGETCoffee() {
         CoffeeResourceHandler endpoint = new CoffeeResourceHandler();
-        AbstractHTTPRequest request = new HTTPRequest("GET /coffee HTTP/1.0");
-        HashMap<String, String> response = endpoint.getResponseData(request);
+        AbstractHTTPRequest request = new HTTPRequest("GET /coffee HTTP/1.1");
+        String response = endpoint.getResponseData(request, new HTTPResponse());
 
-        assertEquals("HTTP/1.1 418", response.get("responseLine"));
+        assertTrue(response.contains("HTTP/1.1 418"));
     }
 
     @Test
     public void bodyContainsCorrectStringIfPathIsCoffee() {
         CoffeeResourceHandler endpoint = new CoffeeResourceHandler();
-        AbstractHTTPRequest request = new HTTPRequest("GET /coffee HTTP/1.0");
-        HashMap<String, String> response = endpoint.getResponseData(request);
+        AbstractHTTPRequest request = new HTTPRequest("GET /coffee HTTP/1.1");
+        String response = endpoint.getResponseData(request, new HTTPResponse());
 
-        assertTrue(response.get("body").contains("I'm a teapot"));
+        assertTrue(response.contains("I'm a teapot"));
     }
 
     @Test
     public void returns200ForGETTea() {
         CoffeeResourceHandler endpoint = new CoffeeResourceHandler();
-        AbstractHTTPRequest request = new HTTPRequest("GET /tea HTTP/1.0");
-        HashMap<String, String> response = endpoint.getResponseData(request);
+        AbstractHTTPRequest request = new HTTPRequest("GET /tea HTTP/1.1");
+        String response = endpoint.getResponseData(request, new HTTPResponse());
 
-        assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
+        assertTrue(response.contains("HTTP/1.1 200"));
     }
 
 }

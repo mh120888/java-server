@@ -2,12 +2,14 @@ package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
 import httprequest.HTTPRequest;
+import httpresponse.HTTPResponse;
 import org.junit.Test;
 import server.HeaderParser;
 
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by matthewhiggins on 7/14/16.
@@ -17,29 +19,27 @@ public class RedirectResourceHandlerTest {
     public void getResponseDataReturnsA302Response() {
         RedirectResourceHandler endpoint = new RedirectResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
-        HashMap<String, String> response = endpoint.getResponseData(request);
+        String response = endpoint.getResponseData(request, new HTTPResponse());
 
-        assertEquals("HTTP/1.1 302 Found", response.get("responseLine"));
+        assertTrue(response.contains("HTTP/1.1 302"));
     }
 
     @Test
     public void getResponseDataReturnsResponseContainingLocationHeader() {
         RedirectResourceHandler endpoint = new RedirectResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
-        HashMap<String, String> response = endpoint.getResponseData(request);
-        HashMap<String, String> headers = HeaderParser.parse(response.get("headers"));
+        String response = endpoint.getResponseData(request, new HTTPResponse());
 
-        assertEquals(true, headers.containsKey("location"));
+        assertTrue(response.contains("location: "));
     }
 
     @Test
     public void getResponseDataReturnsResponseContainingLocationHeaderWithCorrectValue() {
         RedirectResourceHandler endpoint = new RedirectResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
-        HashMap<String, String> response = endpoint.getResponseData(request);
-        HashMap<String, String> headers = HeaderParser.parse(response.get("headers"));
+        String response = endpoint.getResponseData(request, new HTTPResponse());
 
-        assertEquals("http://localhost:5000/", headers.get("location"));
+        assertTrue(response.contains("location: http://localhost:5000/"));
     }
 }
 

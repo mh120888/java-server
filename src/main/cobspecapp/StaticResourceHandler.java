@@ -1,6 +1,7 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
+import abstracthttpresponse.AbstractHTTPResponse;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,23 +25,23 @@ public class StaticResourceHandler implements ResourceHandler {
         DIRECTORY, IMAGE, OTHER
     }
 
-    public HashMap<String, String> getResponseData(AbstractHTTPRequest requestData) {
-        HashMap<String, String> responseData = new HashMap<>();
-        responseData.put("responseLine", getResponseLine(requestData));
-        responseData.put("body", getBody(requestData));
+    public String getResponseData(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+        response.setHTTPVersion(request.getVersion());
+        response.setStatus(getResponseLine(request));
+        response.setBody(getBody(request));
 
-        return responseData;
+        return response.getFormattedResponse();
     }
 
-    private String getResponseLine(AbstractHTTPRequest requestData) {
-        String method = requestData.getMethod();
+    private int getResponseLine(AbstractHTTPRequest request) {
+        String method = request.getMethod();
 
         if (isAcceptableMethodWithoutParams(method))
 //        (isAcceptableMethodWithoutParams(method) || requestData.containsKey("body") && isAcceptableMethodWithParams(method))
         {
-            return "HTTP/1.1 200 OK";
+            return 200;
         } else {
-            return "HTTP/1.1 405 Method Not Allowed";
+            return 405;
         }
     }
 

@@ -1,6 +1,7 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
+import abstracthttpresponse.AbstractHTTPResponse;
 
 import java.util.HashMap;
 
@@ -9,18 +10,17 @@ import java.util.HashMap;
  */
 public class OptionsResourceHandler implements ResourceHandler {
 
-    public HashMap<String, String> getResponseData(AbstractHTTPRequest requestData) {
-        HashMap<String, String> responseData = new HashMap<>();
+    public String getResponseData(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+        response.setHTTPVersion(request.getVersion());
+        response.setStatus(200);
+        response.addHeader("Allow", buildHeaders(request.getPath()));
 
-        responseData.put("responseLine", "HTTP/1.1 200 OK");
-        responseData.put("headers", buildHeaders(requestData.getPath()));
-
-        return responseData;
+        return response.getFormattedResponse();
     }
 
     private String buildHeaders(String path) {
         String header = "";
-        header += "Allow: " + String.join(",", acceptedMethods(path));
+        header += String.join(",", acceptedMethods(path));
         return header;
     }
 

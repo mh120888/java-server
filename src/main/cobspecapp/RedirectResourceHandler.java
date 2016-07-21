@@ -1,6 +1,7 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
+import abstracthttpresponse.AbstractHTTPResponse;
 
 import java.util.HashMap;
 
@@ -8,11 +9,11 @@ import java.util.HashMap;
  * Created by matthewhiggins on 7/14/16.
  */
 public class RedirectResourceHandler implements ResourceHandler {
-    public HashMap<String, String> getResponseData(AbstractHTTPRequest request) {
-        HashMap<String, String> responseData = new HashMap<>();
-        responseData.put("responseLine", "HTTP/1.1 302 Found");
-        responseData.put("headers", "location: " + request.getBaseLocation());
+    public String getResponseData(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+        response.setHTTPVersion(request.getVersion());
+        response.setStatus(302);
+        response.addHeader("location", request.getBaseLocation());
 
-        return responseData;
+        return response.getFormattedResponse();
     }
 }

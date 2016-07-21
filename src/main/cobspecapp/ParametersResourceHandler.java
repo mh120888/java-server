@@ -1,6 +1,7 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
+import abstracthttpresponse.AbstractHTTPResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,25 +11,25 @@ import java.util.Map;
  */
 public class ParametersResourceHandler implements ResourceHandler {
 
-    public HashMap<String, String> getResponseData(AbstractHTTPRequest requestData) {
-        HashMap<String, String> responseData = new HashMap<>();
+    public String getResponseData(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+        response.setHTTPVersion(request.getVersion());
 
-        if (requestData.getMethod().equals("GET")) {
-            responseData.put("responseLine", "HTTP/1.1 200 OK");
+        if (request.getMethod().equals("GET")) {
+            response.setStatus(200);
         } else {
-            responseData.put("responseLine", "HTTP/1.1 405 Method Not Allowed");
+            response.setStatus(405);
         }
 
-        Map<String, String> parameters = requestData.getAllParams();
+        Map<String, String> parameters = request.getAllParams();
 
         if (parameters.size() > 0) {
             String body = "";
             for (Map.Entry<String, String> entry : parameters.entrySet()) {
                 body += entry.getKey() + " = " + entry.getValue() + "\n";
             }
-            responseData.put("body", body);
+            response.setBody(body);
         }
 
-        return responseData;
+        return response.getFormattedResponse();
     }
 }

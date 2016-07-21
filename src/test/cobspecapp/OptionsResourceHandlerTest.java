@@ -2,6 +2,8 @@ package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
 import httprequest.HTTPRequest;
+import httpresponse.HTTPResponse;
+import org.junit.Assert;
 import org.junit.Test;
 import server.HeaderParser;
 
@@ -17,40 +19,38 @@ public class OptionsResourceHandlerTest {
     public void getReponseDataReturnsCorrectResponseLineForGET() {
         OptionsResourceHandler endpoint = new OptionsResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
-        HashMap<String, String> response = endpoint.getResponseData(request);
+        String response = endpoint.getResponseData(request, new HTTPResponse());
 
-        assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
+        Assert.assertTrue(response.contains("HTTP/1.1 200"));
     }
 
     @Test
     public void getReponseDataReturnsCorrectResponseLineForOPTIONS() {
         OptionsResourceHandler endpoint = new OptionsResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("OPTIONS /pathdoesnotmatter HTTP/1.1");
-        HashMap<String, String> response = endpoint.getResponseData(request);
+        String response = endpoint.getResponseData(request, new HTTPResponse());
 
-        assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
+        Assert.assertTrue(response.contains("HTTP/1.1 200"));
     }
 
     @Test
     public void getResponseDataReturnsAResponseWithAnAllowHeader() {
         OptionsResourceHandler endpoint = new OptionsResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
-        HashMap<String, String> response = endpoint.getResponseData(request);
-        HashMap<String, String> headers = HeaderParser.parse(response.get("headers"));
+        String response = endpoint.getResponseData(request, new HTTPResponse());
 
-        assertEquals(true, headers.containsKey("Allow"));
+        Assert.assertTrue(response.contains("Allow: "));
     }
 
     @Test
     public void getResponseDataReturnsAResponseWithAllowHeaderWithMethodsAllowedForGivenPath() {
         OptionsResourceHandler endpoint = new OptionsResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /method_options HTTP/1.1");
-        HashMap<String, String> response = endpoint.getResponseData(request);
-        HashMap<String, String> headers = HeaderParser.parse(response.get("headers"));
+        String response = endpoint.getResponseData(request, new HTTPResponse());
         String[] acceptedMethods = {"GET", "HEAD", "POST", "OPTIONS", "PUT"};
 
         for (String method : acceptedMethods) {
-            assertEquals(true, headers.get("Allow").contains(method));
+            Assert.assertTrue(response.contains(method));
         }
     }
 
@@ -58,12 +58,11 @@ public class OptionsResourceHandlerTest {
     public void getResponseDataReturnsAResponseWithAllowHeaderWithMethodsAllowedForADifferentPath() {
         OptionsResourceHandler endpoint = new OptionsResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /method_options2 HTTP/1.1");
-        HashMap<String, String> response = endpoint.getResponseData(request);
-        HashMap<String, String> headers = HeaderParser.parse(response.get("headers"));
+        String response = endpoint.getResponseData(request, new HTTPResponse());
         String[] acceptedMethods = {"GET", "OPTIONS"};
 
         for (String method : acceptedMethods) {
-            assertEquals(true, headers.get("Allow").contains(method));
+            Assert.assertTrue(response.contains(method));
         }
     }
 
@@ -71,12 +70,11 @@ public class OptionsResourceHandlerTest {
     public void getResponseDataReturnsAResponseWithAllowHeaderWithoutMethodsNotAllowedForPath() {
         OptionsResourceHandler endpoint = new OptionsResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /method_options2 HTTP/1.1");
-        HashMap<String, String> response = endpoint.getResponseData(request);
-        HashMap<String, String> headers = HeaderParser.parse(response.get("headers"));
+        String response = endpoint.getResponseData(request, new HTTPResponse());
         String[] disallowedMethods = {"POST", "HEAD", "PUT"};
 
         for (String method : disallowedMethods) {
-            assertEquals(false, headers.get("Allow").contains(method));
+            Assert.assertFalse(response.contains(method));
         }
 
     }
