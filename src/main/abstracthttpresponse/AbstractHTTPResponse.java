@@ -9,4 +9,5 @@ public abstract class AbstractHTTPResponse {
     public abstract void setBody(String bodyContent);
     public abstract void addToBody(String additionalContent);
     public abstract void addHeader(String name, String value);
+    public abstract String getFormattedResponse();
 }

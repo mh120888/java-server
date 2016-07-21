@@ -1,6 +1,6 @@
 package mocks;
 
-import abstracthttprequest.AbstractHttpRequest;
+import abstracthttprequest.AbstractHTTPRequest;
 import app.Application;
 
 import java.util.HashMap;
@@ -16,7 +16,7 @@ public class MockApplication extends Application {
         defaultResponse = fakeResponse;
     }
 
-    public HashMap<String, String> getResponse(AbstractHttpRequest request) {
+    public HashMap<String, String> getResponse(AbstractHTTPRequest request) {
         HashMap<String, String> response = new HashMap<>();
         response.put("responseLine", defaultResponse);
         return response;

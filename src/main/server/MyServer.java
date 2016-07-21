@@ -2,7 +2,7 @@ package server; /**
  * Created by matthewhiggins on 7/5/16.
  */
 
-import abstracthttprequest.AbstractHttpRequest;
+import abstracthttprequest.AbstractHTTPRequest;
 import app.Application;
 import cobspecapp.CobSpecApp;
 import httprequest.HTTPRequest;
@@ -42,7 +42,7 @@ public class MyServer {
     }
 
     public static void generateOutput(String input, PrintStream out, Application app) throws IOException {
-        AbstractHttpRequest request = new HTTPRequest(input);
+        AbstractHTTPRequest request = new HTTPRequest(input);
         HashMap<String, String> response = app.getResponse(request);
         String output = HTTPResponseBuilder.buildResponse(response);
         out.println(output);
