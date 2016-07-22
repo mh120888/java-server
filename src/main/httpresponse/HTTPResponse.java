@@ -54,6 +54,7 @@ public class HTTPResponse extends AbstractHTTPResponse {
     String getStatusText() {
         switch (status) {
             case 200: return "OK";
+            case 206: return "Partial Content";
             case 302: return "Found";
             case 401: return "Not Authorized";
             case 404: return "Not Found";

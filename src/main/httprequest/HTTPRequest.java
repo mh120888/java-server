@@ -72,6 +72,10 @@ public class HTTPRequest extends AbstractHTTPRequest {
         return method + " " + pathWithParams + " " + version;
     }
 
+    public HeaderParser getHeaderParser() {
+        return new HeaderParser();
+    }
+
     private void setHeaders(String[] requestSeparatedByNewline) {
         if (requestSeparatedByNewline.length > 1) {
             String[] justTheHeaders = Arrays.copyOfRange(requestSeparatedByNewline, 1, requestSeparatedByNewline.length);

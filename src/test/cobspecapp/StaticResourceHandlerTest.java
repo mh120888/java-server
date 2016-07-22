@@ -10,7 +10,10 @@ import org.junit.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -147,5 +150,29 @@ public class StaticResourceHandlerTest {
         String response = endpoint.getResponse(request, new HTTPResponse());
 
         assertEquals(true, response.contains(new String(imageContents)));
+    }
+
+    @Test
+    public void getRequestWithRangeHeadersReturnsA206Response() {
+        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+
+        AbstractHTTPRequest request = new HTTPRequest("GET /partial_content.txt HTTP/1.1\nRange: bytes=0-10");
+        String response = endpoint.getResponse(request, new HTTPResponse());
+
+        assertTrue(response.contains("HTTP/1.1 206 Partial Content"));
+    }
+
+    @Test
+    public void getRequestWithRangeHeadersReturnsOnlyTheSpecifiedRangeOfTheRequestedResource() throws IOException {
+        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+        String path = publicDirectory + "/partial_content.txt";
+        byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
+        byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 0, 11);
+
+        AbstractHTTPRequest request = new HTTPRequest("GET /partial_content.txt HTTP/1.1\nRange: bytes=0-10");
+        String response = endpoint.getResponse(request, new HTTPResponse());
+
+        assertTrue(response.contains("This is a f"));
+        assertFalse(response.contains(new String(fullFileContents)));
     }
 }

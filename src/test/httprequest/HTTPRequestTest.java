@@ -146,4 +146,11 @@ public class HTTPRequestTest {
 
         Assert.assertEquals("GET /some-path?somerandomparam=33 HTTP/1.1", request.getInitialRequestLine());
     }
+
+    @Test
+    public void getHeaderParserReturnsANewHeaderParser() {
+        HTTPRequest request = new HTTPRequest("GET /path-does-not-matter HTTP/1.1\n");
+
+        Assert.assertTrue(request.getHeaderParser() instanceof HeaderParser);
+    }
 }

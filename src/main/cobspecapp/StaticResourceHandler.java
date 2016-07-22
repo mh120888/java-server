@@ -1,6 +1,7 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
+import abstracthttprequest.AbstractHeaderParser;
 import abstracthttpresponse.AbstractHTTPResponse;
 
 import java.io.File;
@@ -35,9 +36,11 @@ public class StaticResourceHandler implements ResourceHandler {
     private int getResponseLine(AbstractHTTPRequest request) {
         String method = request.getMethod();
 
-        if (isAcceptableMethodWithoutParams(method))
+        if (request.headerExists("Range")) {
+            return 206;
+        }
 //        (isAcceptableMethodWithoutParams(method) || requestData.containsKey("body") && isAcceptableMethodWithParams(method))
-        {
+        else if (isAcceptableMethodWithoutParams(method)) {
             return 200;
         } else {
             return 405;
@@ -60,33 +63,54 @@ public class StaticResourceHandler implements ResourceHandler {
         return Arrays.asList(listOfMethods).contains(method);
     }
 
-    private String getBody(AbstractHTTPRequest requestData) {
-        String method = requestData.getMethod();
+    private String getBody(AbstractHTTPRequest request) {
+        String method = request.getMethod();
         String body = "";
         if (!method.equals("GET")) {
             return body;
         }
-        String path = requestData.getPath();
+        String path = request.getPath();
         switch (getFiletype(path)) {
             case DIRECTORY:
-                File file = new File(publicDirectory);
-                String[] fileNames = file.list();
-
-                for (String fileName : fileNames) {
-                    body += ("<a href=\"/" + fileName + "\">" + fileName + "</a>\n");
-                }
+                body += getBodyForDirectory();
                 break;
             default:
-                try {
-                    String filePath = publicDirectory + path;
-                    byte[] imageContents = Files.readAllBytes(Paths.get(filePath));
-                    body = new String(imageContents, Charset.defaultCharset());
-                } catch (IOException e) {
-                    System.err.println(e);
-                }
+                body += getBodyDefault(request);
                 break;
         }
         return body;
+    }
+
+    String getBodyForDirectory() {
+        String body = "";
+        File file = new File(publicDirectory);
+        String[] fileNames = file.list();
+
+        for (String fileName : fileNames) {
+            body += ("<a href=\"/" + fileName + "\">" + fileName + "</a>\n");
+        }
+        return body;
+    }
+
+     String getBodyDefault(AbstractHTTPRequest request) {
+        String path = request.getPath();
+        String body = "";
+        try {
+            String filePath = publicDirectory + path;
+            byte[] imageContents = getCorrectPortionOfFileContents(Files.readAllBytes(Paths.get(filePath)), request.getHeader("Range"), request.getHeaderParser());
+            body = new String(imageContents, Charset.defaultCharset());
+        } catch (IOException e) {
+            System.err.println(e);
+        }
+        return body;
+    }
+
+     byte[] getCorrectPortionOfFileContents(byte[] fileContents, String rangeHeader, AbstractHeaderParser parser) {
+//        if (rangeHeader != null) {
+//            int[] range = parser.parseRangeHeader(rangeHeader);
+//            fileContents = Arrays.copyOfRange(fileContents, range[0], range[1] + 1);
+//        }
+        return fileContents;
     }
 
     public Filetype getFiletype(String path) {
