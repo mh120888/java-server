@@ -4,8 +4,6 @@ import abstracthttprequest.AbstractHTTPRequest;
 import abstracthttpresponse.AbstractHTTPResponse;
 import app.Application;
 
-import java.util.HashMap;
-
 /**
  * Created by matthewhiggins on 7/19/16.
  */

@@ -4,11 +4,6 @@ import abstracthttprequest.AbstractHTTPRequest;
 import httprequest.HTTPRequest;
 import httpresponse.HTTPResponse;
 import org.junit.Test;
-import server.HeaderParser;
-
-import java.util.HashMap;
-
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**

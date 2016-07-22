@@ -6,7 +6,6 @@ import mocks.MockOutputStream;
 import mocks.MockPrintStream;
 import org.junit.Assert;
 import org.junit.Test;
-
 import java.io.*;
 
 /**

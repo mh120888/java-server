@@ -20,5 +20,3 @@ public class HTTPResponseBuilder {
         return response;
     }
 }
-
-//depends on nothing

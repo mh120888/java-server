@@ -5,11 +5,6 @@ import httprequest.HTTPRequest;
 import httpresponse.HTTPResponse;
 import org.junit.Assert;
 import org.junit.Test;
-import server.HeaderParser;
-
-import java.util.HashMap;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Created by matthewhiggins on 7/14/16.

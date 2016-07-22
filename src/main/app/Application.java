@@ -3,8 +3,6 @@ package app;
 import abstracthttprequest.AbstractHTTPRequest;
 import abstracthttpresponse.AbstractHTTPResponse;
 
-import java.util.HashMap;
-
 /**
  * Created by matthewhiggins on 7/19/16.
  */

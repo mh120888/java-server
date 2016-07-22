@@ -6,10 +6,6 @@ import httpresponse.HTTPResponse;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.HashMap;
-
-import static org.junit.Assert.assertEquals;
-
 /**
  * Created by matthewhiggins on 7/11/16.
  */

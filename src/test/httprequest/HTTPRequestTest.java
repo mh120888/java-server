@@ -3,7 +3,6 @@ package httprequest;
 import org.junit.Assert;
 import org.junit.Test;
 
-
 /**
  * Created by matthewhiggins on 7/20/16.
  */
