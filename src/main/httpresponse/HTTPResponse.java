@@ -36,7 +36,7 @@ public class HTTPResponse extends AbstractHTTPResponse {
 
     public String getFormattedResponse() {
         String result = "";
-        result += version + " " + status + "\n";
+        result += version + " " + status + " " + getStatusText() + "\n";
         result += getFormattedHeaders() + "\n";
         result += body;
 
@@ -49,6 +49,17 @@ public class HTTPResponse extends AbstractHTTPResponse {
             result += header.getKey() + ": " + header.getValue() + "\n";
         }
         return result;
+    }
+
+    String getStatusText() {
+        switch (status) {
+            case 200: return "OK";
+            case 302: return "Found";
+            case 401: return "Not Authorized";
+            case 404: return "Not Found";
+            case 405: return "Method Not Allowed";
+            default:  return "";
+        }
     }
 }
 

@@ -81,7 +81,7 @@ public class HTTPResponseTest {
         response.setBody("Some content");
         response.addHeader("One header", "one value");
 
-        Assert.assertEquals("HTTP/1.1 200\nOne header: one value\n\nSome content", response.getFormattedResponse());
+        Assert.assertEquals("HTTP/1.1 200 OK\nOne header: one value\n\nSome content", response.getFormattedResponse());
     }
 
     @Test
@@ -91,5 +91,37 @@ public class HTTPResponseTest {
         response.addHeader("second", "something random");
 
         Assert.assertEquals("One header: one value\nsecond: something random\n", response.getFormattedHeaders());
+    }
+
+    @Test
+    public void getStatusTextReturnsOKFor200() {
+        HTTPResponse response = new HTTPResponse();
+        response.setStatus(200);
+
+        Assert.assertEquals("OK", response.getStatusText());
+    }
+
+    @Test
+    public void getStatusTextReturnsNotFoundFor404() {
+        HTTPResponse response = new HTTPResponse();
+        response.setStatus(404);
+
+        Assert.assertEquals("Not Found", response.getStatusText());
+    }
+
+    @Test
+    public void getStatusTextReturnsMethodNotAllowedFor405() {
+        HTTPResponse response = new HTTPResponse();
+        response.setStatus(405);
+
+        Assert.assertEquals("Method Not Allowed", response.getStatusText());
+    }
+
+    @Test
+    public void getStatusTextReturnsAnEmptyStringForAnUnknownStatusCode() {
+        HTTPResponse response = new HTTPResponse();
+        response.setStatus(0);
+
+        Assert.assertEquals("", response.getStatusText());
     }
 }
