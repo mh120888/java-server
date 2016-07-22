@@ -33,7 +33,7 @@ public class StaticResourceHandlerTest {
     }
 
     @Test
-    public void getReponseDataReturnsCorrectResponseLineForGet() {
+    public void getResponseDataReturnsCorrectResponseLineForGet() {
         StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
 
         AbstractHTTPRequest request = new HTTPRequest("GET / HTTP/1.1");
@@ -173,6 +173,35 @@ public class StaticResourceHandlerTest {
         String response = endpoint.getResponse(request, new HTTPResponse());
 
         assertTrue(response.contains("This is a f"));
+        assertFalse(response.contains(new String(fullFileContents)));
+    }
+
+    @Test
+    public void getRequestWithRangeHeadersReturnsCorrectPortionOfResourceWhenNoStartIsGiven() throws IOException {
+        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+        String path = publicDirectory + "/partial_content.txt";
+        byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
+        byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 72, fullFileContents.length);
+
+        AbstractHTTPRequest request = new HTTPRequest("GET /partial_content.txt HTTP/1.1\nRange: bytes=-6");
+        String response = endpoint.getResponse(request, new HTTPResponse());
+
+        assertTrue(response.contains(new String(requestedFileContents)));
+        assertFalse(response.contains(new String(fullFileContents)));
+    }
+
+
+    @Test
+    public void getRequestWithRangeHeadersReturnsCorrectPortionOfResourceWhenNoEndIsGiven() throws IOException {
+        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+        String path = publicDirectory + "/partial_content.txt";
+        byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
+        byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 4, fullFileContents.length);
+
+        AbstractHTTPRequest request = new HTTPRequest("GET /partial_content.txt HTTP/1.1\nRange: bytes=4-");
+        String response = endpoint.getResponse(request, new HTTPResponse());
+
+        assertTrue(response.contains(new String(requestedFileContents)));
         assertFalse(response.contains(new String(fullFileContents)));
     }
 }

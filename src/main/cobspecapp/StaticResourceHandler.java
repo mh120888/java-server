@@ -106,11 +106,12 @@ public class StaticResourceHandler implements ResourceHandler {
     }
 
      byte[] getCorrectPortionOfFileContents(byte[] fileContents, String rangeHeader, AbstractHeaderParser parser) {
-//        if (rangeHeader != null) {
-//            int[] range = parser.parseRangeHeader(rangeHeader);
-//            fileContents = Arrays.copyOfRange(fileContents, range[0], range[1] + 1);
-//        }
-        return fileContents;
+        byte[] result = fileContents;
+        if (rangeHeader != null) {
+            int[] range = parser.parseRangeHeader(rangeHeader, fileContents);
+            result = Arrays.copyOfRange(fileContents, range[0], range[1] + 1);
+        }
+        return result;
     }
 
     public Filetype getFiletype(String path) {
