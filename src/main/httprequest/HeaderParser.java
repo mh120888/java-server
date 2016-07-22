@@ -23,17 +23,25 @@ public class HeaderParser extends AbstractHeaderParser {
      int[] calculateStartAndEndBytes(String[] startAndEndStrings, byte[] resourceContents) {
         int[] result = new int[2];
         int lengthOfResource = resourceContents.length;
-        if (startAndEndStrings[0].isEmpty()) {
-            result[0] = resourceContents.length - Integer.parseInt(startAndEndStrings[1]);
-            result[1] = resourceContents.length;
-        } else if (startAndEndStrings.length == 1) {
+        if (isStartOfRangeMissing(startAndEndStrings)) {
+            result[0] = lengthOfResource - Integer.parseInt(startAndEndStrings[1]);
+            result[1] = lengthOfResource;
+        } else if (isEndOfRangeMissing(startAndEndStrings)) {
             result[0] = Integer.parseInt(startAndEndStrings[0]);
-            result[1] = resourceContents.length;
+            result[1] = lengthOfResource;
         } else {
             for (int i = 0; i < startAndEndStrings.length; i++) {
                 result[i] = Integer.parseInt(startAndEndStrings[i]);
             }
         }
         return result;
+    }
+
+    boolean isStartOfRangeMissing(String[] range) {
+        return range[0].isEmpty();
+    }
+
+    boolean isEndOfRangeMissing(String[] range) {
+        return range.length == 1;
     }
 }

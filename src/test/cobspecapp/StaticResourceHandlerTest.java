@@ -167,12 +167,12 @@ public class StaticResourceHandlerTest {
         StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         String path = publicDirectory + "/partial_content.txt";
         byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
-        byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 0, 11);
+        byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 0, 5);
 
-        AbstractHTTPRequest request = new HTTPRequest("GET /partial_content.txt HTTP/1.1\nRange: bytes=0-10");
+        AbstractHTTPRequest request = new HTTPRequest("GET /partial_content.txt HTTP/1.1\nRange: bytes=0-4");
         String response = endpoint.getResponse(request, new HTTPResponse());
 
-        assertTrue(response.contains("This is a f"));
+        assertTrue(response.contains(new String(requestedFileContents)));
         assertFalse(response.contains(new String(fullFileContents)));
     }
 

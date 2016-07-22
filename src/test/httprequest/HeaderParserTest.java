@@ -1,7 +1,10 @@
 package httprequest;
 
 import org.junit.Test;
+
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by matthewhiggins on 7/13/16.
@@ -65,5 +68,37 @@ public class HeaderParserTest {
 
         assertEquals(4, result[0]);
         assertEquals(100, result[1]);
+    }
+
+    @Test
+    public void isStartOfRangeMissingReturnsTrueIfTheStartOfTheRangeIsNotGiven() {
+        HeaderParser parser = new HeaderParser();
+        String[] range = {"", "2"};
+
+        assertTrue(parser.isStartOfRangeMissing(range));
+    }
+
+    @Test
+    public void isStartOfRangeMissingReturnsFalseIfTheStartOfTheRangeIsGiven() {
+        HeaderParser parser = new HeaderParser();
+        String[] range = {"1", "2"};
+
+        assertFalse(parser.isStartOfRangeMissing(range));
+    }
+
+    @Test
+    public void isEndOfRangeMissingReturnsTrueIfTheEndOfTheRangeIsNotGiven() {
+        HeaderParser parser = new HeaderParser();
+        String[] range = {"1"};
+
+        assertTrue(parser.isEndOfRangeMissing(range));
+    }
+
+    @Test
+    public void isEndOfRangeMissingReturnsFalseIfTheEndOfTheRangeIsGiven() {
+        HeaderParser parser = new HeaderParser();
+        String[] range = {"1", "2"};
+
+        assertFalse(parser.isEndOfRangeMissing(range));
     }
 }
