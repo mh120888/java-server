@@ -1,7 +1,6 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
-import abstracthttprequest.AbstractHeaderParser;
 import abstracthttpresponse.AbstractHTTPResponse;
 
 import java.io.File;
@@ -36,7 +35,7 @@ public class StaticResourceHandler implements ResourceHandler {
     private int getResponseLine(AbstractHTTPRequest request) {
         String method = request.getMethod();
 
-        if (request.headerExists("Range")) {
+        if (request.containsHeader("Range")) {
             return 206;
         }
 //        (isAcceptableMethodWithoutParams(method) || requestData.containsKey("body") && isAcceptableMethodWithParams(method))
@@ -93,28 +92,27 @@ public class StaticResourceHandler implements ResourceHandler {
     }
 
      String getBodyDefault(AbstractHTTPRequest request) {
-        String path = request.getPath();
         String body = "";
         try {
-            String filePath = publicDirectory + path;
-            byte[] imageContents = getCorrectPortionOfFileContents(Files.readAllBytes(Paths.get(filePath)), request.getHeader("Range"), request.getHeaderParser());
-            body = new String(imageContents, Charset.defaultCharset());
+            String filePath = publicDirectory + request.getPath();
+            byte[] imageContents = getCorrectPortionOfFileContents(Files.readAllBytes(Paths.get(filePath)), request);
+            body = new String(imageContents);
         } catch (IOException e) {
             System.err.println(e);
         }
         return body;
     }
 
-     byte[] getCorrectPortionOfFileContents(byte[] fileContents, String rangeHeader, AbstractHeaderParser parser) {
+     byte[] getCorrectPortionOfFileContents(byte[] fileContents, AbstractHTTPRequest request) {
         byte[] result = fileContents;
-        if (rangeHeader != null) {
-            int[] range = parser.parseRangeHeader(rangeHeader, fileContents);
+        if (request.containsHeader("Range")) {
+            int[] range = request.getHeaderParser().parseRangeHeader(request.getHeader("Range"), fileContents);
             result = Arrays.copyOfRange(fileContents, range[0], range[1] + 1);
         }
         return result;
     }
 
-    public Filetype getFiletype(String path) {
+    Filetype getFiletype(String path) {
         String[] splitUpPath = path.split("\\.");
         String[] imageExtensions = {"png", "jpeg", "gif"};
 
@@ -127,7 +125,7 @@ public class StaticResourceHandler implements ResourceHandler {
         }
     }
 
-    public boolean isPathADirectory(String path) {
+    boolean isPathADirectory(String path) {
         String filePath = publicDirectory + path;
         File file = new File(filePath);
         return file.isDirectory();

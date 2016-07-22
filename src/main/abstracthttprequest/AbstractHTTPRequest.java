@@ -11,7 +11,7 @@ public abstract class AbstractHTTPRequest {
     public abstract String getVersion();
     public abstract HashMap<String, String> getAllHeaders();
     public abstract String getHeader(String headerName);
-    public abstract boolean headerExists(String headerName);
+    public abstract boolean containsHeader(String headerName);
     public abstract HashMap<String, String> getAllParams();
     public abstract String getParam(String paramName);
     public abstract boolean paramExists(String paramName);

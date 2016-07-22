@@ -48,7 +48,7 @@ public class HTTPRequest extends AbstractHTTPRequest {
         return headers.get(headerName);
     }
 
-    public boolean headerExists(String headerName) {
+    public boolean containsHeader(String headerName) {
         return headers.containsKey(headerName);
     }
 

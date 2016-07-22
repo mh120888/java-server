@@ -24,7 +24,7 @@ public class LogsResourceHandler implements ResourceHandler {
 
     public boolean isAuthorized(AbstractHTTPRequest request) {
         String encodedCredentials = "";
-        if (request.headerExists("Authorization")) {
+        if (request.containsHeader("Authorization")) {
             encodedCredentials = request.getHeader("Authorization").replace("Basic ", "");
         }
         return BasicAuthorizer.isAuthorized(encodedCredentials, correctCredentials);
