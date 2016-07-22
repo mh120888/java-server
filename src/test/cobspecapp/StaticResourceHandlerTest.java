@@ -37,26 +37,26 @@ public class StaticResourceHandlerTest {
         StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
 
         AbstractHTTPRequest request = new HTTPRequest("GET / HTTP/1.1");
-        String response = endpoint.getResponseData(request, new HTTPResponse());
+        String response = endpoint.getResponse(request, new HTTPResponse());
 
         assertTrue(response.contains("HTTP/1.1 200"));
     }
 
     @Test
-    public void getResponseDataReturns200ForHeadRequest() {
+    public void getResponseReturns200ForHeadRequest() {
         StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         AbstractHTTPRequest request = new HTTPRequest("HEAD / HTTP/1.1");
-        String response = endpoint.getResponseData(request, new HTTPResponse());
+        String response = endpoint.getResponse(request, new HTTPResponse());
 
         assertTrue(response.contains("HTTP/1.1 200"));
     }
 
     @Test
-    public void getResponseDataReturns405ForInvalidMethods() {
+    public void getResponseReturns405ForInvalidMethods() {
         StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         AbstractHTTPRequest request = new HTTPRequest("NOTAREALMETHOD / HTTP/1.1");
 
-        String response = endpoint.getResponseData(request, new HTTPResponse());
+        String response = endpoint.getResponse(request, new HTTPResponse());
 
         assertTrue(response.contains("HTTP/1.1 405"));
 
@@ -67,7 +67,7 @@ public class StaticResourceHandlerTest {
         StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         AbstractHTTPRequest request = new HTTPRequest("GET / HTTP/1.1");
 
-        String response = endpoint.getResponseData(request, new HTTPResponse());
+        String response = endpoint.getResponse(request, new HTTPResponse());
 
         assertTrue(response.contains("<a href=\"/file1\">file1</a>"));
 
@@ -78,7 +78,7 @@ public class StaticResourceHandlerTest {
         StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         AbstractHTTPRequest request = new HTTPRequest("POST / HTTP/1.1");
 
-        String response = endpoint.getResponseData(request, new HTTPResponse());
+        String response = endpoint.getResponse(request, new HTTPResponse());
 
         assertTrue(response.contains("HTTP/1.1 405"));
     }
@@ -87,7 +87,7 @@ public class StaticResourceHandlerTest {
 //    public void postRequestWithParamsReturnsA200() {
 //        cobspecapp.StaticResourceHandler endpoint = new cobspecapp.StaticResourceHandler();
 //        HashMap<String, String> request = server.HTTPRequestParser.parse("POST / HTTP/1.0\n\nsomeParam=something");
-//        HashMap<String, String> response = endpoint.getResponseData(request);
+//        HashMap<String, String> response = endpoint.getResponse(request);
 //
 //        assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
 //    }
@@ -96,7 +96,7 @@ public class StaticResourceHandlerTest {
 //    public void putRequestWithParamsReturnsA200() {
 //        cobspecapp.StaticResourceHandler endpoint = new cobspecapp.StaticResourceHandler();
 //        HashMap<String, String> request = server.HTTPRequestParser.parse("PUT / HTTP/1.1\n\nsomeParam=something");
-//        HashMap<String, String> response = endpoint.getResponseData(request);
+//        HashMap<String, String> response = endpoint.getResponse(request);
 //
 //        assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
 //    }
@@ -147,7 +147,7 @@ public class StaticResourceHandlerTest {
         String path = publicDirectory + "/image.png";
         byte[] imageContents = Files.readAllBytes(Paths.get(path));
         AbstractHTTPRequest request = new HTTPRequest("GET /image.png HTTP/1.1");
-        String response = endpoint.getResponseData(request, new HTTPResponse());
+        String response = endpoint.getResponse(request, new HTTPResponse());
 
         assertEquals(true, response.contains(new String(imageContents)));
     }

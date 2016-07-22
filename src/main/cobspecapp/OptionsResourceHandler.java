@@ -3,14 +3,12 @@ package cobspecapp;
 import abstracthttprequest.AbstractHTTPRequest;
 import abstracthttpresponse.AbstractHTTPResponse;
 
-import java.util.HashMap;
-
 /**
  * Created by matthewhiggins on 7/14/16.
  */
 public class OptionsResourceHandler implements ResourceHandler {
 
-    public String getResponseData(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+    public String getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
         response.setHTTPVersion(request.getVersion());
         response.setStatus(200);
         response.addHeader("Allow", buildHeaders(request.getPath()));

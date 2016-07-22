@@ -16,28 +16,28 @@ import static org.junit.Assert.assertTrue;
  */
 public class RedirectResourceHandlerTest {
     @Test
-    public void getResponseDataReturnsA302Response() {
+    public void getResponseReturnsA302Response() {
         RedirectResourceHandler endpoint = new RedirectResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
-        String response = endpoint.getResponseData(request, new HTTPResponse());
+        String response = endpoint.getResponse(request, new HTTPResponse());
 
         assertTrue(response.contains("HTTP/1.1 302"));
     }
 
     @Test
-    public void getResponseDataReturnsResponseContainingLocationHeader() {
+    public void getResponseReturnsResponseContainingLocationHeader() {
         RedirectResourceHandler endpoint = new RedirectResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
-        String response = endpoint.getResponseData(request, new HTTPResponse());
+        String response = endpoint.getResponse(request, new HTTPResponse());
 
         assertTrue(response.contains("location: "));
     }
 
     @Test
-    public void getResponseDataReturnsResponseContainingLocationHeaderWithCorrectValue() {
+    public void getResponseReturnsResponseContainingLocationHeaderWithCorrectValue() {
         RedirectResourceHandler endpoint = new RedirectResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
-        String response = endpoint.getResponseData(request, new HTTPResponse());
+        String response = endpoint.getResponse(request, new HTTPResponse());
 
         assertTrue(response.contains("location: http://localhost:5000/"));
     }

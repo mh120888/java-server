@@ -3,15 +3,13 @@ package cobspecapp;
 import abstracthttprequest.AbstractHTTPRequest;
 import abstracthttpresponse.AbstractHTTPResponse;
 
-import java.util.HashMap;
-
 /**L
  * Created by matthewhiggins on 7/12/16.
  */
 public class LogsResourceHandler implements ResourceHandler {
     private String correctCredentials = "admin:hunter2";
 
-    public String getResponseData(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+    public String getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
         response.setHTTPVersion(request.getVersion());
 
         if (isAuthorized(request)) {

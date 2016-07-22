@@ -9,7 +9,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * Created by matthewhiggins on 7/11/16.
@@ -25,7 +24,7 @@ public class StaticResourceHandler implements ResourceHandler {
         DIRECTORY, IMAGE, OTHER
     }
 
-    public String getResponseData(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+    public String getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
         response.setHTTPVersion(request.getVersion());
         response.setStatus(getResponseLine(request));
         response.setBody(getBody(request));
@@ -109,6 +108,3 @@ public class StaticResourceHandler implements ResourceHandler {
         return file.isDirectory();
     }
 }
-
-//depends on cobspecapp.ResourceHandler Interface
-//depends on server for filepath

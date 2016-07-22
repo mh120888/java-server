@@ -29,7 +29,7 @@ public class CoffeeResourceHandlerTest {
     public void returns418ForGETCoffee() {
         CoffeeResourceHandler endpoint = new CoffeeResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /coffee HTTP/1.1");
-        String response = endpoint.getResponseData(request, new HTTPResponse());
+        String response = endpoint.getResponse(request, new HTTPResponse());
 
         assertTrue(response.contains("HTTP/1.1 418"));
     }
@@ -38,7 +38,7 @@ public class CoffeeResourceHandlerTest {
     public void bodyContainsCorrectStringIfPathIsCoffee() {
         CoffeeResourceHandler endpoint = new CoffeeResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /coffee HTTP/1.1");
-        String response = endpoint.getResponseData(request, new HTTPResponse());
+        String response = endpoint.getResponse(request, new HTTPResponse());
 
         assertTrue(response.contains("I'm a teapot"));
     }
@@ -47,7 +47,7 @@ public class CoffeeResourceHandlerTest {
     public void returns200ForGETTea() {
         CoffeeResourceHandler endpoint = new CoffeeResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /tea HTTP/1.1");
-        String response = endpoint.getResponseData(request, new HTTPResponse());
+        String response = endpoint.getResponse(request, new HTTPResponse());
 
         assertTrue(response.contains("HTTP/1.1 200"));
     }

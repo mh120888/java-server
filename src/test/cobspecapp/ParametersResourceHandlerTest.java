@@ -18,7 +18,7 @@ public class ParametersResourceHandlerTest {
     public void GETRequestReturns200() {
         ParametersResourceHandler endpoint = new ParametersResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /parameters HTTP/1.1");
-        String response = endpoint.getResponseData(request, new HTTPResponse());
+        String response = endpoint.getResponse(request, new HTTPResponse());
 
         assertTrue(response.contains("HTTP/1.1 200"));
     }
@@ -27,7 +27,7 @@ public class ParametersResourceHandlerTest {
     public void POSTRequestReturns405() {
         ParametersResourceHandler endpoint = new ParametersResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("POST /parameters HTTP/1.1");
-        String response = endpoint.getResponseData(request, new HTTPResponse());
+        String response = endpoint.getResponse(request, new HTTPResponse());
 
         assertTrue(response.contains("HTTP/1.1 405"));
     }
@@ -36,7 +36,7 @@ public class ParametersResourceHandlerTest {
     public void GETRequestWithParametersIncludesParametersInBody() {
         ParametersResourceHandler endpoint = new ParametersResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /parameters?someParam=newValue HTTP/1.1");
-        String response = endpoint.getResponseData(request, new HTTPResponse());
+        String response = endpoint.getResponse(request, new HTTPResponse());
 
         assertTrue(response.contains("someParam = newValue"));
     }

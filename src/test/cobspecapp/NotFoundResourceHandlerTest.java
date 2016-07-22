@@ -29,7 +29,7 @@ public class NotFoundResourceHandlerTest {
     public void returnsAStatusOf404() {
         NotFoundResourceHandler endpoint = new NotFoundResourceHandler();
         AbstractHTTPRequest request = new httprequest.HTTPRequest("GET /foobar HTTP/1.1");
-        String response = endpoint.getResponseData(request, new HTTPResponse());
+        String response = endpoint.getResponse(request, new HTTPResponse());
 
         assertTrue(response.contains("HTTP/1.1 404"));
     }

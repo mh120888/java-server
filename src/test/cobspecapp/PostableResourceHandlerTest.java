@@ -15,38 +15,38 @@ import static org.junit.Assert.assertEquals;
  */
 public class PostableResourceHandlerTest {
 //    @Test
-//    public void getResponseDataReturnsA200forPOSTWithParams() {
+//    public void getResponseReturnsA200forPOSTWithParams() {
 //        cobspecapp.PostableResourceHandler endpoint = new cobspecapp.PostableResourceHandler();
 //        HashMap<String, String> request = server.HTTPRequestParser.parse("POST /form HTTP/1.1\n\nsomeParam=someValue");
-//        HashMap<String, String> response = endpoint.getResponseData(request);
+//        HashMap<String, String> response = endpoint.getResponse(request);
 //
 //        assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
 //    }
 
     @Test
-    public void getResponseDataReturns200ForGET() {
+    public void getResponseReturns200ForGET() {
         PostableResourceHandler endpoint = new PostableResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /form HTTP/1.1");
-        String response = endpoint.getResponseData(request, new HTTPResponse());
+        String response = endpoint.getResponse(request, new HTTPResponse());
 
         Assert.assertTrue(response.contains("HTTP/1.1 200"));
     }
 
     @Test
-    public void getResponseDataReturnsA405ForPostWithoutParams() {
+    public void getResponseReturnsA405ForPostWithoutParams() {
         PostableResourceHandler endpoint = new PostableResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("POST /form HTTP/1.1");
-        String response = endpoint.getResponseData(request, new HTTPResponse());
+        String response = endpoint.getResponse(request, new HTTPResponse());
 
         Assert.assertTrue(response.contains("HTTP/1.1 405"));
     }
 
 //    @Test
-//    public void getResponseDataReturnsCorrectBodyContentForPostWithParams() {
+//    public void getResponseReturnsCorrectBodyContentForPostWithParams() {
 //        cobspecapp.PostableResourceHandler endpoint = new cobspecapp.PostableResourceHandler();
-//        endpoint.getResponseData(server.HTTPRequestParser.parse("POST /form HTTP/1.1\n\ndata=something"));
+//        endpoint.getResponse(server.HTTPRequestParser.parse("POST /form HTTP/1.1\n\ndata=something"));
 //        HashMap<String, String> request = server.HTTPRequestParser.parse("GET /form HTTP/1.1");
-//        HashMap<String, String> response = endpoint.getResponseData(request);
+//        HashMap<String, String> response = endpoint.getResponse(request);
 //
 //        assertEquals("data=something", response.get("body"));
 //    }
