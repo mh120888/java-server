@@ -9,6 +9,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Base64;
 
 /**
  * Created by matthewhiggins on 7/11/16.
@@ -35,9 +36,11 @@ public class StaticResourceHandler implements ResourceHandler {
     private int getResponseLine(AbstractHTTPRequest request) {
         String method = request.getMethod();
 
-        if (isAcceptableMethodWithoutParams(method))
+        if (request.containsHeader("Range")) {
+            return 206;
+        }
 //        (isAcceptableMethodWithoutParams(method) || requestData.containsKey("body") && isAcceptableMethodWithParams(method))
-        {
+        else if (isAcceptableMethodWithoutParams(method)) {
             return 200;
         } else {
             return 405;
@@ -60,36 +63,57 @@ public class StaticResourceHandler implements ResourceHandler {
         return Arrays.asList(listOfMethods).contains(method);
     }
 
-    private String getBody(AbstractHTTPRequest requestData) {
-        String method = requestData.getMethod();
+    private String getBody(AbstractHTTPRequest request) {
+        String method = request.getMethod();
         String body = "";
         if (!method.equals("GET")) {
             return body;
         }
-        String path = requestData.getPath();
+        String path = request.getPath();
         switch (getFiletype(path)) {
             case DIRECTORY:
-                File file = new File(publicDirectory);
-                String[] fileNames = file.list();
-
-                for (String fileName : fileNames) {
-                    body += ("<a href=\"/" + fileName + "\">" + fileName + "</a>\n");
-                }
+                body += getBodyForDirectory();
                 break;
             default:
-                try {
-                    String filePath = publicDirectory + path;
-                    byte[] imageContents = Files.readAllBytes(Paths.get(filePath));
-                    body = new String(imageContents, Charset.defaultCharset());
-                } catch (IOException e) {
-                    System.err.println(e);
-                }
+                body += getBodyDefault(request);
                 break;
         }
         return body;
     }
 
-    public Filetype getFiletype(String path) {
+    String getBodyForDirectory() {
+        String body = "";
+        File file = new File(publicDirectory);
+        String[] fileNames = file.list();
+
+        for (String fileName : fileNames) {
+            body += ("<a href=\"/" + fileName + "\">" + fileName + "</a>\n");
+        }
+        return body;
+    }
+
+     String getBodyDefault(AbstractHTTPRequest request) {
+        String body = "";
+        try {
+            String filePath = publicDirectory + request.getPath();
+            byte[] imageContents = getCorrectPortionOfFileContents(Files.readAllBytes(Paths.get(filePath)), request);
+            body = new String(imageContents);
+        } catch (IOException e) {
+            System.err.println(e);
+        }
+        return body;
+    }
+
+     byte[] getCorrectPortionOfFileContents(byte[] fileContents, AbstractHTTPRequest request) {
+        byte[] result = fileContents;
+        if (request.containsHeader("Range")) {
+            int[] range = request.getHeaderParser().parseRangeHeader(request.getHeader("Range"), fileContents);
+            result = Arrays.copyOfRange(fileContents, range[0], range[1] + 1);
+        }
+        return result;
+    }
+
+    Filetype getFiletype(String path) {
         String[] splitUpPath = path.split("\\.");
         String[] imageExtensions = {"png", "jpeg", "gif"};
 
@@ -102,7 +126,7 @@ public class StaticResourceHandler implements ResourceHandler {
         }
     }
 
-    public boolean isPathADirectory(String path) {
+    boolean isPathADirectory(String path) {
         String filePath = publicDirectory + path;
         File file = new File(filePath);
         return file.isDirectory();

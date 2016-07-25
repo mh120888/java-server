@@ -44,7 +44,7 @@ public class MyServer {
     public static void generateOutput(String input, PrintStream out, Application app) throws IOException {
         HTTPRequest request = new HTTPRequest(input);
         String output = app.getResponse(request, new HTTPResponse());
-        out.println(output);
+        out.write(output.getBytes());
     }
 
     public static String readInInput(BufferedReader in) throws IOException {

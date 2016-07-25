@@ -16,4 +16,7 @@ public class MockPrintStream extends PrintStream {
     public void println(String message) {
         lastMessage = message;
     }
+    public void write(byte[] message) {
+        lastMessage = new String(message);
+    }
 }

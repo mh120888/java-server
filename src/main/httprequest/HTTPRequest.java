@@ -48,7 +48,7 @@ public class HTTPRequest extends AbstractHTTPRequest {
         return headers.get(headerName);
     }
 
-    public boolean headerExists(String headerName) {
+    public boolean containsHeader(String headerName) {
         return headers.containsKey(headerName);
     }
 
@@ -70,6 +70,10 @@ public class HTTPRequest extends AbstractHTTPRequest {
 
     public String getInitialRequestLine() {
         return method + " " + pathWithParams + " " + version;
+    }
+
+    public HeaderParser getHeaderParser() {
+        return new HeaderParser();
     }
 
     private void setHeaders(String[] requestSeparatedByNewline) {

@@ -60,14 +60,14 @@ public class HTTPRequestTest {
     public void headerExistReturnsTrueForAHeaderThatExists() {
         HTTPRequest request = new HTTPRequest("GET /somerandompath HTTP/1.1\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==\n");
 
-        Assert.assertTrue(request.headerExists("Authorization"));
+        Assert.assertTrue(request.containsHeader("Authorization"));
     }
 
     @Test
     public void headerExistReturnsFalseForAHeaderThatDoesNotExist() {
         HTTPRequest request = new HTTPRequest("GET /somerandompath HTTP/1.1\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==\n");
 
-        Assert.assertFalse(request.headerExists("does not exist"));
+        Assert.assertFalse(request.containsHeader("does not exist"));
     }
 
     @Test
@@ -145,5 +145,12 @@ public class HTTPRequestTest {
         HTTPRequest request = new HTTPRequest("GET /some-path?somerandomparam=33 HTTP/1.1\n");
 
         Assert.assertEquals("GET /some-path?somerandomparam=33 HTTP/1.1", request.getInitialRequestLine());
+    }
+
+    @Test
+    public void getHeaderParserReturnsANewHeaderParser() {
+        HTTPRequest request = new HTTPRequest("GET /path-does-not-matter HTTP/1.1\n");
+
+        Assert.assertTrue(request.getHeaderParser() instanceof HeaderParser);
     }
 }
