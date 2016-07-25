@@ -25,10 +25,10 @@ public class HeaderParser extends AbstractHeaderParser {
         int lengthOfResource = resourceContents.length;
         if (isStartOfRangeMissing(startAndEndStrings)) {
             result[0] = lengthOfResource - Integer.parseInt(startAndEndStrings[1]);
-            result[1] = lengthOfResource;
+            result[1] = lengthOfResource - 1;
         } else if (isEndOfRangeMissing(startAndEndStrings)) {
             result[0] = Integer.parseInt(startAndEndStrings[0]);
-            result[1] = lengthOfResource;
+            result[1] = lengthOfResource - 1;
         } else {
             for (int i = 0; i < startAndEndStrings.length; i++) {
                 result[i] = Integer.parseInt(startAndEndStrings[i]);

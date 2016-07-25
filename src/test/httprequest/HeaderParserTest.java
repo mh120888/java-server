@@ -56,7 +56,7 @@ public class HeaderParserTest {
         int[] result = parser.calculateStartAndEndBytes(input, mockResource);
 
         assertEquals(98, result[0]);
-        assertEquals(100, result[1]);
+        assertEquals(99, result[1]);
     }
 
     @Test
@@ -67,7 +67,7 @@ public class HeaderParserTest {
         int[] result = parser.calculateStartAndEndBytes(input, mockResource);
 
         assertEquals(4, result[0]);
-        assertEquals(100, result[1]);
+        assertEquals(99, result[1]);
     }
 
     @Test
