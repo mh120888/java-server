@@ -2,6 +2,7 @@ package httpresponse;
 
 import abstracthttpresponse.AbstractHTTPResponse;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +12,7 @@ import java.util.Map;
 public class HTTPResponse extends AbstractHTTPResponse {
     int status;
     String version = "";
-    String body = "";
+    byte[] body = new byte[0];
     HashMap<String, String> headers = new HashMap<>();
 
     public void setStatus(int statusCode) {
@@ -22,12 +23,16 @@ public class HTTPResponse extends AbstractHTTPResponse {
         version = httpVersion;
     }
 
-    public void setBody(String bodyContent) {
-        body = bodyContent;
+    public void setBodyFromString(String bodyContent) {
+        body = bodyContent.getBytes();
     }
 
-    public void addToBody(String newBodyContent) {
-        body += newBodyContent;
+    public void setBody (byte[] bodyBytes) {
+        body = bodyBytes;
+    }
+
+    public byte[] getBody() {
+        return body;
     }
 
     public void addHeader(String name, String value) {
@@ -35,10 +40,16 @@ public class HTTPResponse extends AbstractHTTPResponse {
     }
 
     public String getFormattedResponse() {
+        String result = getAllButBody();
+        result += new String(body);
+
+        return result;
+    }
+
+    public String getAllButBody() {
         String result = "";
         result += version + " " + status + " " + getStatusText() + "\n";
         result += getFormattedHeaders() + "\n";
-        result += body;
 
         return result;
     }

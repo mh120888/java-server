@@ -58,6 +58,6 @@ public class MyServerTest {
         Application app = new MockApplication("Random response");
         MyServer.generateOutput(input, out, app);
 
-        Assert.assertEquals("Random response", out.lastMessage);
+        Assert.assertTrue(out.lastMessage.contains("Random response"));
     }
 }

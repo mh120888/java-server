@@ -29,39 +29,19 @@ public class HTTPResponseTest {
     public void setBodyUpdatesTheBodyMemberToTheProvidedString() {
         HTTPResponse response = new HTTPResponse();
 
-        response.setBody("random body content");
+        response.setBodyFromString("random body content");
 
-        Assert.assertEquals("random body content", response.body);
+        Assert.assertEquals("random body content", new String(response.body));
     }
 
     @Test
     public void setBodyOverwritesPreviousBodyContents() {
         HTTPResponse response = new HTTPResponse();
-        response.setBody("random body content");
+        response.setBodyFromString("random body content");
 
-        response.setBody("new body content");
+        response.setBodyFromString("new body content");
 
-        Assert.assertEquals("new body content", response.body);
-    }
-
-    @Test
-    public void addToBodyAddsNewContentToBody() {
-        HTTPResponse response = new HTTPResponse();
-        response.setBody("random body content");
-
-        response.addToBody("more stuff");
-
-        Assert.assertTrue(response.body.contains("more stuff"));
-    }
-
-    @Test
-    public void addToBodyDoesNotOverwritePreviousBodyContents() {
-        HTTPResponse response = new HTTPResponse();
-        response.setBody("random body content");
-
-        response.addToBody("more stuff");
-
-        Assert.assertTrue(response.body.contains("random body content"));
+        Assert.assertEquals("new body content", new String(response.body));
     }
 
     @Test
@@ -78,7 +58,7 @@ public class HTTPResponseTest {
         HTTPResponse response = new HTTPResponse();
         response.setStatus(200);
         response.setHTTPVersion("HTTP/1.1");
-        response.setBody("Some content");
+        response.setBodyFromString("Some content");
         response.addHeader("One header", "one value");
 
         Assert.assertEquals("HTTP/1.1 200 OK\nOne header: one value\n\nSome content", response.getFormattedResponse());
