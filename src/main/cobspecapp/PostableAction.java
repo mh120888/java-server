@@ -6,7 +6,7 @@ import abstracthttpresponse.AbstractHTTPResponse;
 /**
  * Created by matthewhiggins on 7/11/16.
  */
-public class PostableResourceHandler implements ResourceHandler {
+public class PostableAction implements Action {
     private static String data = "";
 
     public AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {

@@ -10,10 +10,10 @@ import org.junit.Test;
 /**
  * Created by matthewhiggins on 7/14/16.
  */
-public class OptionsResourceHandlerTest {
+public class OptionsActionTest {
     @Test
     public void getReponseDataReturnsCorrectResponseLineForGET() {
-        OptionsResourceHandler endpoint = new OptionsResourceHandler();
+        OptionsAction endpoint = new OptionsAction();
         AbstractHTTPRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
@@ -22,7 +22,7 @@ public class OptionsResourceHandlerTest {
 
     @Test
     public void getReponseDataReturnsCorrectResponseLineForOPTIONS() {
-        OptionsResourceHandler endpoint = new OptionsResourceHandler();
+        OptionsAction endpoint = new OptionsAction();
         AbstractHTTPRequest request = new HTTPRequest("OPTIONS /pathdoesnotmatter HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
@@ -31,7 +31,7 @@ public class OptionsResourceHandlerTest {
 
     @Test
     public void getResponseReturnsAResponseWithAnAllowHeader() {
-        OptionsResourceHandler endpoint = new OptionsResourceHandler();
+        OptionsAction endpoint = new OptionsAction();
         AbstractHTTPRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
@@ -40,7 +40,7 @@ public class OptionsResourceHandlerTest {
 
     @Test
     public void getResponseReturnsAResponseWithAllowHeaderWithMethodsAllowedForGivenPath() {
-        OptionsResourceHandler endpoint = new OptionsResourceHandler();
+        OptionsAction endpoint = new OptionsAction();
         AbstractHTTPRequest request = new HTTPRequest("GET /method_options HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
         String[] acceptedMethods = {"GET", "HEAD", "POST", "OPTIONS", "PUT"};
@@ -52,7 +52,7 @@ public class OptionsResourceHandlerTest {
 
     @Test
     public void getResponseReturnsAResponseWithAllowHeaderWithMethodsAllowedForADifferentPath() {
-        OptionsResourceHandler endpoint = new OptionsResourceHandler();
+        OptionsAction endpoint = new OptionsAction();
         AbstractHTTPRequest request = new HTTPRequest("GET /method_options2 HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
         String[] acceptedMethods = {"GET", "OPTIONS"};
@@ -64,7 +64,7 @@ public class OptionsResourceHandlerTest {
 
     @Test
     public void getResponseReturnsAResponseWithAllowHeaderWithoutMethodsNotAllowedForPath() {
-        OptionsResourceHandler endpoint = new OptionsResourceHandler();
+        OptionsAction endpoint = new OptionsAction();
         AbstractHTTPRequest request = new HTTPRequest("GET /method_options2 HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
         String[] disallowedMethods = {"POST", "HEAD", "PUT"};

@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by matthewhiggins on 7/11/16.
  */
-public class NotFoundResourceHandlerTest {
+public class NotFoundActionTest {
     @Before
     public void setUp() throws Exception {
 
@@ -24,7 +24,7 @@ public class NotFoundResourceHandlerTest {
 
     @Test
     public void returnsAStatusOf404() {
-        NotFoundResourceHandler endpoint = new NotFoundResourceHandler();
+        NotFoundAction endpoint = new NotFoundAction();
         AbstractHTTPRequest request = new httprequest.HTTPRequest("GET /foobar HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 

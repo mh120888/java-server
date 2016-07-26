@@ -9,7 +9,7 @@ import java.util.Arrays;
  * Created by matthewhiggins on 7/11/16.
  */
 public class Router {
-    public static ResourceHandler getEndpoint(AbstractHTTPRequest request, String publicDirectory) {
+    public static Action route(AbstractHTTPRequest request, String publicDirectory) {
         Logger.addLog(request.getInitialRequestLine());
 
         File file = new File(publicDirectory);
@@ -17,21 +17,21 @@ public class Router {
         String path = request.getPath();
 
         if (Arrays.asList(fileNames).contains(path.replace("/", "")) || path.equals("/")) {
-            return new StaticResourceHandler(publicDirectory);
+            return new StaticResourceAction(publicDirectory);
         } else if (path.contains("/coffee") || path.contains("/tea")) {
-            return new CoffeeResourceHandler();
+            return new CoffeeAction();
         } else if (path.contains("/form")) {
-            return new PostableResourceHandler();
+            return new PostableAction();
         } else if (path.contains("/logs")) {
-            return new LogsResourceHandler();
+            return new LogsAction();
         } else if (path.contains("/parameters")) {
-            return new ParametersResourceHandler();
+            return new ParametersAction();
         } else if (path.contains("/method_options")) {
-            return new OptionsResourceHandler();
+            return new OptionsAction();
         } else if (path.contains("/redirect")) {
-            return new RedirectResourceHandler();
+            return new RedirectAction();
         } else {
-            return new NotFoundResourceHandler();
+            return new NotFoundAction();
         }
     }
 }

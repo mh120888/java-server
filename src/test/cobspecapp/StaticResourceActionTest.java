@@ -20,7 +20,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by matthewhiggins on 7/11/16.
  */
-public class StaticResourceHandlerTest {
+public class StaticResourceActionTest {
     public static String publicDirectory = "/Users/matthewhiggins/Desktop/cob_spec/public";
 
     @Before
@@ -35,7 +35,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void getResponseDataReturnsCorrectResponseLineForGet() {
-        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+        StaticResourceAction endpoint = new StaticResourceAction(publicDirectory);
 
         AbstractHTTPRequest request = new HTTPRequest("GET / HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
@@ -45,7 +45,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void getResponseReturns200ForHeadRequest() {
-        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+        StaticResourceAction endpoint = new StaticResourceAction(publicDirectory);
         AbstractHTTPRequest request = new HTTPRequest("HEAD / HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
@@ -54,7 +54,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void getResponseReturns405ForInvalidMethods() {
-        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+        StaticResourceAction endpoint = new StaticResourceAction(publicDirectory);
         AbstractHTTPRequest request = new HTTPRequest("NOTAREALMETHOD / HTTP/1.1");
 
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
@@ -65,7 +65,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void getIndexResponseIncludesLinksToOtherResourcesInPublic() {
-        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+        StaticResourceAction endpoint = new StaticResourceAction(publicDirectory);
         AbstractHTTPRequest request = new HTTPRequest("GET / HTTP/1.1");
 
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
@@ -76,7 +76,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void postRequestWithNoParamsReturnsA405() {
-        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+        StaticResourceAction endpoint = new StaticResourceAction(publicDirectory);
         AbstractHTTPRequest request = new HTTPRequest("POST / HTTP/1.1");
 
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
@@ -86,7 +86,7 @@ public class StaticResourceHandlerTest {
 //
 //    @Test
 //    public void postRequestWithParamsReturnsA200() {
-//        cobspecapp.StaticResourceHandler endpoint = new cobspecapp.StaticResourceHandler();
+//        cobspecapp.StaticResourceAction endpoint = new cobspecapp.StaticResourceAction();
 //        HashMap<String, String> request = server.HTTPRequestParser.parse("POST / HTTP/1.0\n\nsomeParam=something");
 //        HashMap<String, String> response = endpoint.getResponse(request);
 //
@@ -95,7 +95,7 @@ public class StaticResourceHandlerTest {
 //
 //    @Test
 //    public void putRequestWithParamsReturnsA200() {
-//        cobspecapp.StaticResourceHandler endpoint = new cobspecapp.StaticResourceHandler();
+//        cobspecapp.StaticResourceAction endpoint = new cobspecapp.StaticResourceAction();
 //        HashMap<String, String> request = server.HTTPRequestParser.parse("PUT / HTTP/1.1\n\nsomeParam=something");
 //        HashMap<String, String> response = endpoint.getResponse(request);
 //
@@ -104,7 +104,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void isPathADirectoryReturnsTrueForADirectory() {
-        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+        StaticResourceAction endpoint = new StaticResourceAction(publicDirectory);
         String path = "/";
 
         Assert.assertEquals(true, endpoint.isPathADirectory(path));
@@ -112,7 +112,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void isPathADirectoryReturnsFalseForAFile() {
-        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+        StaticResourceAction endpoint = new StaticResourceAction(publicDirectory);
         String path = "/file1";
 
         Assert.assertEquals(false, endpoint.isPathADirectory(path));
@@ -120,31 +120,31 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void getFiletypeReturnsDIRECTORYForADirectory() {
-        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+        StaticResourceAction endpoint = new StaticResourceAction(publicDirectory);
         String path = "/";
 
-        Assert.assertEquals(StaticResourceHandler.Filetype.DIRECTORY, endpoint.getFiletype(path));
+        Assert.assertEquals(StaticResourceAction.Filetype.DIRECTORY, endpoint.getFiletype(path));
     }
 
     @Test
     public void getFiletypeReturnsIMAGEForAnImage() {
-        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+        StaticResourceAction endpoint = new StaticResourceAction(publicDirectory);
         String path = "/image.png";
 
-        Assert.assertEquals(StaticResourceHandler.Filetype.IMAGE, endpoint.getFiletype(path));
+        Assert.assertEquals(StaticResourceAction.Filetype.IMAGE, endpoint.getFiletype(path));
     }
 
     @Test
     public void getFiletypeReturnsOTHERForATextFile() {
-        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+        StaticResourceAction endpoint = new StaticResourceAction(publicDirectory);
         String path = "/text-file.txt";
 
-        Assert.assertEquals(StaticResourceHandler.Filetype.OTHER, endpoint.getFiletype(path));
+        Assert.assertEquals(StaticResourceAction.Filetype.OTHER, endpoint.getFiletype(path));
     }
 
     @Test
     public void getRequestForAnExistingFileReturnsTheContentsOfThatFile() throws IOException {
-        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+        StaticResourceAction endpoint = new StaticResourceAction(publicDirectory);
         String path = publicDirectory + "/image.png";
         byte[] imageContents = Files.readAllBytes(Paths.get(path));
         AbstractHTTPRequest request = new HTTPRequest("GET /image.png HTTP/1.1");
@@ -155,7 +155,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void getRequestWithRangeHeadersReturnsA206Response() {
-        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+        StaticResourceAction endpoint = new StaticResourceAction(publicDirectory);
 
         AbstractHTTPRequest request = new HTTPRequest("GET /partial_content.txt HTTP/1.1\nRange: bytes=0-10");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
@@ -165,7 +165,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void getRequestWithRangeHeadersReturnsOnlyTheSpecifiedRangeOfTheRequestedResource() throws IOException {
-        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+        StaticResourceAction endpoint = new StaticResourceAction(publicDirectory);
         String path = publicDirectory + "/partial_content.txt";
         byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
         byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 0, 5);
@@ -178,7 +178,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void getRequestWithRangeHeadersReturnsCorrectPortionOfResourceWhenNoStartIsGiven() throws IOException {
-        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+        StaticResourceAction endpoint = new StaticResourceAction(publicDirectory);
         String path = publicDirectory + "/partial_content.txt";
         byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
         byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 71, fullFileContents.length);
@@ -192,7 +192,7 @@ public class StaticResourceHandlerTest {
 
     @Test
     public void getRequestWithRangeHeadersReturnsCorrectPortionOfResourceWhenNoEndIsGiven() throws IOException {
-        StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
+        StaticResourceAction endpoint = new StaticResourceAction(publicDirectory);
         String path = publicDirectory + "/partial_content.txt";
         byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
         byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 4, fullFileContents.length);

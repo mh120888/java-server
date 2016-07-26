@@ -25,75 +25,75 @@ public class RouterTest {
     }
 
     @Test
-    public void getEndpointReturnsStaticResourceEndpointForAStaticResource() {
+    public void routeReturnsStaticResourceActionForAStaticResource() {
         AbstractHTTPRequest request = new HTTPRequest("GET / HTTP/1.1");
-        ResourceHandler resourceHandler = Router.getEndpoint(request, publicDirectory);
+        Action action = Router.route(request, publicDirectory);
 
-        assertTrue(resourceHandler instanceof StaticResourceHandler);
+        assertTrue(action instanceof StaticResourceAction);
     }
 
     @Test
-    public void getEndpointReturnsCoffeeEndpointWhenAppropriate() {
+    public void routeReturnsCoffeeActionWhenAppropriate() {
         AbstractHTTPRequest request = new HTTPRequest("GET /coffee HTTP/1.1");
-        ResourceHandler resourceHandler = Router.getEndpoint(request, publicDirectory);
+        Action action = Router.route(request, publicDirectory);
 
-        assertTrue(resourceHandler instanceof CoffeeResourceHandler);
+        assertTrue(action instanceof CoffeeAction);
     }
 
     @Test
-    public void getEndpointReturnsNotFoundEndpointWhenPathIsNotRecognized() {
+    public void routeReturnsNotFoundActionWhenPathIsNotRecognized() {
         AbstractHTTPRequest request = new HTTPRequest("GET /foobar HTTP/1.1");
-        ResourceHandler resourceHandler = Router.getEndpoint(request, publicDirectory);
+        Action action = Router.route(request, publicDirectory);
 
-        assertTrue(resourceHandler instanceof NotFoundResourceHandler);
+        assertTrue(action instanceof NotFoundAction);
     }
 
     @Test
-    public void getEndpointReturnsPostableEndpointWhenAppropriate() {
+    public void routeReturnsPostableActionWhenAppropriate() {
         AbstractHTTPRequest request = new HTTPRequest("POST /form HTTP/1.1");
-        ResourceHandler resourceHandler = Router.getEndpoint(request, publicDirectory);
+        Action action = Router.route(request, publicDirectory);
 
-        assertTrue(resourceHandler instanceof PostableResourceHandler);
+        assertTrue(action instanceof PostableAction);
     }
 
     @Test
-    public void getEndpointReturnsLogsEndpointWhenAppropriatePathIsRequested() {
+    public void routeReturnsLogsActionWhenAppropriatePathIsRequested() {
         AbstractHTTPRequest request = new HTTPRequest("GET /logs HTTP/1.1");
-        ResourceHandler resourceHandler = Router.getEndpoint(request, publicDirectory);
+        Action action = Router.route(request, publicDirectory);
 
-        assertTrue(resourceHandler instanceof LogsResourceHandler);
+        assertTrue(action instanceof LogsAction);
     }
 
     @Test
     public void allRequestsAreLoggedAfterBeingRoutes() {
         String requestLine = "GET /logs HTTP/1.1";
         AbstractHTTPRequest request = new HTTPRequest(requestLine);
-        Router.getEndpoint(request, publicDirectory);
+        Router.route(request, publicDirectory);
 
         Assert.assertEquals(true, Logger.getLog().contains(requestLine));
     }
 
     @Test
-    public void requestToParametersReturnsParametersEndpoint() {
+    public void requestToParametersReturnsParametersAction() {
         AbstractHTTPRequest request = new HTTPRequest("GET /parameters HTTP/1.1");
-        ResourceHandler resourceHandler = Router.getEndpoint(request, publicDirectory);
+        Action action = Router.route(request, publicDirectory);
 
-        assertTrue(resourceHandler instanceof ParametersResourceHandler);
+        assertTrue(action instanceof ParametersAction);
     }
 
     @Test
-    public void getEndpointReturnsOptionsEndPointWhenAppropriate() {
+    public void routeReturnsOptionsActionWhenAppropriate() {
         AbstractHTTPRequest request = new HTTPRequest("GET /method_options HTTP/1.1");
-        ResourceHandler resourceHandler = Router.getEndpoint(request, publicDirectory);
+        Action action = Router.route(request, publicDirectory);
 
-        assertTrue(resourceHandler instanceof OptionsResourceHandler);
+        assertTrue(action instanceof OptionsAction);
     }
 
     @Test
-    public void getEndpointReturnsRedirectResourceHandlerWhenAppropriate() {
+    public void routeReturnsRedirectResourceHandlerWhenAppropriate() {
         AbstractHTTPRequest request = new HTTPRequest("GET /redirect HTTP/1.1");
-        ResourceHandler resourceHandler = Router.getEndpoint(request, publicDirectory);
+        Action action = Router.route(request, publicDirectory);
 
-        assertTrue(resourceHandler instanceof RedirectResourceHandler);
+        assertTrue(action instanceof RedirectAction);
     }
 }

@@ -10,10 +10,10 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by matthewhiggins on 7/14/16.
  */
-public class RedirectResourceHandlerTest {
+public class RedirectActionTest {
     @Test
     public void getResponseReturnsA302Response() {
-        RedirectResourceHandler endpoint = new RedirectResourceHandler();
+        RedirectAction endpoint = new RedirectAction();
         AbstractHTTPRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
@@ -22,7 +22,7 @@ public class RedirectResourceHandlerTest {
 
     @Test
     public void getResponseReturnsResponseContainingLocationHeader() {
-        RedirectResourceHandler endpoint = new RedirectResourceHandler();
+        RedirectAction endpoint = new RedirectAction();
         AbstractHTTPRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
@@ -31,7 +31,7 @@ public class RedirectResourceHandlerTest {
 
     @Test
     public void getResponseReturnsResponseContainingLocationHeaderWithCorrectValue() {
-        RedirectResourceHandler endpoint = new RedirectResourceHandler();
+        RedirectAction endpoint = new RedirectAction();
         AbstractHTTPRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 

@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by matthewhiggins on 7/11/16.
  */
-public class CoffeeResourceHandlerTest {
+public class CoffeeActionTest {
     @Before
     public void setUp() throws Exception {
 
@@ -25,7 +25,7 @@ public class CoffeeResourceHandlerTest {
 
     @Test
     public void returns418ForGETCoffee() {
-        CoffeeResourceHandler endpoint = new CoffeeResourceHandler();
+        CoffeeAction endpoint = new CoffeeAction();
         AbstractHTTPRequest request = new HTTPRequest("GET /coffee HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
@@ -34,7 +34,7 @@ public class CoffeeResourceHandlerTest {
 
     @Test
     public void bodyContainsCorrectStringIfPathIsCoffee() {
-        CoffeeResourceHandler endpoint = new CoffeeResourceHandler();
+        CoffeeAction endpoint = new CoffeeAction();
         AbstractHTTPRequest request = new HTTPRequest("GET /coffee HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
@@ -43,7 +43,7 @@ public class CoffeeResourceHandlerTest {
 
     @Test
     public void returns200ForGETTea() {
-        CoffeeResourceHandler endpoint = new CoffeeResourceHandler();
+        CoffeeAction endpoint = new CoffeeAction();
         AbstractHTTPRequest request = new HTTPRequest("GET /tea HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 

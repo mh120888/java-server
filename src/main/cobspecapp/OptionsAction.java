@@ -6,7 +6,7 @@ import abstracthttpresponse.AbstractHTTPResponse;
 /**
  * Created by matthewhiggins on 7/14/16.
  */
-public class OptionsResourceHandler implements ResourceHandler {
+public class OptionsAction implements Action {
 
     public AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
         response.setHTTPVersion(request.getVersion());

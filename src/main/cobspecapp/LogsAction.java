@@ -6,7 +6,7 @@ import abstracthttpresponse.AbstractHTTPResponse;
 /**L
  * Created by matthewhiggins on 7/12/16.
  */
-public class LogsResourceHandler implements ResourceHandler {
+public class LogsAction implements Action {
     private String correctCredentials = "admin:hunter2";
 
     public AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {

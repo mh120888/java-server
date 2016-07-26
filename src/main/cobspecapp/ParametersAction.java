@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Created by matthewhiggins on 7/13/16.
  */
-public class ParametersResourceHandler implements ResourceHandler {
+public class ParametersAction implements Action {
 
     public AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
         response.setHTTPVersion(request.getVersion());

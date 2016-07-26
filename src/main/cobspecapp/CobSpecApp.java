@@ -15,8 +15,8 @@ public class CobSpecApp extends Application {
     }
 
     public AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
-        ResourceHandler resourceHandler = Router.getEndpoint(request, publicDirectory);
-        AbstractHTTPResponse result = resourceHandler.getResponse(request, response);
+        Action action = Router.route(request, publicDirectory);
+        AbstractHTTPResponse result = action.getResponse(request, response);
         return result;
     }
 }

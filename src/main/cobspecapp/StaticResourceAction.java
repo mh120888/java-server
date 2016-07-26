@@ -12,8 +12,8 @@ import java.util.Arrays;
 /**
  * Created by matthewhiggins on 7/11/16.
  */
-public class StaticResourceHandler implements ResourceHandler {
-    public StaticResourceHandler(String filepath) {
+public class StaticResourceAction implements Action {
+    public StaticResourceAction(String filepath) {
         publicDirectory = filepath;
     }
 

@@ -10,10 +10,10 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by matthewhiggins on 7/13/16.
  */
-public class ParametersResourceHandlerTest {
+public class ParametersActionTest {
     @Test
     public void GETRequestReturns200() {
-        ParametersResourceHandler endpoint = new ParametersResourceHandler();
+        ParametersAction endpoint = new ParametersAction();
         AbstractHTTPRequest request = new HTTPRequest("GET /parameters HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
@@ -22,7 +22,7 @@ public class ParametersResourceHandlerTest {
 
     @Test
     public void POSTRequestReturns405() {
-        ParametersResourceHandler endpoint = new ParametersResourceHandler();
+        ParametersAction endpoint = new ParametersAction();
         AbstractHTTPRequest request = new HTTPRequest("POST /parameters HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
@@ -31,7 +31,7 @@ public class ParametersResourceHandlerTest {
 
     @Test
     public void GETRequestWithParametersIncludesParametersInBody() {
-        ParametersResourceHandler endpoint = new ParametersResourceHandler();
+        ParametersAction endpoint = new ParametersAction();
         AbstractHTTPRequest request = new HTTPRequest("GET /parameters?someParam=newValue HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 

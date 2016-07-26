@@ -10,10 +10,10 @@ import org.junit.Test;
 /**
  * Created by matthewhiggins on 7/11/16.
  */
-public class PostableResourceHandlerTest {
+public class PostableActionTest {
 //    @Test
 //    public void getResponseReturnsA200forPOSTWithParams() {
-//        cobspecapp.PostableResourceHandler endpoint = new cobspecapp.PostableResourceHandler();
+//        cobspecapp.PostableAction endpoint = new cobspecapp.PostableAction();
 //        HashMap<String, String> request = server.HTTPRequestParser.parse("POST /form HTTP/1.1\n\nsomeParam=someValue");
 //        HashMap<String, String> response = endpoint.getResponse(request);
 //
@@ -22,7 +22,7 @@ public class PostableResourceHandlerTest {
 
     @Test
     public void getResponseReturns200ForGET() {
-        PostableResourceHandler endpoint = new PostableResourceHandler();
+        PostableAction endpoint = new PostableAction();
         AbstractHTTPRequest request = new HTTPRequest("GET /form HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
@@ -31,7 +31,7 @@ public class PostableResourceHandlerTest {
 
     @Test
     public void getResponseReturnsA405ForPostWithoutParams() {
-        PostableResourceHandler endpoint = new PostableResourceHandler();
+        PostableAction endpoint = new PostableAction();
         AbstractHTTPRequest request = new HTTPRequest("POST /form HTTP/1.1");
         AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
@@ -40,7 +40,7 @@ public class PostableResourceHandlerTest {
 
 //    @Test
 //    public void getResponseReturnsCorrectBodyContentForPostWithParams() {
-//        cobspecapp.PostableResourceHandler endpoint = new cobspecapp.PostableResourceHandler();
+//        cobspecapp.PostableAction endpoint = new cobspecapp.PostableAction();
 //        endpoint.getResponse(server.HTTPRequestParser.parse("POST /form HTTP/1.1\n\ndata=something"));
 //        HashMap<String, String> request = server.HTTPRequestParser.parse("GET /form HTTP/1.1");
 //        HashMap<String, String> response = endpoint.getResponse(request);
