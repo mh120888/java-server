@@ -48,10 +48,6 @@ public class HTTPRequest extends AbstractHTTPRequest {
         return version;
     };
 
-    public HashMap<String, String> getAllHeaders() {
-        return headers;
-    }
-
     public String getHeader(String headerName) {
         return headers.get(headerName);
     }

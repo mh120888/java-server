@@ -36,20 +36,6 @@ public class HTTPRequestTest {
     }
 
     @Test
-    public void getAllHeadersRetrievesASingleHeader() {
-        HTTPRequest request = new HTTPRequest("GET /somerandompath HTTP/1.1\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==\n");
-
-        Assert.assertTrue("The key \"Authorization\" was not present", request.getAllHeaders().containsKey("Authorization"));
-    }
-
-    @Test
-    public void getAllHeadersRetrievesTheRightNumberOfHeaders() {
-        HTTPRequest request = new HTTPRequest("GET /somerandompath HTTP/1.1\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==\nOther: somethingelse");
-
-        Assert.assertEquals(2, request.getAllHeaders().size());
-    }
-
-    @Test
     public void getHeaderRetrievesTheValueAssociatedWithThatHeaderIfItExists() {
         HTTPRequest request = new HTTPRequest("GET /somerandompath HTTP/1.1\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==\n");
 

@@ -25,11 +25,6 @@ public class MockHTTPRequest extends AbstractHTTPRequest {
     }
 
     @Override
-    public HashMap<String, String> getAllHeaders() {
-        return null;
-    }
-
-    @Override
     public String getHeader(String headerName) {
         return null;
     }
