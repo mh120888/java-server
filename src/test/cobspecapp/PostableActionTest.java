@@ -5,10 +5,10 @@ import abstracthttpresponse.AbstractHTTPResponse;
 import httprequest.HTTPRequest;
 import httpresponse.HTTPResponse;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -16,35 +16,33 @@ import static org.junit.Assert.assertTrue;
  */
 
 public class PostableActionTest {
+    PostableAction action;
+
+    @Before
+    public void setup() {
+        action = new PostableAction();
+    }
+
     @Test
     public void getResponseReturnsA200forPOST() {
-        PostableAction endpoint = new PostableAction();
-        AbstractHTTPRequest request = new HTTPRequest("POST /form HTTP/1.1");
-
-        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = ResponseGenerator.generateResponse("POST /form HTTP/1.1", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200 OK"));
     }
 
     @Test
     public void getResponseReturnsA200ForPUT() {
-        PostableAction endpoint = new PostableAction();
-        AbstractHTTPRequest request = new HTTPRequest("PUT /form HTTP/1.1");
-
-        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = ResponseGenerator.generateResponse("PUT /form HTTP/1.1", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200 OK"));
     }
 
     @Test
     public void GETRequestsIncludeTheStaticVariableDataInBody() {
-        PostableAction endpoint = new PostableAction();
         String fakeData = "some random data";
-        endpoint.data = fakeData;
+        action.data = fakeData;
 
-        AbstractHTTPRequest request = new HTTPRequest("GET /form HTTP/1.1");
-        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
-
+        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /form HTTP/1.1", action);
         Assert.assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
     }
     @Test
@@ -53,20 +51,18 @@ public class PostableActionTest {
         String fakeData = "some random data";
         endpoint.data = fakeData;
 
-        AbstractHTTPRequest request = new HTTPRequest("POST /form HTTP/1.1");
-        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = ResponseGenerator.generateResponse("POST /form HTTP/1.1", action);
 
-        Assert.assertFalse(response.getFormattedResponse().contains("some random data"));
+        Assert.assertFalse(response.getFormattedResponse().contains(fakeData));
     }
 
     @Test
     public void POSTRequestWithDataChangesTheValueOfStaticVarData() {
-        PostableAction endpoint = new PostableAction();
         AbstractHTTPRequest request = new HTTPRequest("POST /form HTTP/1.1");
         request.setBody("random stuff here");
 
-        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = action.getResponse(request, new HTTPResponse());
 
-        assertEquals("random stuff here", endpoint.data);
+        assertEquals("random stuff here", action.data);
     }
 }
