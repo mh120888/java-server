@@ -84,6 +84,10 @@ public class HTTPRequest extends AbstractHTTPRequest {
         return new HeaderParser();
     }
 
+    public void setBody(String input) {
+        body = input;
+    }
+
     public String getBody() {
         return body;
     }

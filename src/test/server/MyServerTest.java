@@ -1,7 +1,9 @@
 package server;
 
+import abstracthttprequest.AbstractHTTPRequest;
 import app.Application;
 import mocks.MockApplication;
+import mocks.MockHTTPRequest;
 import mocks.MockOutputStream;
 import mocks.MockPrintStream;
 import org.junit.Assert;
@@ -43,30 +45,29 @@ public class MyServerTest {
         Assert.assertEquals("Line one\nLine two\n", result);
     }
 
-//    @Test
-//    public void readInInputIgnoresAnythingAfterAnEmptyLine() throws Exception {
-//        BufferedReader in = new BufferedReader(new StringReader("Something\n\nLine two\nLine three   "));
-//        String result = MyServer.readInInput(in);
-//
-//        Assert.assertEquals("Something\n", result);
-//    }
-
     @Test
     public void generateOutputWritesToOutputStream() throws Exception {
-        String input = "Something random, doesn't matter";
+        AbstractHTTPRequest request = new MockHTTPRequest();
         MockPrintStream out = new MockPrintStream(new MockOutputStream());
         Application app = new MockApplication("Random response");
-        MyServer.generateOutput(input, out, app);
+        MyServer.generateOutput(request, out, app);
 
         Assert.assertTrue(out.lastMessage.contains("Random response"));
     }
 
     @Test
-    public void readInInputCanReadInputContainingAnEmptyLine() throws Exception {
-        String input = "Fake input\nanother fake line\n\nThis stuff should be there\n";
-        BufferedReader in = new BufferedReader(new StringReader(input));
-        String result = MyServer.readInInput(in);
-
-        Assert.assertEquals(input, result);
+    public void readInBodyReadsTheSpecifiedNumberOfOctets() throws Exception {
+        String bodyContent = "I am 3 octets long......";
+        InputStream is = new StringBufferInputStream(bodyContent);
+        Assert.assertEquals("I am 3 octe", MyServer.readInBody(is, 1.375f));
     }
+
+//    @Test
+//    public void readInInputCanReadInputContainingAnEmptyLine() throws Exception {
+//        String input = "Fake input\nanother fake line\n\nThis stuff should be there\n";
+//        BufferedReader in = new BufferedReader(new StringReader(input));
+//        String result = MyServer.readInInput(in);
+//
+//        Assert.assertEquals(input, result);
+//    }
 }

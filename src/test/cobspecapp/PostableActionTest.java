@@ -62,9 +62,11 @@ public class PostableActionTest {
     @Test
     public void POSTRequestWithDataChangesTheValueOfStaticVarData() {
         PostableAction endpoint = new PostableAction();
+        AbstractHTTPRequest request = new HTTPRequest("POST /form HTTP/1.1");
+        request.setBody("random stuff here");
 
-        AbstractHTTPRequest request = new HTTPRequest("POST /form HTTP/1.1\n\ndata=fatcat");
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        assertEquals("data=fatcat", endpoint.data);
+        assertEquals("random stuff here", endpoint.data);
     }
 }

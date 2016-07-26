@@ -18,5 +18,6 @@ public abstract class AbstractHTTPRequest {
     public abstract String getBaseLocation();
     public abstract String getInitialRequestLine();
     public abstract AbstractHeaderParser getHeaderParser();
+    public abstract void setBody(String input);
     public abstract String getBody();
 }

@@ -3,6 +3,7 @@ package server; /**
  */
 
 import abstracthttpresponse.AbstractHTTPResponse;
+import abstracthttprequest.AbstractHTTPRequest;
 import app.Application;
 import cobspecapp.CobSpecApp;
 import httprequest.HTTPRequest;
@@ -17,19 +18,25 @@ public class MyServer {
     private static String publicDirectory = "/Users/matthewhiggins/Desktop/cob_spec/public";
     private static int port = 5000;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         setOptions(args);
         runServer(new CobSpecApp(publicDirectory));
     }
 
-    public static void runServer(Application app) throws IOException {
+    public static void runServer(Application app) throws Exception {
         ServerSocket server = new ServerSocket(port);
         try {
             while (true) {
                 Socket socket = server.accept();
                 try {
-                    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    generateOutput(readInInput(in), new PrintStream(socket.getOutputStream()), app);
+                    InputStream is = socket.getInputStream();
+                    BufferedReader in = new BufferedReader(new InputStreamReader(is));
+                    HTTPRequest request = new HTTPRequest(readInInput(in));
+                    if (request.containsHeader("Content-Length")) {
+                        BufferedInputStream bis = new BufferedInputStream(is);
+                        request.setBody(readInBody(is, 0.125f));
+                    }
+                    generateOutput(request, new PrintStream(socket.getOutputStream()), app);
                 } finally {
                     socket.close();
                 }
@@ -42,29 +49,30 @@ public class MyServer {
         }
     }
 
-    public static void generateOutput(String input, PrintStream out, Application app) throws IOException {
-        HTTPRequest request = new HTTPRequest(input);
+    public static void generateOutput(AbstractHTTPRequest request, PrintStream out, Application app) throws IOException {
         AbstractHTTPResponse response = app.getResponse(request, new HTTPResponse());
         out.write(response.getAllButBody().getBytes());
         out.write(response.getBody());
     }
 
-    public static String readInInput(BufferedReader in) throws IOException {
+    public static String readInInput(BufferedReader br) throws IOException {
         String input = "";
-        String currentLine = in.readLine();
-        int counter = 0;
-//        while (currentLine != null && !currentLine.trim().isEmpty()) {
-        while (counter < 2) {
-            if (counter == 1 && currentLine == null) {
-                break;
-            }
+        String currentLine = br.readLine();
+        while (currentLine != null && !currentLine.trim().isEmpty()) {
             input += currentLine.trim() + "\n";
-            currentLine = in.readLine();
-            if (currentLine == null || currentLine.trim().isEmpty()) {
-                counter += 1;
-            }
+            br.mark(1);
+            currentLine = br.readLine();
         }
+        br.reset();
         return input;
+    }
+
+    static String readInBody(InputStream is, float numOfOctets) throws IOException {
+        int numOfBytesToRead = Math.round(numOfOctets*8.0f);
+        byte[] resultBytes = new byte[numOfBytesToRead];
+        is.read(resultBytes, 0, numOfBytesToRead);
+        return new String(resultBytes);
+//        return "data=fatcat";
     }
 
     private static void setOptions(String[] args) {
