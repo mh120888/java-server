@@ -1,6 +1,7 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
+import abstracthttpresponse.AbstractHTTPResponse;
 import httpresponse.HTTPResponse;
 import org.junit.After;
 import org.junit.Before;
@@ -25,9 +26,9 @@ public class NotFoundResourceHandlerTest {
     public void returnsAStatusOf404() {
         NotFoundResourceHandler endpoint = new NotFoundResourceHandler();
         AbstractHTTPRequest request = new httprequest.HTTPRequest("GET /foobar HTTP/1.1");
-        String response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        assertTrue(response.contains("HTTP/1.1 404"));
+        assertTrue(response.getFormattedResponse().contains("HTTP/1.1 404"));
     }
 
 }

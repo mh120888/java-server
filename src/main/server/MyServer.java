@@ -2,6 +2,7 @@ package server; /**
  * Created by matthewhiggins on 7/5/16.
  */
 
+import abstracthttpresponse.AbstractHTTPResponse;
 import app.Application;
 import cobspecapp.CobSpecApp;
 import httprequest.HTTPRequest;
@@ -43,8 +44,9 @@ public class MyServer {
 
     public static void generateOutput(String input, PrintStream out, Application app) throws IOException {
         HTTPRequest request = new HTTPRequest(input);
-        String output = app.getResponse(request, new HTTPResponse());
-        out.write(output.getBytes());
+        AbstractHTTPResponse response = app.getResponse(request, new HTTPResponse());
+        out.write(response.getAllButBody().getBytes());
+        out.write(response.getBody());
     }
 
     public static String readInInput(BufferedReader in) throws IOException {

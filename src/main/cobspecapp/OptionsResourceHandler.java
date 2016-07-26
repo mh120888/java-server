@@ -8,12 +8,12 @@ import abstracthttpresponse.AbstractHTTPResponse;
  */
 public class OptionsResourceHandler implements ResourceHandler {
 
-    public String getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+    public AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
         response.setHTTPVersion(request.getVersion());
         response.setStatus(200);
         response.addHeader("Allow", buildHeaders(request.getPath()));
 
-        return response.getFormattedResponse();
+        return response;
     }
 
     private String buildHeaders(String path) {

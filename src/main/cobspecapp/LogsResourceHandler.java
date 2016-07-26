@@ -9,17 +9,17 @@ import abstracthttpresponse.AbstractHTTPResponse;
 public class LogsResourceHandler implements ResourceHandler {
     private String correctCredentials = "admin:hunter2";
 
-    public String getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+    public AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
         response.setHTTPVersion(request.getVersion());
 
         if (isAuthorized(request)) {
             response.setStatus(200);
-            response.setBody(String.join("\n", Logger.getLog()));
+            response.setBodyFromString(String.join("\n", Logger.getLog()));
         } else {
             response.setStatus(401);
             response.addHeader("WWW-Authenticate", "Basic realm=\"User Visible Realm\"");
         }
-        return response.getFormattedResponse();
+        return response;
     }
 
     public boolean isAuthorized(AbstractHTTPRequest request) {

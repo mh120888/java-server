@@ -1,6 +1,7 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
+import abstracthttpresponse.AbstractHTTPResponse;
 import httprequest.HTTPRequest;
 import httpresponse.HTTPResponse;
 import org.junit.Before;
@@ -20,18 +21,18 @@ public class LogsResourceHandlerTest {
     public void getLogsWithoutCredentialsReturnsA401() {
         LogsResourceHandler endpoint = new LogsResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /logs HTTP/1.1");
-        String response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        assertTrue(response.contains("HTTP/1.1 401"));
+        assertTrue(response.getFormattedResponse().contains("HTTP/1.1 401"));
     }
 
     @Test
     public void requestToLogsWithoutProperCredentialsReturnsWWWAuthenticateHeader() {
         LogsResourceHandler endpoint = new LogsResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /logs HTTP/1.1");
-        String response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        assertTrue(response.contains("WWW-Authenticate: Basic realm=\"User Visible Realm\""));
+        assertTrue(response.getFormattedResponse().contains("WWW-Authenticate: Basic realm=\"User Visible Realm\""));
     }
 
     @Test
@@ -63,8 +64,8 @@ public class LogsResourceHandlerTest {
         Logger.addLog("GET / HTTP/1.1");
         LogsResourceHandler endpoint = new LogsResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /logs HTTP/1.1\nAuthorization: Basic YWRtaW46aHVudGVyMg==");
-        String response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        assertTrue(response.contains("GET / HTTP/1.1"));
+        assertTrue(response.getFormattedResponse().contains("GET / HTTP/1.1"));
     }
 }

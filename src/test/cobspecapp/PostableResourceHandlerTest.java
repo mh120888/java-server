@@ -1,6 +1,7 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
+import abstracthttpresponse.AbstractHTTPResponse;
 import httprequest.HTTPRequest;
 import httpresponse.HTTPResponse;
 import org.junit.Assert;
@@ -23,18 +24,18 @@ public class PostableResourceHandlerTest {
     public void getResponseReturns200ForGET() {
         PostableResourceHandler endpoint = new PostableResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /form HTTP/1.1");
-        String response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        Assert.assertTrue(response.contains("HTTP/1.1 200"));
+        Assert.assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
     }
 
     @Test
     public void getResponseReturnsA405ForPostWithoutParams() {
         PostableResourceHandler endpoint = new PostableResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("POST /form HTTP/1.1");
-        String response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        Assert.assertTrue(response.contains("HTTP/1.1 405"));
+        Assert.assertTrue(response.getFormattedResponse().contains("HTTP/1.1 405"));
     }
 
 //    @Test

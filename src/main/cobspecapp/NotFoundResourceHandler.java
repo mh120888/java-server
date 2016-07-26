@@ -10,10 +10,10 @@ import abstracthttpresponse.AbstractHTTPResponse;
 public class NotFoundResourceHandler implements ResourceHandler {
     public NotFoundResourceHandler() {}
 
-    public String getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+    public AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
         response.setHTTPVersion(request.getVersion());
         response.setStatus(404);
 
-        return response.getFormattedResponse();
+        return response;
     }
 }

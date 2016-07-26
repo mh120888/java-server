@@ -7,5 +7,5 @@ import abstracthttpresponse.AbstractHTTPResponse;
  * Created by matthewhiggins on 7/11/16.
  */
 public interface ResourceHandler {
-    String getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response);
+    AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response);
 }
