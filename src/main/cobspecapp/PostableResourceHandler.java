@@ -9,11 +9,11 @@ import abstracthttpresponse.AbstractHTTPResponse;
 public class PostableResourceHandler implements ResourceHandler {
     private static String data = "";
 
-    public String getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+    public AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
         response.setHTTPVersion(request.getVersion());
         if (request.getMethod().equals("GET")) {
             response.setStatus(200);
-            response.setBody(data);
+            response.setBodyFromString(data);
         }
 //        else if (requestData.containsKey("body")) {
 //            responseData.put("responseLine", "HTTP/1.1 200 OK");
@@ -22,6 +22,6 @@ public class PostableResourceHandler implements ResourceHandler {
         else {
             response.setStatus(405);
         }
-        return response.getFormattedResponse();
+        return response;
     }
 }

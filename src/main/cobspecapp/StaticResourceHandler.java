@@ -5,11 +5,9 @@ import abstracthttpresponse.AbstractHTTPResponse;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.Base64;
 
 /**
  * Created by matthewhiggins on 7/11/16.
@@ -25,12 +23,12 @@ public class StaticResourceHandler implements ResourceHandler {
         DIRECTORY, IMAGE, OTHER
     }
 
-    public String getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+    public AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
         response.setHTTPVersion(request.getVersion());
         response.setStatus(getResponseLine(request));
         response.setBody(getBody(request));
 
-        return response.getFormattedResponse();
+        return response;
     }
 
     private int getResponseLine(AbstractHTTPRequest request) {
@@ -63,25 +61,25 @@ public class StaticResourceHandler implements ResourceHandler {
         return Arrays.asList(listOfMethods).contains(method);
     }
 
-    private String getBody(AbstractHTTPRequest request) {
+    private byte[] getBody(AbstractHTTPRequest request) {
         String method = request.getMethod();
-        String body = "";
+        byte[] body = new byte[0];
         if (!method.equals("GET")) {
             return body;
         }
         String path = request.getPath();
         switch (getFiletype(path)) {
             case DIRECTORY:
-                body += getBodyForDirectory();
+                body = getBodyForDirectory();
                 break;
             default:
-                body += getBodyDefault(request);
+                body = getBodyDefault(request);
                 break;
         }
         return body;
     }
 
-    String getBodyForDirectory() {
+    byte[] getBodyForDirectory() {
         String body = "";
         File file = new File(publicDirectory);
         String[] fileNames = file.list();
@@ -89,15 +87,16 @@ public class StaticResourceHandler implements ResourceHandler {
         for (String fileName : fileNames) {
             body += ("<a href=\"/" + fileName + "\">" + fileName + "</a>\n");
         }
-        return body;
+        return body.getBytes();
     }
 
-     String getBodyDefault(AbstractHTTPRequest request) {
-        String body = "";
+     byte[] getBodyDefault(AbstractHTTPRequest request) {
+        byte[] body = new byte[0];
         try {
             String filePath = publicDirectory + request.getPath();
-            byte[] imageContents = getCorrectPortionOfFileContents(Files.readAllBytes(Paths.get(filePath)), request);
-            body = new String(imageContents);
+            body = getCorrectPortionOfFileContents(Files.readAllBytes(Paths.get(filePath)), request);
+//            body = new String(imageContents);
+//            body = Base64.getEncoder().encodeToString(imageContents);
         } catch (IOException e) {
             System.err.println(e);
         }

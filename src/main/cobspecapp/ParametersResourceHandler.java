@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class ParametersResourceHandler implements ResourceHandler {
 
-    public String getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+    public AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
         response.setHTTPVersion(request.getVersion());
 
         if (request.getMethod().equals("GET")) {
@@ -26,9 +26,9 @@ public class ParametersResourceHandler implements ResourceHandler {
             for (Map.Entry<String, String> entry : parameters.entrySet()) {
                 body += entry.getKey() + " = " + entry.getValue() + "\n";
             }
-            response.setBody(body);
+            response.setBodyFromString(body);
         }
 
-        return response.getFormattedResponse();
+        return response;
     }
 }

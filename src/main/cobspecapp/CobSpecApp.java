@@ -14,10 +14,10 @@ public class CobSpecApp extends Application {
         publicDirectory = filepath;
     }
 
-    public String getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+    public AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
         ResourceHandler resourceHandler = Router.getEndpoint(request, publicDirectory);
-        String responseData = resourceHandler.getResponse(request, response);
-        return responseData;
+        AbstractHTTPResponse result = resourceHandler.getResponse(request, response);
+        return result;
     }
 }
 
