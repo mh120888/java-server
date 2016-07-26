@@ -43,13 +43,13 @@ public class MyServerTest {
         Assert.assertEquals("Line one\nLine two\n", result);
     }
 
-    @Test
-    public void readInInputIgnoresAnythingAfterAnEmptyLine() throws Exception {
-        BufferedReader in = new BufferedReader(new StringReader("     \nLine two\nLine three   "));
-        String result = MyServer.readInInput(in);
-
-        Assert.assertEquals("", result);
-    }
+//    @Test
+//    public void readInInputIgnoresAnythingAfterAnEmptyLine() throws Exception {
+//        BufferedReader in = new BufferedReader(new StringReader("Something\n\nLine two\nLine three   "));
+//        String result = MyServer.readInInput(in);
+//
+//        Assert.assertEquals("Something\n", result);
+//    }
 
     @Test
     public void generateOutputWritesToOutputStream() throws Exception {
@@ -59,5 +59,14 @@ public class MyServerTest {
         MyServer.generateOutput(input, out, app);
 
         Assert.assertTrue(out.lastMessage.contains("Random response"));
+    }
+
+    @Test
+    public void readInInputCanReadInputContainingAnEmptyLine() throws Exception {
+        String input = "Fake input\nanother fake line\n\nThis stuff should be there\n";
+        BufferedReader in = new BufferedReader(new StringReader(input));
+        String result = MyServer.readInInput(in);
+
+        Assert.assertEquals(input, result);
     }
 }

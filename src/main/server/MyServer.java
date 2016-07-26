@@ -52,9 +52,17 @@ public class MyServer {
     public static String readInInput(BufferedReader in) throws IOException {
         String input = "";
         String currentLine = in.readLine();
-        while (currentLine != null && !currentLine.trim().isEmpty()) {
+        int counter = 0;
+//        while (currentLine != null && !currentLine.trim().isEmpty()) {
+        while (counter < 2) {
+            if (counter == 1 && currentLine == null) {
+                break;
+            }
             input += currentLine.trim() + "\n";
             currentLine = in.readLine();
+            if (currentLine == null || currentLine.trim().isEmpty()) {
+                counter += 1;
+            }
         }
         return input;
     }

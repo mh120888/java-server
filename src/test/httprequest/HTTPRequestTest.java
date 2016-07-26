@@ -152,5 +152,5 @@ public class HTTPRequestTest {
         HTTPRequest request = new HTTPRequest("GET /path-does-not-matter HTTP/1.1\n");
 
         Assert.assertTrue(request.getHeaderParser() instanceof HeaderParser);
-    }
+  }
 }
