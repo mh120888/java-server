@@ -7,21 +7,19 @@ import abstracthttpresponse.AbstractHTTPResponse;
  * Created by matthewhiggins on 7/11/16.
  */
 public class PostableAction implements Action {
-    private static String data = "";
+    static String data = "default";
 
     public AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
         response.setHTTPVersion(request.getVersion());
+        response.setStatus(200);
+
         if (request.getMethod().equals("GET")) {
             response.setStatus(200);
             response.setBodyFromString(data);
+        } else {
+            data = "data=fatcat";
         }
-//        else if (requestData.containsKey("body")) {
-//            responseData.put("responseLine", "HTTP/1.1 200 OK");
-//            data = requestData.get("body");
-//        }
-        else {
-            response.setStatus(405);
-        }
+
         return response;
     }
 }
