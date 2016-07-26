@@ -16,6 +16,7 @@ public class HTTPRequest extends AbstractHTTPRequest {
     private String version;
     private HashMap<String, String> headers = new HashMap<>();;
     private HashMap<String, String> params = new HashMap<>();;
+    private String body;
 
     public HTTPRequest(String requestAsString) {
         String[] requestSeparatedByNewline = requestAsString.split("\n");
@@ -26,6 +27,13 @@ public class HTTPRequest extends AbstractHTTPRequest {
 
         setHeaders(requestSeparatedByNewline);
         setParams(pathWithParams.split("\\?"));
+
+        String[] headersAndBody = requestAsString.split("\n\n");
+        if (headersAndBody.length > 1) {
+            body = requestAsString.split("\n\n")[1];
+        } else {
+            body = "";
+        }
     };
 
     public String getMethod() {
@@ -39,10 +47,6 @@ public class HTTPRequest extends AbstractHTTPRequest {
     public String getVersion() {
         return version;
     };
-
-    public HashMap<String, String> getAllHeaders() {
-        return headers;
-    }
 
     public String getHeader(String headerName) {
         return headers.get(headerName);
@@ -74,6 +78,14 @@ public class HTTPRequest extends AbstractHTTPRequest {
 
     public HeaderParser getHeaderParser() {
         return new HeaderParser();
+    }
+
+    public void setBody(String input) {
+        body = input;
+    }
+
+    public String getBody() {
+        return body;
     }
 
     private void setHeaders(String[] requestSeparatedByNewline) {

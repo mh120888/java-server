@@ -3,6 +3,7 @@ package server; /**
  */
 
 import abstracthttpresponse.AbstractHTTPResponse;
+import abstracthttprequest.AbstractHTTPRequest;
 import app.Application;
 import cobspecapp.CobSpecApp;
 import httprequest.HTTPRequest;
@@ -28,8 +29,14 @@ public class MyServer {
             while (true) {
                 Socket socket = server.accept();
                 try {
-                    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    generateOutput(readInInput(in), new PrintStream(socket.getOutputStream()), app);
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    HTTPRequest request = new HTTPRequest(readInFirstLineAndHeaders(reader));
+                    if (reader.ready() && request.containsHeader("Content-Length")) {
+                        int contentLength = Integer.parseInt(request.getHeader("Content-Length"));
+                        String body = (readInBody(reader, contentLength));
+                        request.setBody(body);
+                    }
+                    generateOutput(request, new PrintStream(socket.getOutputStream()), app);
                 } finally {
                     socket.close();
                 }
@@ -42,21 +49,38 @@ public class MyServer {
         }
     }
 
-    public static void generateOutput(String input, PrintStream out, Application app) throws IOException {
-        HTTPRequest request = new HTTPRequest(input);
+    public static void generateOutput(AbstractHTTPRequest request, PrintStream out, Application app) {
         AbstractHTTPResponse response = app.getResponse(request, new HTTPResponse());
-        out.write(response.getAllButBody().getBytes());
-        out.write(response.getBody());
+        try {
+            out.write(response.getAllButBody().getBytes());
+            out.write(response.getBody());
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
-    public static String readInInput(BufferedReader in) throws IOException {
+    public static String readInFirstLineAndHeaders(BufferedReader br) {
         String input = "";
-        String currentLine = in.readLine();
-        while (currentLine != null && !currentLine.trim().isEmpty()) {
-            input += currentLine.trim() + "\n";
-            currentLine = in.readLine();
+        try {
+            String currentLine = br.readLine();
+            while (currentLine != null && !currentLine.trim().isEmpty()) {
+                input += currentLine.trim() + "\n";
+                currentLine = br.readLine();
+            }
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
         }
         return input;
+    }
+
+    static String readInBody(BufferedReader reader, int contentLength) {
+        char[] bodyInChars = new char[contentLength];
+        try {
+            reader.read(bodyInChars);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        return new String(bodyInChars);
     }
 
     private static void setOptions(String[] args) {

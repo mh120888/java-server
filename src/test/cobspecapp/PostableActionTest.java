@@ -5,46 +5,64 @@ import abstracthttpresponse.AbstractHTTPResponse;
 import httprequest.HTTPRequest;
 import httpresponse.HTTPResponse;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by matthewhiggins on 7/11/16.
  */
+
 public class PostableActionTest {
-//    @Test
-//    public void getResponseReturnsA200forPOSTWithParams() {
-//        cobspecapp.PostableAction endpoint = new cobspecapp.PostableAction();
-//        HashMap<String, String> request = server.HTTPRequestParser.parse("POST /form HTTP/1.1\n\nsomeParam=someValue");
-//        HashMap<String, String> response = endpoint.getResponse(request);
-//
-//        assertEquals("HTTP/1.1 200 OK", response.get("responseLine"));
-//    }
+    PostableAction action;
+
+    @Before
+    public void setup() {
+        action = new PostableAction();
+    }
 
     @Test
-    public void getResponseReturns200ForGET() {
-        PostableAction endpoint = new PostableAction();
-        AbstractHTTPRequest request = new HTTPRequest("GET /form HTTP/1.1");
-        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
+    public void getResponseReturnsA200forPOST() {
+        AbstractHTTPResponse response = ResponseGenerator.generateResponse("POST /form HTTP/1.1", action);
 
+        assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200 OK"));
+    }
+
+    @Test
+    public void getResponseReturnsA200ForPUT() {
+        AbstractHTTPResponse response = ResponseGenerator.generateResponse("PUT /form HTTP/1.1", action);
+
+        assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200 OK"));
+    }
+
+    @Test
+    public void GETRequestsIncludeTheStaticVariableDataInBody() {
+        String fakeData = "some random data";
+        action.data = fakeData;
+
+        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /form HTTP/1.1", action);
         Assert.assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
     }
-
     @Test
-    public void getResponseReturnsA405ForPostWithoutParams() {
+    public void POSTRequestsDoNotContainStaticVarDataInBody() {
         PostableAction endpoint = new PostableAction();
-        AbstractHTTPRequest request = new HTTPRequest("POST /form HTTP/1.1");
-        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
+        String fakeData = "some random data";
+        endpoint.data = fakeData;
 
-        Assert.assertTrue(response.getFormattedResponse().contains("HTTP/1.1 405"));
+        AbstractHTTPResponse response = ResponseGenerator.generateResponse("POST /form HTTP/1.1", action);
+
+        Assert.assertFalse(response.getFormattedResponse().contains(fakeData));
     }
 
-//    @Test
-//    public void getResponseReturnsCorrectBodyContentForPostWithParams() {
-//        cobspecapp.PostableAction endpoint = new cobspecapp.PostableAction();
-//        endpoint.getResponse(server.HTTPRequestParser.parse("POST /form HTTP/1.1\n\ndata=something"));
-//        HashMap<String, String> request = server.HTTPRequestParser.parse("GET /form HTTP/1.1");
-//        HashMap<String, String> response = endpoint.getResponse(request);
-//
-//        assertEquals("data=something", response.get("body"));
-//    }
+    @Test
+    public void POSTRequestWithDataChangesTheValueOfStaticVarData() {
+        AbstractHTTPRequest request = new HTTPRequest("POST /form HTTP/1.1");
+        request.setBody("random stuff here");
+
+        AbstractHTTPResponse response = action.getResponse(request, new HTTPResponse());
+
+        assertEquals("random stuff here", action.data);
+    }
 }

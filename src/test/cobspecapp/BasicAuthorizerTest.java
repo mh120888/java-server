@@ -1,5 +1,6 @@
 package cobspecapp;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -8,20 +9,21 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by matthewhiggins on 7/13/16.
  */
+
 public class BasicAuthorizerTest {
+    String base64EncodedCredentials;
+
+    @Before public void setup() {
+        base64EncodedCredentials = "YWRtaW46aHVudGVyMg==";
+    }
+
     @Test
     public void isAuthorizedReturnsTrueIfEncodedAndPlaintextMatch() {
-        String base64EncodedCredentials = "YWRtaW46aHVudGVyMg==";
-        String plaintextCredentials = "admin:hunter2";
-
-        assertTrue(BasicAuthorizer.isAuthorized(base64EncodedCredentials, plaintextCredentials));
+        assertTrue(BasicAuthorizer.isAuthorized(base64EncodedCredentials, "admin:hunter2"));
     }
 
     @Test
     public void isAuthorizedReturnsFalseIfEncodedAndPlaintextDoNotMatch() {
-        String base64EncodedCredentials = "YWRtaW46aHVudGVyMg==";
-        String plaintextCredentials = "notcorrect:obviouslywrong";
-
-        assertFalse(BasicAuthorizer.isAuthorized(base64EncodedCredentials, plaintextCredentials));
+        assertFalse(BasicAuthorizer.isAuthorized(base64EncodedCredentials, "notcorrect:obviouslywrong"));
     }
 }

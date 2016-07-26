@@ -1,7 +1,9 @@
 package server;
 
+import abstracthttprequest.AbstractHTTPRequest;
 import app.Application;
 import mocks.MockApplication;
+import mocks.MockHTTPRequest;
 import mocks.MockOutputStream;
 import mocks.MockPrintStream;
 import org.junit.Assert;
@@ -30,7 +32,7 @@ public class MyServerTest {
     @Test
     public void readInInputTrimsEachLineAndEndsItWithANewlineCharacter() throws Exception {
         BufferedReader in = new BufferedReader(new StringReader("Some string with whitespace at the end    "));
-        String result = MyServer.readInInput(in);
+        String result = MyServer.readInFirstLineAndHeaders(in);
 
         Assert.assertEquals("Some string with whitespace at the end\n", result);
     }
@@ -38,26 +40,25 @@ public class MyServerTest {
     @Test
     public void readInInputWorksProperlyForMultiLineInput() throws Exception {
         BufferedReader in = new BufferedReader(new StringReader("Line one\nLine two   "));
-        String result = MyServer.readInInput(in);
+        String result = MyServer.readInFirstLineAndHeaders(in);
 
         Assert.assertEquals("Line one\nLine two\n", result);
     }
 
     @Test
-    public void readInInputIgnoresAnythingAfterAnEmptyLine() throws Exception {
-        BufferedReader in = new BufferedReader(new StringReader("     \nLine two\nLine three   "));
-        String result = MyServer.readInInput(in);
-
-        Assert.assertEquals("", result);
-    }
-
-    @Test
     public void generateOutputWritesToOutputStream() throws Exception {
-        String input = "Something random, doesn't matter";
+        AbstractHTTPRequest request = new MockHTTPRequest();
         MockPrintStream out = new MockPrintStream(new MockOutputStream());
         Application app = new MockApplication("Random response");
-        MyServer.generateOutput(input, out, app);
+        MyServer.generateOutput(request, out, app);
 
         Assert.assertTrue(out.lastMessage.contains("Random response"));
     }
+
+    @Test
+    public void readInBodyReadsTheSpecifiedNumberOfOctets() throws Exception {
+        BufferedReader reader = new BufferedReader(new StringReader("I am 18 bytes long"));
+        Assert.assertEquals("I am 18 by", MyServer.readInBody(reader, 10));
+    }
+
 }
