@@ -32,7 +32,7 @@ public class MyServerTest {
     @Test
     public void readInInputTrimsEachLineAndEndsItWithANewlineCharacter() throws Exception {
         BufferedReader in = new BufferedReader(new StringReader("Some string with whitespace at the end    "));
-        String result = MyServer.readInInput(in);
+        String result = MyServer.readInFirstLineAndHeaders(in);
 
         Assert.assertEquals("Some string with whitespace at the end\n", result);
     }
@@ -40,7 +40,7 @@ public class MyServerTest {
     @Test
     public void readInInputWorksProperlyForMultiLineInput() throws Exception {
         BufferedReader in = new BufferedReader(new StringReader("Line one\nLine two   "));
-        String result = MyServer.readInInput(in);
+        String result = MyServer.readInFirstLineAndHeaders(in);
 
         Assert.assertEquals("Line one\nLine two\n", result);
     }
@@ -57,17 +57,8 @@ public class MyServerTest {
 
     @Test
     public void readInBodyReadsTheSpecifiedNumberOfOctets() throws Exception {
-        String bodyContent = "I am 3 octets long......";
-        InputStream is = new StringBufferInputStream(bodyContent);
-        Assert.assertEquals("I am 3 octe", MyServer.readInBody(is, 1.375f));
+        BufferedReader reader = new BufferedReader(new StringReader("I am 18 bytes long"));
+        Assert.assertEquals("I am 18 by", MyServer.readInBody(reader, 10));
     }
 
-//    @Test
-//    public void readInInputCanReadInputContainingAnEmptyLine() throws Exception {
-//        String input = "Fake input\nanother fake line\n\nThis stuff should be there\n";
-//        BufferedReader in = new BufferedReader(new StringReader(input));
-//        String result = MyServer.readInInput(in);
-//
-//        Assert.assertEquals(input, result);
-//    }
 }

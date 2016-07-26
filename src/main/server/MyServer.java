@@ -18,23 +18,23 @@ public class MyServer {
     private static String publicDirectory = "/Users/matthewhiggins/Desktop/cob_spec/public";
     private static int port = 5000;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException {
         setOptions(args);
         runServer(new CobSpecApp(publicDirectory));
     }
 
-    public static void runServer(Application app) throws Exception {
+    public static void runServer(Application app) throws IOException {
         ServerSocket server = new ServerSocket(port);
         try {
             while (true) {
                 Socket socket = server.accept();
                 try {
-                    InputStream is = socket.getInputStream();
-                    BufferedReader in = new BufferedReader(new InputStreamReader(is));
-                    HTTPRequest request = new HTTPRequest(readInInput(in));
-                    if (request.containsHeader("Content-Length")) {
-                        BufferedInputStream bis = new BufferedInputStream(is);
-                        request.setBody(readInBody(is, 0.125f));
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    HTTPRequest request = new HTTPRequest(readInFirstLineAndHeaders(reader));
+                    if (reader.ready() && request.containsHeader("Content-Length")) {
+                        int contentLength = Integer.parseInt(request.getHeader("Content-Length"));
+                        String body = (readInBody(reader, contentLength));
+                        request.setBody(body);
                     }
                     generateOutput(request, new PrintStream(socket.getOutputStream()), app);
                 } finally {
@@ -49,30 +49,38 @@ public class MyServer {
         }
     }
 
-    public static void generateOutput(AbstractHTTPRequest request, PrintStream out, Application app) throws IOException {
+    public static void generateOutput(AbstractHTTPRequest request, PrintStream out, Application app) {
         AbstractHTTPResponse response = app.getResponse(request, new HTTPResponse());
-        out.write(response.getAllButBody().getBytes());
-        out.write(response.getBody());
+        try {
+            out.write(response.getAllButBody().getBytes());
+            out.write(response.getBody());
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
-    public static String readInInput(BufferedReader br) throws IOException {
+    public static String readInFirstLineAndHeaders(BufferedReader br) {
         String input = "";
-        String currentLine = br.readLine();
-        while (currentLine != null && !currentLine.trim().isEmpty()) {
-            input += currentLine.trim() + "\n";
-            br.mark(1);
-            currentLine = br.readLine();
+        try {
+            String currentLine = br.readLine();
+            while (currentLine != null && !currentLine.trim().isEmpty()) {
+                input += currentLine.trim() + "\n";
+                currentLine = br.readLine();
+            }
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
         }
-        br.reset();
         return input;
     }
 
-    static String readInBody(InputStream is, float numOfOctets) throws IOException {
-        int numOfBytesToRead = Math.round(numOfOctets*8.0f);
-        byte[] resultBytes = new byte[numOfBytesToRead];
-        is.read(resultBytes, 0, numOfBytesToRead);
-        return new String(resultBytes);
-//        return "data=fatcat";
+    static String readInBody(BufferedReader reader, int contentLength) {
+        char[] bodyInChars = new char[contentLength];
+        try {
+            reader.read(bodyInChars);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        return new String(bodyInChars);
     }
 
     private static void setOptions(String[] args) {
