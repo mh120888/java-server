@@ -1,6 +1,7 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
+import abstracthttpresponse.AbstractHTTPResponse;
 import httprequest.HTTPRequest;
 import httpresponse.HTTPResponse;
 import org.junit.After;
@@ -37,18 +38,18 @@ public class StaticResourceHandlerTest {
         StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
 
         AbstractHTTPRequest request = new HTTPRequest("GET / HTTP/1.1");
-        String response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        assertTrue(response.contains("HTTP/1.1 200"));
+        assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
     }
 
     @Test
     public void getResponseReturns200ForHeadRequest() {
         StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         AbstractHTTPRequest request = new HTTPRequest("HEAD / HTTP/1.1");
-        String response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        assertTrue(response.contains("HTTP/1.1 200"));
+        assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
     }
 
     @Test
@@ -56,9 +57,9 @@ public class StaticResourceHandlerTest {
         StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         AbstractHTTPRequest request = new HTTPRequest("NOTAREALMETHOD / HTTP/1.1");
 
-        String response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        assertTrue(response.contains("HTTP/1.1 405"));
+        assertTrue(response.getFormattedResponse().contains("HTTP/1.1 405"));
 
     }
 
@@ -67,9 +68,9 @@ public class StaticResourceHandlerTest {
         StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         AbstractHTTPRequest request = new HTTPRequest("GET / HTTP/1.1");
 
-        String response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        assertTrue(response.contains("<a href=\"/file1\">file1</a>"));
+        assertTrue(response.getFormattedResponse().contains("<a href=\"/file1\">file1</a>"));
 
     }
 
@@ -78,9 +79,9 @@ public class StaticResourceHandlerTest {
         StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         AbstractHTTPRequest request = new HTTPRequest("POST / HTTP/1.1");
 
-        String response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        assertTrue(response.contains("HTTP/1.1 405"));
+        assertTrue(response.getFormattedResponse().contains("HTTP/1.1 405"));
     }
 //
 //    @Test
@@ -147,9 +148,9 @@ public class StaticResourceHandlerTest {
         String path = publicDirectory + "/image.png";
         byte[] imageContents = Files.readAllBytes(Paths.get(path));
         AbstractHTTPRequest request = new HTTPRequest("GET /image.png HTTP/1.1");
-        String response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        assertEquals(true, response.contains(new String(imageContents)));
+        assertEquals(true, response.getFormattedResponse().contains(new String(imageContents)));
     }
 
     @Test
@@ -157,9 +158,9 @@ public class StaticResourceHandlerTest {
         StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
 
         AbstractHTTPRequest request = new HTTPRequest("GET /partial_content.txt HTTP/1.1\nRange: bytes=0-10");
-        String response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        assertTrue(response.contains("HTTP/1.1 206 Partial Content"));
+        assertTrue(response.getFormattedResponse().contains("HTTP/1.1 206 Partial Content"));
     }
 
     @Test
@@ -170,10 +171,9 @@ public class StaticResourceHandlerTest {
         byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 0, 5);
 
         AbstractHTTPRequest request = new HTTPRequest("GET /partial_content.txt HTTP/1.1\nRange: bytes=0-4");
-        String response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        assertTrue(response.contains(new String(requestedFileContents)));
-        assertFalse(response.contains(new String(fullFileContents)));
+        assertTrue(Arrays.equals(requestedFileContents, response.getBody()));
     }
 
     @Test
@@ -181,13 +181,12 @@ public class StaticResourceHandlerTest {
         StaticResourceHandler endpoint = new StaticResourceHandler(publicDirectory);
         String path = publicDirectory + "/partial_content.txt";
         byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
-        byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 72, fullFileContents.length);
+        byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 71, fullFileContents.length);
 
         AbstractHTTPRequest request = new HTTPRequest("GET /partial_content.txt HTTP/1.1\nRange: bytes=-6");
-        String response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        assertTrue(response.contains(new String(requestedFileContents)));
-        assertFalse(response.contains(new String(fullFileContents)));
+        assertTrue(Arrays.equals(requestedFileContents, response.getBody()));
     }
 
 
@@ -199,9 +198,8 @@ public class StaticResourceHandlerTest {
         byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 4, fullFileContents.length);
 
         AbstractHTTPRequest request = new HTTPRequest("GET /partial_content.txt HTTP/1.1\nRange: bytes=4-");
-        String response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        assertTrue(response.contains(new String(requestedFileContents)));
-        assertFalse(response.contains(new String(fullFileContents)));
+        assertTrue(Arrays.equals(response.getBody(), requestedFileContents));
     }
 }

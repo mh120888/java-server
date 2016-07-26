@@ -1,6 +1,7 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
+import abstracthttpresponse.AbstractHTTPResponse;
 import httprequest.HTTPRequest;
 import httpresponse.HTTPResponse;
 import org.junit.Test;
@@ -14,27 +15,27 @@ public class RedirectResourceHandlerTest {
     public void getResponseReturnsA302Response() {
         RedirectResourceHandler endpoint = new RedirectResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
-        String response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        assertTrue(response.contains("HTTP/1.1 302"));
+        assertTrue(response.getFormattedResponse().contains("HTTP/1.1 302"));
     }
 
     @Test
     public void getResponseReturnsResponseContainingLocationHeader() {
         RedirectResourceHandler endpoint = new RedirectResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
-        String response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        assertTrue(response.contains("location: "));
+        assertTrue(response.getFormattedResponse().contains("location: "));
     }
 
     @Test
     public void getResponseReturnsResponseContainingLocationHeaderWithCorrectValue() {
         RedirectResourceHandler endpoint = new RedirectResourceHandler();
         AbstractHTTPRequest request = new HTTPRequest("GET /pathdoesnotmatter HTTP/1.1");
-        String response = endpoint.getResponse(request, new HTTPResponse());
+        AbstractHTTPResponse response = endpoint.getResponse(request, new HTTPResponse());
 
-        assertTrue(response.contains("location: http://localhost:5000/"));
+        assertTrue(response.getFormattedResponse().contains("location: http://localhost:5000/"));
     }
 }
 
