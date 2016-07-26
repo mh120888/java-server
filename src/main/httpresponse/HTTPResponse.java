@@ -2,7 +2,6 @@ package httpresponse;
 
 import abstracthttpresponse.AbstractHTTPResponse;
 
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 

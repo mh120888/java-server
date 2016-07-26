@@ -95,8 +95,6 @@ public class StaticResourceAction implements Action {
         try {
             String filePath = publicDirectory + request.getPath();
             body = getCorrectPortionOfFileContents(Files.readAllBytes(Paths.get(filePath)), request);
-//            body = new String(imageContents);
-//            body = Base64.getEncoder().encodeToString(imageContents);
         } catch (IOException e) {
             System.err.println(e);
         }
