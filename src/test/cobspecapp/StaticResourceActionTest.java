@@ -1,6 +1,10 @@
 package cobspecapp;
 
+import abstracthttprequest.AbstractHTTPRequest;
 import abstracthttpresponse.AbstractHTTPResponse;
+import httprequest.HTTPRequest;
+import httpresponse.HTTPResponse;
+import mocks.MockFileIO;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -149,5 +153,32 @@ public class StaticResourceActionTest {
         AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /partial_content.txt HTTP/1.1\nRange: bytes=4-", action);
 
         assertTrue(Arrays.equals(response.getBody(), requestedFileContents));
+    }
+
+    @Test
+    public void patchRequestWithContentReturnsA204() {
+        StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
+        String path = publicDirectory + "/does-not-matter.txt";
+        AbstractHTTPRequest request = new HTTPRequest("PATCH /does-not-matter.txt HTTP/1.1");
+        request.setBody("some random content");
+        AbstractHTTPResponse response = new HTTPResponse();
+
+        action.getResponse(request, response);
+
+        Assert.assertTrue(response.getFormattedResponse().contains("HTTP/1.1 204 No Content"));
+    }
+
+    @Test
+    public void modifyResourceWillOverwriteContentsOfSpecifiedResource() throws IOException {
+        StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
+        String path = publicDirectory + "/does-not-matter.txt";
+        AbstractHTTPRequest request = new HTTPRequest("PATCH /does-not-matter.txt HTTP/1.1");
+        request.setBody("some random content");
+        AbstractHTTPResponse response = new HTTPResponse();
+
+        action.getResponse(request, response);
+
+        String fileContentsAfterPatchRequest = new String(action.fileIO.getAllBytesFromFile(path));
+        Assert.assertEquals("some random content", fileContentsAfterPatchRequest);
     }
 }

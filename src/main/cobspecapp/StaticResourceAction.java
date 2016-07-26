@@ -4,20 +4,26 @@ import abstracthttprequest.AbstractHTTPRequest;
 import abstracthttpresponse.AbstractHTTPResponse;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
+
 
 /**
  * Created by matthewhiggins on 7/11/16.
  */
 public class StaticResourceAction implements Action {
+    public static String publicDirectory;
+
     public StaticResourceAction(String filepath) {
         publicDirectory = filepath;
+        fileIO = new RealFileIO();
     }
 
-    public static String publicDirectory;
+    public StaticResourceAction(String filepath, FileIO fileInputOuput) {
+        publicDirectory = filepath;
+        fileIO = fileInputOuput;
+    }
+
+    FileIO fileIO;
 
     public enum Filetype {
         DIRECTORY, IMAGE, OTHER
@@ -28,7 +34,15 @@ public class StaticResourceAction implements Action {
         response.setStatus(getResponseLine(request));
         response.setBody(getBody(request));
 
+        modifyResource(request);
+
         return response;
+    }
+
+    private void modifyResource(AbstractHTTPRequest request) {
+        if (!request.getBody().isEmpty() && request.getMethod().equals("PATCH")) {
+            fileIO.writeToFile(publicDirectory + request.getPath(), request.getBody().getBytes());
+        }
     }
 
     private int getResponseLine(AbstractHTTPRequest request) {
@@ -36,9 +50,9 @@ public class StaticResourceAction implements Action {
 
         if (request.containsHeader("Range")) {
             return 206;
-        }
-//        (isAcceptableMethodWithoutParams(method) || requestData.containsKey("body") && isAcceptableMethodWithParams(method))
-        else if (isAcceptableMethodWithoutParams(method)) {
+        } else if (!request.getBody().isEmpty() && method.equals("PATCH")) {
+            return 204;
+        } else if (isAcceptableMethodWithoutParams(method)) {
             return 200;
         } else {
             return 405;
@@ -91,14 +105,8 @@ public class StaticResourceAction implements Action {
     }
 
      byte[] getBodyDefault(AbstractHTTPRequest request) {
-        byte[] body = new byte[0];
-        try {
-            String filePath = publicDirectory + request.getPath();
-            body = getCorrectPortionOfFileContents(Files.readAllBytes(Paths.get(filePath)), request);
-        } catch (IOException e) {
-            System.err.println(e);
-        }
-        return body;
+        String filePath = publicDirectory + request.getPath();
+        return getCorrectPortionOfFileContents(fileIO.getAllBytesFromFile(filePath), request);
     }
 
      byte[] getCorrectPortionOfFileContents(byte[] fileContents, AbstractHTTPRequest request) {
