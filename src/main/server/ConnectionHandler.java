@@ -17,8 +17,8 @@ import java.net.Socket;
  */
 public class ConnectionHandler implements Runnable {
 
-    Socket clientSocket;
-    Application application;
+    private Socket clientSocket;
+    private Application application;
 
     public ConnectionHandler(Socket socket, Application app) {
         clientSocket = socket;
@@ -30,9 +30,7 @@ public class ConnectionHandler implements Runnable {
             BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             HTTPRequest request = new HTTPRequest(readInFirstLineAndHeaders(reader));
             if (reader.ready() && request.containsHeader("Content-Length")) {
-                int contentLength = Integer.parseInt(request.getHeader("Content-Length"));
-                String body = (readInBody(reader, contentLength));
-                request.setBody(body);
+                request.setBody(readInBody(reader, Integer.parseInt(request.getHeader("Content-Length"))));
             }
             generateOutput(request, new PrintStream(clientSocket.getOutputStream()), application);
             clientSocket.close();
