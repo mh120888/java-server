@@ -169,10 +169,24 @@ public class StaticResourceActionTest {
     }
 
     @Test
-    public void modifyResourceWillOverwriteContentsOfSpecifiedResource() throws IOException {
+    public void modifyResourceWillNotOverwriteContentsOfSpecifiedResourceWithoutIfMatchHeader() throws IOException {
         StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
         String path = publicDirectory + "/does-not-matter.txt";
         AbstractHTTPRequest request = new HTTPRequest("PATCH /does-not-matter.txt HTTP/1.1");
+        request.setBody("some random content");
+        AbstractHTTPResponse response = new HTTPResponse();
+
+        action.getResponse(request, response);
+
+        String fileContentsAfterPatchRequest = new String(action.fileIO.getAllBytesFromFile(path));
+        Assert.assertEquals("default content", fileContentsAfterPatchRequest);
+    }
+
+    @Test
+    public void modifyResourceWillOverwriteContentsOfSpecifiedResource() throws IOException {
+        StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
+        String path = publicDirectory + "/does-not-matter.txt";
+        AbstractHTTPRequest request = new HTTPRequest("PATCH /does-not-matter.txt HTTP/1.1\nIf-Match: somethingGoesHere");
         request.setBody("some random content");
         AbstractHTTPResponse response = new HTTPResponse();
 

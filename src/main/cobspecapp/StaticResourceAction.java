@@ -40,9 +40,13 @@ public class StaticResourceAction implements Action {
     }
 
     private void modifyResource(AbstractHTTPRequest request) {
-        if (!request.getBody().isEmpty() && request.getMethod().equals("PATCH")) {
+        if (isValidPatch(request)) {
             fileIO.writeToFile(publicDirectory + request.getPath(), request.getBody().getBytes());
         }
+    }
+
+    private boolean isValidPatch(AbstractHTTPRequest request) {
+        return request.getMethod().equals("PATCH") && !request.getBody().isEmpty() && request.containsHeader("If-Match");
     }
 
     private int getResponseLine(AbstractHTTPRequest request) {
