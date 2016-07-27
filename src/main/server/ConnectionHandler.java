@@ -35,14 +35,9 @@ public class ConnectionHandler implements Runnable {
                 request.setBody(body);
             }
             generateOutput(request, new PrintStream(clientSocket.getOutputStream()), application);
+            clientSocket.close();
         } catch (IOException e) {
             System.err.println(e.getMessage());
-        } finally {
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                System.err.println(e.getMessage());
-            }
         }
     }
 
