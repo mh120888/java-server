@@ -13,8 +13,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MyServer {
-    private static String publicDirectory = "/Users/matthewhiggins/Desktop/cob_spec/public";
-    private static int port = 5000;
+    static String publicDirectory = "/Users/matthewhiggins/Desktop/cob_spec/public";
+    static int myPort = 5000;
 
     static ExecutorService executor = Executors.newFixedThreadPool(100);
 
@@ -24,7 +24,7 @@ public class MyServer {
     }
 
     public static void runServer(Application app) throws IOException {
-        ServerSocket server = new ServerSocket(port);
+        ServerSocket server = new ServerSocket(myPort);
         try {
             while (true) {
                 Socket socket = server.accept();
@@ -32,7 +32,7 @@ public class MyServer {
                 executor.execute(connectionHandler);
             }
         } catch (IOException e) {
-            System.out.println("Could not listen on port " + port);
+            System.out.println("Could not listen on port " + myPort);
             System.exit(-1);
         } finally {
             server.close();
@@ -41,30 +41,33 @@ public class MyServer {
 
     private static void setOptions(String[] args) {
         HashMap<String, String> options = CommandLineArgsParser.groupOptions(args);
-        port = setPortNumber(options);
-        setPublicDirectory(options);
+        myPort = getPortNumber(options);
+        publicDirectory = setPublicDirectory(options);
     }
 
-    private static int setPortNumber(HashMap<String, String> options) {
-        int port = 5000;
+     static int getPortNumber(HashMap<String, String> options) {
+        int port = myPort;
         if (options.containsKey("-p")) {
             try {
                 port = Integer.parseInt(options.get("-p"));
             } catch (NumberFormatException e) {
-                port = 5000;
+                port = myPort;
             }
         }
         return port;
     }
 
-    private static void setPublicDirectory(HashMap<String, String> options) {
-        String directory = options.get("-d");
-        if (directory == null) {
-            return;
+    static String setPublicDirectory(HashMap<String, String> options) {
+        String directory = publicDirectory;
+        String directoryFromOptions = options.get("-d");
+        if (directoryFromOptions == null) {
+            directory = publicDirectory;
+        } else {
+            File file = new File(directoryFromOptions);
+            if (file.exists()) {
+                directory = directoryFromOptions;
+            }
         }
-        File file = new File(directory);
-        if (file.exists()) {
-            publicDirectory = directory;
-        }
+        return directory;
     }
 }
