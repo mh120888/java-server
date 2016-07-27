@@ -1,3 +1,15 @@
-*.class
+out/*
 .idea/*
+.clover/*
+target/*
 
+*.txt
+*.iml
+*.class
+index.html
+*.html
+*.png
+*.jpg
+*.pdf
+*.mp3
+.DS_Store
