@@ -2,21 +2,21 @@ package server; /**
  * Created by matthewhiggins on 7/5/16.
  */
 
-import abstracthttpresponse.AbstractHTTPResponse;
-import abstracthttprequest.AbstractHTTPRequest;
 import app.Application;
 import cobspecapp.CobSpecApp;
-import httprequest.HTTPRequest;
-import httpresponse.HTTPResponse;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MyServer {
     private static String publicDirectory = "/Users/matthewhiggins/Desktop/cob_spec/public";
     private static int port = 5000;
+
+    static ExecutorService executor = Executors.newFixedThreadPool(100);
 
     public static void main(String[] args) throws IOException {
         setOptions(args);
@@ -28,18 +28,8 @@ public class MyServer {
         try {
             while (true) {
                 Socket socket = server.accept();
-                try {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    HTTPRequest request = new HTTPRequest(readInFirstLineAndHeaders(reader));
-                    if (reader.ready() && request.containsHeader("Content-Length")) {
-                        int contentLength = Integer.parseInt(request.getHeader("Content-Length"));
-                        String body = (readInBody(reader, contentLength));
-                        request.setBody(body);
-                    }
-                    generateOutput(request, new PrintStream(socket.getOutputStream()), app);
-                } finally {
-                    socket.close();
-                }
+                Runnable connectionHandler = new ConnectionHandler(socket, app);
+                executor.execute(connectionHandler);
             }
         } catch (IOException e) {
             System.out.println("Could not listen on port " + port);
@@ -47,40 +37,6 @@ public class MyServer {
         } finally {
             server.close();
         }
-    }
-
-    public static void generateOutput(AbstractHTTPRequest request, PrintStream out, Application app) {
-        AbstractHTTPResponse response = app.getResponse(request, new HTTPResponse());
-        try {
-            out.write(response.getAllButBody().getBytes());
-            out.write(response.getBody());
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
-    public static String readInFirstLineAndHeaders(BufferedReader br) {
-        String input = "";
-        try {
-            String currentLine = br.readLine();
-            while (currentLine != null && !currentLine.trim().isEmpty()) {
-                input += currentLine.trim() + "\n";
-                currentLine = br.readLine();
-            }
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
-        return input;
-    }
-
-    static String readInBody(BufferedReader reader, int contentLength) {
-        char[] bodyInChars = new char[contentLength];
-        try {
-            reader.read(bodyInChars);
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
-        return new String(bodyInChars);
     }
 
     private static void setOptions(String[] args) {

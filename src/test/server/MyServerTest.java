@@ -28,37 +28,4 @@ public class MyServerTest {
         System.setOut(null);
         System.setErr(null);
     }
-
-    @Test
-    public void readInInputTrimsEachLineAndEndsItWithANewlineCharacter() throws Exception {
-        BufferedReader in = new BufferedReader(new StringReader("Some string with whitespace at the end    "));
-        String result = MyServer.readInFirstLineAndHeaders(in);
-
-        Assert.assertEquals("Some string with whitespace at the end\n", result);
-    }
-
-    @Test
-    public void readInInputWorksProperlyForMultiLineInput() throws Exception {
-        BufferedReader in = new BufferedReader(new StringReader("Line one\nLine two   "));
-        String result = MyServer.readInFirstLineAndHeaders(in);
-
-        Assert.assertEquals("Line one\nLine two\n", result);
-    }
-
-    @Test
-    public void generateOutputWritesToOutputStream() throws Exception {
-        AbstractHTTPRequest request = new MockHTTPRequest();
-        MockPrintStream out = new MockPrintStream(new MockOutputStream());
-        Application app = new MockApplication("Random response");
-        MyServer.generateOutput(request, out, app);
-
-        Assert.assertTrue(out.lastMessage.contains("Random response"));
-    }
-
-    @Test
-    public void readInBodyReadsTheSpecifiedNumberOfOctets() throws Exception {
-        BufferedReader reader = new BufferedReader(new StringReader("I am 18 bytes long"));
-        Assert.assertEquals("I am 18 by", MyServer.readInBody(reader, 10));
-    }
-
 }
