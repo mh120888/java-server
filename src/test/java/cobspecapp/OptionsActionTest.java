@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import abstracthttpresponse.AbstractHTTPResponse;
+import response.Response;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,28 +18,28 @@ public class OptionsActionTest {
 
     @Test
     public void getReponseDataReturnsCorrectResponseLineForGET() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /pathdoesnotmatter HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET /pathdoesnotmatter HTTP/1.1", action);
 
         Assert.assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
     }
 
     @Test
     public void getReponseDataReturnsCorrectResponseLineForOPTIONS() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("OPTIONS /pathdoesnotmatter HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("OPTIONS /pathdoesnotmatter HTTP/1.1", action);
 
         Assert.assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
     }
 
     @Test
     public void getResponseReturnsAResponseWithAnAllowHeader() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /pathdoesnotmatter HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET /pathdoesnotmatter HTTP/1.1", action);
 
         Assert.assertTrue(response.getFormattedResponse().contains("Allow: "));
     }
 
     @Test
     public void getResponseReturnsAResponseWithAllowHeaderWithMethodsAllowedForGivenPath() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /method_options HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET /method_options HTTP/1.1", action);
 
         String[] acceptedMethods = {"GET", "HEAD", "POST", "OPTIONS", "PUT"};
         for (String method : acceptedMethods) {
@@ -49,7 +49,7 @@ public class OptionsActionTest {
 
     @Test
     public void getResponseReturnsAResponseWithAllowHeaderWithMethodsAllowedForADifferentPath() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /method_options2 HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET /method_options2 HTTP/1.1", action);
 
         String[] acceptedMethods = {"GET", "OPTIONS"};
 
@@ -60,7 +60,7 @@ public class OptionsActionTest {
 
     @Test
     public void getResponseReturnsAResponseWithAllowHeaderWithoutMethodsNotAllowedForPath() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /method_options2 HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET /method_options2 HTTP/1.1", action);
 
         String[] disallowedMethods = {"POST", "HEAD", "PUT"};
 

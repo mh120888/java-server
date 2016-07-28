@@ -1,7 +1,7 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
-import abstracthttpresponse.AbstractHTTPResponse;
+import response.Response;
 import httprequest.HTTPRequest;
 import httpresponse.HTTPResponse;
 import org.junit.Assert;
@@ -25,14 +25,14 @@ public class PostableActionTest {
 
     @Test
     public void getResponseReturnsA200forPOST() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("POST /form HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("POST /form HTTP/1.1", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200 OK"));
     }
 
     @Test
     public void getResponseReturnsA200ForPUT() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("PUT /form HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("PUT /form HTTP/1.1", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200 OK"));
     }
@@ -42,7 +42,7 @@ public class PostableActionTest {
         String fakeData = "some random data";
         action.data = fakeData;
 
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /form HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET /form HTTP/1.1", action);
         Assert.assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
     }
     @Test
@@ -51,7 +51,7 @@ public class PostableActionTest {
         String fakeData = "some random data";
         endpoint.data = fakeData;
 
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("POST /form HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("POST /form HTTP/1.1", action);
 
         Assert.assertFalse(response.getFormattedResponse().contains(fakeData));
     }
@@ -61,7 +61,7 @@ public class PostableActionTest {
         AbstractHTTPRequest request = new HTTPRequest("POST /form HTTP/1.1");
         request.setBody("random stuff here");
 
-        AbstractHTTPResponse response = action.getResponse(request, new HTTPResponse());
+        Response response = action.getResponse(request, new HTTPResponse());
 
         assertEquals("random stuff here", action.data);
     }

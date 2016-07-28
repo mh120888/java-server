@@ -1,9 +1,6 @@
 package cobspecapp;
 
-import abstracthttprequest.AbstractHTTPRequest;
-import abstracthttpresponse.AbstractHTTPResponse;
-import httprequest.HTTPRequest;
-import httpresponse.HTTPResponse;
+import response.Response;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,21 +24,21 @@ public class CoffeeActionTest {
 
     @Test
     public void returns418ForGETCoffee() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /coffee HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET /coffee HTTP/1.1", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 418"));
     }
 
     @Test
     public void bodyContainsCorrectStringIfPathIsCoffee() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /coffee HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET /coffee HTTP/1.1", action);
 
         assertTrue(response.getFormattedResponse().contains("I'm a teapot"));
     }
 
     @Test
     public void returns200ForGETTea() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /tea HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET /tea HTTP/1.1", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
     }

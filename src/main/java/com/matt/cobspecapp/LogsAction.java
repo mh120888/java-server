@@ -1,7 +1,7 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
-import abstracthttpresponse.AbstractHTTPResponse;
+import response.Response;
 
 /**L
  * Created by matthewhiggins on 7/12/16.
@@ -9,7 +9,7 @@ import abstracthttpresponse.AbstractHTTPResponse;
 public class LogsAction implements Action {
     private String correctCredentials = "admin:hunter2";
 
-    public AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+    public Response getResponse(AbstractHTTPRequest request, Response response) {
         response.setHTTPVersion(request.getVersion());
 
         if (isAuthorized(request)) {

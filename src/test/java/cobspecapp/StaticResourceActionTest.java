@@ -1,7 +1,7 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
-import abstracthttpresponse.AbstractHTTPResponse;
+import response.Response;
 import httprequest.HTTPRequest;
 import httpresponse.HTTPResponse;
 import mocks.MockFileIO;
@@ -36,35 +36,35 @@ public class StaticResourceActionTest {
 
     @Test
     public void getResponseDataReturnsCorrectResponseLineForGet() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET / HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET / HTTP/1.1", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
     }
 
     @Test
     public void getResponseReturns200ForHeadRequest() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("HEAD / HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("HEAD / HTTP/1.1", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
     }
 
     @Test
     public void getResponseReturns405ForInvalidMethods() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("NOTAREALMETHOD / HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("NOTAREALMETHOD / HTTP/1.1", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 405"));
     }
 
     @Test
     public void getIndexResponseIncludesLinksToOtherResourcesInPublic() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET / HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET / HTTP/1.1", action);
 
         assertTrue(response.getFormattedResponse().contains("<a href=\"/file1\">file1</a>"));
     }
 
     @Test
     public void postRequestWithNoParamsReturnsA405() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("POST / HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("POST / HTTP/1.1", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 405"));
     }
@@ -109,14 +109,14 @@ public class StaticResourceActionTest {
         String path = publicDirectory + "/image.png";
         byte[] imageContents = Files.readAllBytes(Paths.get(path));
 
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /image.png HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET /image.png HTTP/1.1", action);
 
         assertEquals(true, response.getFormattedResponse().contains(new String(imageContents)));
     }
 
     @Test
     public void getRequestWithRangeHeadersReturnsA206Response() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /partial_content.txt HTTP/1.1\nRange: bytes=0-10", action);
+        Response response = ResponseGenerator.generateResponse("GET /partial_content.txt HTTP/1.1\nRange: bytes=0-10", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 206 Partial Content"));
     }
@@ -127,7 +127,7 @@ public class StaticResourceActionTest {
         byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
         byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 0, 5);
 
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /partial_content.txt HTTP/1.1\nRange: bytes=0-4", action);
+        Response response = ResponseGenerator.generateResponse("GET /partial_content.txt HTTP/1.1\nRange: bytes=0-4", action);
 
         assertTrue(Arrays.equals(requestedFileContents, response.getBody()));
     }
@@ -138,7 +138,7 @@ public class StaticResourceActionTest {
         byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
         byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 71, fullFileContents.length);
 
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /partial_content.txt HTTP/1.1\nRange: bytes=-6", action);
+        Response response = ResponseGenerator.generateResponse("GET /partial_content.txt HTTP/1.1\nRange: bytes=-6", action);
 
         assertTrue(Arrays.equals(requestedFileContents, response.getBody()));
     }
@@ -150,7 +150,7 @@ public class StaticResourceActionTest {
         byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
         byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 4, fullFileContents.length);
 
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /partial_content.txt HTTP/1.1\nRange: bytes=4-", action);
+        Response response = ResponseGenerator.generateResponse("GET /partial_content.txt HTTP/1.1\nRange: bytes=4-", action);
 
         assertTrue(Arrays.equals(response.getBody(), requestedFileContents));
     }
@@ -161,7 +161,7 @@ public class StaticResourceActionTest {
         String path = publicDirectory + "/does-not-matter.txt";
         AbstractHTTPRequest request = new HTTPRequest("PATCH /does-not-matter.txt HTTP/1.1");
         request.setBody("some random content");
-        AbstractHTTPResponse response = new HTTPResponse();
+        Response response = new HTTPResponse();
 
         action.getResponse(request, response);
 
@@ -174,7 +174,7 @@ public class StaticResourceActionTest {
         String path = publicDirectory + "/does-not-matter.txt";
         AbstractHTTPRequest request = new HTTPRequest("PATCH /does-not-matter.txt HTTP/1.1");
         request.setBody("some random content");
-        AbstractHTTPResponse response = new HTTPResponse();
+        Response response = new HTTPResponse();
 
         action.getResponse(request, response);
 
@@ -188,7 +188,7 @@ public class StaticResourceActionTest {
         String path = publicDirectory + "/does-not-matter.txt";
         AbstractHTTPRequest request = new HTTPRequest("PATCH /does-not-matter.txt HTTP/1.1\nIf-Match: somethingGoesHere");
         request.setBody("some random content");
-        AbstractHTTPResponse response = new HTTPResponse();
+        Response response = new HTTPResponse();
 
         action.getResponse(request, response);
 

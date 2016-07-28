@@ -1,6 +1,6 @@
 package httpresponse;
 
-import abstracthttpresponse.AbstractHTTPResponse;
+import response.Response;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Created by matthewhiggins on 7/21/16.
  */
-public class HTTPResponse extends AbstractHTTPResponse {
+public class HTTPResponse implements Response {
     int status;
     String version = "";
     byte[] body = new byte[0];

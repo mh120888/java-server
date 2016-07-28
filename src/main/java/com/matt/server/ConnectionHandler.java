@@ -1,7 +1,7 @@
 package server;
 
 import abstracthttprequest.AbstractHTTPRequest;
-import abstracthttpresponse.AbstractHTTPResponse;
+import response.Response;
 import app.Application;
 import httprequest.HTTPRequest;
 import httpresponse.HTTPResponse;
@@ -64,7 +64,7 @@ public class ConnectionHandler implements Runnable {
     }
 
     public static void generateOutput(AbstractHTTPRequest request, PrintStream out, Application app) {
-        AbstractHTTPResponse response = app.getResponse(request, new HTTPResponse());
+        Response response = app.getResponse(request, new HTTPResponse());
         try {
             out.write(response.getAllButBody().getBytes());
             out.write(response.getBody());

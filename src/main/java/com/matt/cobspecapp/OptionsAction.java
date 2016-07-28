@@ -1,14 +1,14 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
-import abstracthttpresponse.AbstractHTTPResponse;
+import response.Response;
 
 /**
  * Created by matthewhiggins on 7/14/16.
  */
 public class OptionsAction implements Action {
 
-    public AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+    public Response getResponse(AbstractHTTPRequest request, Response response) {
         response.setHTTPVersion(request.getVersion());
         response.setStatus(200);
         response.addHeader("Allow", buildHeaders(request.getPath()));

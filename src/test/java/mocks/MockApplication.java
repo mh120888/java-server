@@ -1,7 +1,7 @@
 package mocks;
 
 import abstracthttprequest.AbstractHTTPRequest;
-import abstracthttpresponse.AbstractHTTPResponse;
+import response.Response;
 import app.Application;
 
 /**
@@ -15,7 +15,7 @@ public class MockApplication extends Application {
         defaultBody = fakeResponse;
     }
 
-    public AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+    public Response getResponse(AbstractHTTPRequest request, Response response) {
         response.setHTTPVersion("HTTP/1.1");
         response.setStatus(999);
         response.setBodyFromString(defaultBody);

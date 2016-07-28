@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import abstracthttpresponse.AbstractHTTPResponse;
+import response.Response;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
@@ -18,21 +18,21 @@ public class RedirectActionTest {
 
     @Test
     public void getResponseReturnsA302Response() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /pathdoesnotmatter HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET /pathdoesnotmatter HTTP/1.1", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 302"));
     }
 
     @Test
     public void getResponseReturnsResponseContainingLocationHeader() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /pathdoesnotmatter HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET /pathdoesnotmatter HTTP/1.1", action);
 
         assertTrue(response.getFormattedResponse().contains("location: "));
     }
 
     @Test
     public void getResponseReturnsResponseContainingLocationHeaderWithCorrectValue() {
-        AbstractHTTPResponse response = ResponseGenerator.generateResponse("GET /pathdoesnotmatter HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET /pathdoesnotmatter HTTP/1.1", action);
 
         assertTrue(response.getFormattedResponse().contains("location: http://localhost:5000/"));
     }

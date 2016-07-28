@@ -1,7 +1,7 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
-import abstracthttpresponse.AbstractHTTPResponse;
+import response.Response;
 import app.Application;
 
 /**
@@ -14,9 +14,9 @@ public class CobSpecApp extends Application {
         publicDirectory = filepath;
     }
 
-    public AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+    public Response getResponse(AbstractHTTPRequest request, Response response) {
         Action action = Router.route(request, publicDirectory);
-        AbstractHTTPResponse result = action.getResponse(request, response);
+        Response result = action.getResponse(request, response);
         return result;
     }
 }

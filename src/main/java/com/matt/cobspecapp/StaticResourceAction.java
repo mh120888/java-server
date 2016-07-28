@@ -1,7 +1,7 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
-import abstracthttpresponse.AbstractHTTPResponse;
+import response.Response;
 
 import java.io.File;
 import java.util.Arrays;
@@ -29,7 +29,7 @@ public class StaticResourceAction implements Action {
         DIRECTORY, IMAGE, OTHER
     }
 
-    public AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+    public Response getResponse(AbstractHTTPRequest request, Response response) {
         response.setHTTPVersion(request.getVersion());
         response.setStatus(getResponseLine(request));
         response.setBody(getBody(request));

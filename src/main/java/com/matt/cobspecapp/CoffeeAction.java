@@ -1,7 +1,7 @@
 package cobspecapp;
 
 import abstracthttprequest.AbstractHTTPRequest;
-import abstracthttpresponse.AbstractHTTPResponse;
+import response.Response;
 
 /**
  * Created by matthewhiggins on 7/11/16.
@@ -9,7 +9,7 @@ import abstracthttpresponse.AbstractHTTPResponse;
 public class CoffeeAction implements Action {
     public CoffeeAction() {}
 
-    public AbstractHTTPResponse getResponse(AbstractHTTPRequest request, AbstractHTTPResponse response) {
+    public Response getResponse(AbstractHTTPRequest request, Response response) {
         response.setHTTPVersion(request.getVersion());
         if (request.getPath().equals("/coffee")) {
             response.setStatus(418);
