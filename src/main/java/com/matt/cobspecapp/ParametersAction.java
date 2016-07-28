@@ -26,7 +26,7 @@ public class ParametersAction implements Action {
             for (Map.Entry<String, String> entry : parameters.entrySet()) {
                 body += entry.getKey() + " = " + entry.getValue() + "\n";
             }
-            response.setBodyFromString(body);
+            response.setBody(body.getBytes());
         }
 
         return response;

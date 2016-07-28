@@ -14,7 +14,7 @@ public class PostableAction implements Action {
         response.setStatus(200);
 
         if (request.getMethod().equals("GET")) {
-            response.setBodyFromString(data);
+            response.setBody(data.getBytes());
         } else {
             data = request.getBody().trim();
         }

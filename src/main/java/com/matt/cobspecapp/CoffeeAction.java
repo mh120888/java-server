@@ -13,7 +13,7 @@ public class CoffeeAction implements Action {
         response.setHTTPVersion(request.getVersion());
         if (request.getPath().equals("/coffee")) {
             response.setStatus(418);
-            response.setBodyFromString("I'm a teapot");
+            response.setBody("I'm a teapot".getBytes());
         } else {
             response.setStatus(200);
         }

@@ -6,7 +6,6 @@ package response;
 public interface Response {
     void setStatus(int status);
     void setHTTPVersion(String version);
-    void setBodyFromString(String bodyContent);
     void addHeader(String name, String value);
     String getFormattedResponse();
     String getAllButBody();

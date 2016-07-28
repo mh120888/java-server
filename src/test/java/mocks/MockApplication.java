@@ -18,7 +18,7 @@ public class MockApplication extends Application {
     public Response getResponse(AbstractHTTPRequest request, Response response) {
         response.setHTTPVersion("HTTP/1.1");
         response.setStatus(999);
-        response.setBodyFromString(defaultBody);
+        response.setBody(defaultBody.getBytes());
         return response;
     };
 }

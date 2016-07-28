@@ -14,7 +14,7 @@ public class LogsAction implements Action {
 
         if (isAuthorized(request)) {
             response.setStatus(200);
-            response.setBodyFromString(String.join("\n", Logger.getLog()));
+            response.setBody(String.join("\n", Logger.getLog()).getBytes());
         } else {
             response.setStatus(401);
             response.addHeader("WWW-Authenticate", "Basic realm=\"User Visible Realm\"");
