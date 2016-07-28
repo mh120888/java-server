@@ -1,6 +1,6 @@
 package mocks;
 
-import abstracthttprequest.AbstractHTTPRequest;
+import request.Request;
 import httprequest.HeaderParser;
 
 import java.util.HashMap;
@@ -8,7 +8,7 @@ import java.util.HashMap;
 /**
  * Created by matthewhiggins on 7/25/16.
  */
-public class MockHTTPRequest extends AbstractHTTPRequest {
+public class MockHTTPRequest implements Request {
     @Override
     public String getPath() {
         return null;

@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import abstracthttprequest.AbstractHTTPRequest;
+import request.Request;
 import response.Response;
 import httprequest.HTTPRequest;
 import org.junit.Before;
@@ -35,21 +35,21 @@ public class LogsActionTest {
 
     @Test
     public void isAuthorizedReturnsTrueForCorrectCredentials() {
-        AbstractHTTPRequest request = new HTTPRequest("GET /logs HTTP/1.1\nAuthorization: Basic YWRtaW46aHVudGVyMg==");
+        Request request = new HTTPRequest("GET /logs HTTP/1.1\nAuthorization: Basic YWRtaW46aHVudGVyMg==");
 
         assertTrue(action.isAuthorized(request));
     }
 
     @Test
     public void isAuthorizedReturnsFalseWithNoCredentials() {
-        AbstractHTTPRequest request = new HTTPRequest("GET /logs HTTP/1.1");
+        Request request = new HTTPRequest("GET /logs HTTP/1.1");
 
         assertFalse(action.isAuthorized(request));
     }
 
     @Test
     public void isAuthorizedReturnsFalseForIncorrectCredentials() {
-        AbstractHTTPRequest request = new HTTPRequest("GET /logs HTTP/1.1\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
+        Request request = new HTTPRequest("GET /logs HTTP/1.1\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
 
         assertFalse(action.isAuthorized(request));
     }

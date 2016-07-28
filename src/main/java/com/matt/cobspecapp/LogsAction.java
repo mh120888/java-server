@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import abstracthttprequest.AbstractHTTPRequest;
+import request.Request;
 import response.Response;
 
 /**L
@@ -9,7 +9,7 @@ import response.Response;
 public class LogsAction implements Action {
     private String correctCredentials = "admin:hunter2";
 
-    public Response getResponse(AbstractHTTPRequest request, Response response) {
+    public Response getResponse(Request request, Response response) {
         response.setHTTPVersion(request.getVersion());
 
         if (isAuthorized(request)) {
@@ -22,7 +22,7 @@ public class LogsAction implements Action {
         return response;
     }
 
-    public boolean isAuthorized(AbstractHTTPRequest request) {
+    public boolean isAuthorized(Request request) {
         String encodedCredentials = "";
         if (request.containsHeader("Authorization")) {
             encodedCredentials = request.getHeader("Authorization").replace("Basic ", "");

@@ -1,4 +1,4 @@
-package abstracthttprequest;
+package request;
 
 /**
  * Created by matthewhiggins on 7/22/16.

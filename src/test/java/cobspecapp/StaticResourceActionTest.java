@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import abstracthttprequest.AbstractHTTPRequest;
+import request.Request;
 import response.Response;
 import httprequest.HTTPRequest;
 import httpresponse.HTTPResponse;
@@ -159,7 +159,7 @@ public class StaticResourceActionTest {
     public void patchRequestWithContentReturnsA204() {
         StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
         String path = publicDirectory + "/does-not-matter.txt";
-        AbstractHTTPRequest request = new HTTPRequest("PATCH /does-not-matter.txt HTTP/1.1");
+        Request request = new HTTPRequest("PATCH /does-not-matter.txt HTTP/1.1");
         request.setBody("some random content");
         Response response = new HTTPResponse();
 
@@ -172,7 +172,7 @@ public class StaticResourceActionTest {
     public void modifyResourceWillNotOverwriteContentsOfSpecifiedResourceWithoutIfMatchHeader() throws IOException {
         StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
         String path = publicDirectory + "/does-not-matter.txt";
-        AbstractHTTPRequest request = new HTTPRequest("PATCH /does-not-matter.txt HTTP/1.1");
+        Request request = new HTTPRequest("PATCH /does-not-matter.txt HTTP/1.1");
         request.setBody("some random content");
         Response response = new HTTPResponse();
 
@@ -186,7 +186,7 @@ public class StaticResourceActionTest {
     public void modifyResourceWillOverwriteContentsOfSpecifiedResource() throws IOException {
         StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
         String path = publicDirectory + "/does-not-matter.txt";
-        AbstractHTTPRequest request = new HTTPRequest("PATCH /does-not-matter.txt HTTP/1.1\nIf-Match: somethingGoesHere");
+        Request request = new HTTPRequest("PATCH /does-not-matter.txt HTTP/1.1\nIf-Match: somethingGoesHere");
         request.setBody("some random content");
         Response response = new HTTPResponse();
 

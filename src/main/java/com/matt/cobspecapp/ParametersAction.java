@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import abstracthttprequest.AbstractHTTPRequest;
+import request.Request;
 import response.Response;
 
 import java.util.Map;
@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class ParametersAction implements Action {
 
-    public Response getResponse(AbstractHTTPRequest request, Response response) {
+    public Response getResponse(Request request, Response response) {
         response.setHTTPVersion(request.getVersion());
 
         if (request.getMethod().equals("GET")) {

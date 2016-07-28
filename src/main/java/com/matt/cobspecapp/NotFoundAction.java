@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import abstracthttprequest.AbstractHTTPRequest;
+import request.Request;
 import response.Response;
 
 
@@ -10,7 +10,7 @@ import response.Response;
 public class NotFoundAction implements Action {
     public NotFoundAction() {}
 
-    public Response getResponse(AbstractHTTPRequest request, Response response) {
+    public Response getResponse(Request request, Response response) {
         response.setHTTPVersion(request.getVersion());
         response.setStatus(404);
 

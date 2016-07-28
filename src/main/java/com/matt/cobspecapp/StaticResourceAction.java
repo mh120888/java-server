@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import abstracthttprequest.AbstractHTTPRequest;
+import request.Request;
 import response.Response;
 
 import java.io.File;
@@ -29,7 +29,7 @@ public class StaticResourceAction implements Action {
         DIRECTORY, IMAGE, OTHER
     }
 
-    public Response getResponse(AbstractHTTPRequest request, Response response) {
+    public Response getResponse(Request request, Response response) {
         response.setHTTPVersion(request.getVersion());
         response.setStatus(getResponseLine(request));
         response.setBody(getBody(request));
@@ -39,17 +39,17 @@ public class StaticResourceAction implements Action {
         return response;
     }
 
-    private void modifyResource(AbstractHTTPRequest request) {
+    private void modifyResource(Request request) {
         if (isValidPatch(request)) {
             fileIO.writeToFile(publicDirectory + request.getPath(), request.getBody().getBytes());
         }
     }
 
-    private boolean isValidPatch(AbstractHTTPRequest request) {
+    private boolean isValidPatch(Request request) {
         return request.getMethod().equals("PATCH") && !request.getBody().isEmpty() && request.containsHeader("If-Match");
     }
 
-    private int getResponseLine(AbstractHTTPRequest request) {
+    private int getResponseLine(Request request) {
         String method = request.getMethod();
 
         if (request.containsHeader("Range")) {
@@ -79,7 +79,7 @@ public class StaticResourceAction implements Action {
         return Arrays.asList(listOfMethods).contains(method);
     }
 
-    private byte[] getBody(AbstractHTTPRequest request) {
+    private byte[] getBody(Request request) {
         String method = request.getMethod();
         byte[] body = new byte[0];
         if (!method.equals("GET")) {
@@ -108,12 +108,12 @@ public class StaticResourceAction implements Action {
         return body.getBytes();
     }
 
-     byte[] getBodyDefault(AbstractHTTPRequest request) {
+     byte[] getBodyDefault(Request request) {
         String filePath = publicDirectory + request.getPath();
         return getCorrectPortionOfFileContents(fileIO.getAllBytesFromFile(filePath), request);
     }
 
-     byte[] getCorrectPortionOfFileContents(byte[] fileContents, AbstractHTTPRequest request) {
+     byte[] getCorrectPortionOfFileContents(byte[] fileContents, Request request) {
         byte[] result = fileContents;
         if (request.containsHeader("Range")) {
             int[] range = request.getHeaderParser().parseRangeHeader(request.getHeader("Range"), fileContents);

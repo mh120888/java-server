@@ -1,6 +1,6 @@
 package server;
 
-import abstracthttprequest.AbstractHTTPRequest;
+import request.Request;
 import app.Application;
 import mocks.MockApplication;
 import mocks.MockHTTPRequest;
@@ -35,7 +35,7 @@ public class ConnectionHandlerTest {
 
     @Test
     public void generateOutputWritesToOutputStream() throws Exception {
-        AbstractHTTPRequest request = new MockHTTPRequest();
+        Request request = new MockHTTPRequest();
         MockPrintStream out = new MockPrintStream(new MockOutputStream());
         Application app = new MockApplication("Random response");
         ConnectionHandler.generateOutput(request, out, app);

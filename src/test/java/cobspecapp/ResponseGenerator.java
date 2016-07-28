@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import abstracthttprequest.AbstractHTTPRequest;
+import request.Request;
 import response.Response;
 import httprequest.HTTPRequest;
 import httpresponse.HTTPResponse;
@@ -10,7 +10,7 @@ import httpresponse.HTTPResponse;
  */
 public class ResponseGenerator {
     static Response generateResponse(String requestLine, Action action) {
-        AbstractHTTPRequest request = new HTTPRequest(requestLine);
+        Request request = new HTTPRequest(requestLine);
         Response response = action.getResponse(request, new HTTPResponse());
         return response;
     }

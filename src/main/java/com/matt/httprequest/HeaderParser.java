@@ -1,6 +1,6 @@
 package httprequest;
 
-import abstracthttprequest.AbstractHeaderParser;
+import request.AbstractHeaderParser;
 
 /**
  * Created by matthewhiggins on 7/13/16.

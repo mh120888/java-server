@@ -1,6 +1,6 @@
 package httprequest;
 
-import abstracthttprequest.AbstractHTTPRequest;
+import request.Request;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by matthewhiggins on 7/20/16.
  */
-public class HTTPRequest extends AbstractHTTPRequest {
+public class HTTPRequest implements Request {
 
     private String method;
     private String pathWithParams;
