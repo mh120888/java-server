@@ -28,19 +28,28 @@ public class ConnectionHandler implements Runnable {
     public void run() {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            HTTPRequest request = new HTTPRequest(readInFirstLine(reader));
-            if (reader.ready()) {
-                request.setHeaders(readInHeaders(reader));
-            }
-            if (reader.ready() && request.containsHeader("Content-Length")) {
-                request.setBody(readInBody(reader, Integer.parseInt(request.getHeader("Content-Length"))));
-            }
+            HTTPRequest request = buildHttpRequest(reader);
             generateOutput(request, new PrintStream(clientSocket.getOutputStream()), application);
             clientSocket.close();
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
     }
+
+     static HTTPRequest buildHttpRequest(BufferedReader reader) {
+         HTTPRequest request = new HTTPRequest(readInFirstLine(reader));
+         try {
+             if (reader.ready()) {
+                 request.setHeaders(readInHeaders(reader));
+             }
+             if (reader.ready() && request.containsHeader("Content-Length")) {
+                 request.setBody(readInBody(reader, Integer.parseInt(request.getHeader("Content-Length"))));
+             }
+         } catch (IOException e) {
+             System.err.println(e.getMessage());
+         }
+         return request;
+     }
 
     public static String readInFirstLine(BufferedReader br) {
         String input = "";
@@ -76,7 +85,7 @@ public class ConnectionHandler implements Runnable {
         return new String(bodyInChars);
     }
 
-    public static void generateOutput(Request request, PrintStream out, Application app) {
+     static void generateOutput(Request request, PrintStream out, Application app) {
         Response response = app.getResponse(request, new HTTPResponse());
         try {
             out.write(response.getAllButBody().getBytes());

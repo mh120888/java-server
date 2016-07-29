@@ -18,6 +18,42 @@ import java.io.StringReader;
  */
 public class ConnectionHandlerTest {
     @Test
+    public void buildHttpRequestReturnsARequestObjectWithAProperRequestLine() {
+        BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1\n"));
+        Request request = ConnectionHandler.buildHttpRequest(in);
+
+        Assert.assertEquals("GET / HTTP/1.1", request.getInitialRequestLine());
+    }
+
+    @Test
+    public void buildHttpRequestReturnsARequestObjectWithAnEmptyBodyWhenNoneIsProvided() {
+        BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1\n"));
+        Request request = ConnectionHandler.buildHttpRequest(in);
+
+        Assert.assertTrue(request.getBody().isEmpty());
+    }
+
+    @Test
+    public void buildHttpRequestReturnsARequestObjectWithCorrectHeaders() {
+        BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1\nTest header: 29393939\nAnother test: 40223840"));
+        Request request = ConnectionHandler.buildHttpRequest(in);
+
+        Assert.assertTrue(request.containsHeader("Another test"));
+        Assert.assertTrue(request.containsHeader("Test header"));
+    }
+
+    @Test
+    public void buildHttpRequestReturnsARequestObjectWithBody() {
+        BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1\r\n" +
+                                                                "Content-Length: 12\n" +
+                                                                "\n" +
+                                                                "body content"));
+        Request request = ConnectionHandler.buildHttpRequest(in);
+
+        Assert.assertEquals("body content", request.getBody());
+    }
+
+    @Test
     public void readInFirstLineReturnsLineWithoutTrailingWhitespace() {
         BufferedReader in = new BufferedReader(new StringReader("Some string with whitespace at the end    "));
         String result = ConnectionHandler.readInFirstLine(in);
