@@ -17,7 +17,7 @@ public interface Request {
     String getParam(String paramName);
     boolean paramExists(String paramName);
     String getBaseLocation();
-    AbstractHeaderParser getHeaderParser();
+    HeaderParser getHeaderParser();
     void setBody(String input);
     String getBody();
 }

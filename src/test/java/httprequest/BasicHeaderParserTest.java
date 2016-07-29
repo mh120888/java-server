@@ -9,10 +9,10 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by matthewhiggins on 7/13/16.
  */
-public class HeaderParserTest {
+public class BasicHeaderParserTest {
     @Test
     public void splitUpRangeHeaderReturnsTheStartingAndEndingBytes() {
-        HeaderParser parser = new HeaderParser();
+        BasicHeaderParser parser = new BasicHeaderParser();
         String[] result = parser.splitUpRangeHeader("bytes=500-600");
 
         assertEquals("500", result[0]);
@@ -21,7 +21,7 @@ public class HeaderParserTest {
 
     @Test
     public void splitUpRangeHeaderCanHandleAMissingStartingByte() {
-        HeaderParser parser = new HeaderParser();
+        BasicHeaderParser parser = new BasicHeaderParser();
         String[] result = parser.splitUpRangeHeader("bytes=-4");
 
         assertEquals("", result[0]);
@@ -30,7 +30,7 @@ public class HeaderParserTest {
 
     @Test
     public void splitUpRangeHeaderCanHandleAMissingEndingByte() {
-        HeaderParser parser = new HeaderParser();
+        BasicHeaderParser parser = new BasicHeaderParser();
         String[] result = parser.splitUpRangeHeader("bytes=4-");
 
         assertEquals("4", result[0]);
@@ -39,7 +39,7 @@ public class HeaderParserTest {
 
     @Test
     public void calculateStartAndEndBytesReturnsIntArrayOfStartAndEndIfBothAreProvided() {
-        HeaderParser parser = new HeaderParser();
+        BasicHeaderParser parser = new BasicHeaderParser();
         String[] input = {"1", "2"};
         byte[] mockResource = new byte[100];
         int[] result = parser.calculateStartAndEndBytes(input, mockResource);
@@ -50,7 +50,7 @@ public class HeaderParserTest {
 
     @Test
     public void calculateStartAndEndBytesReturnsLastXBytesIfStartIsNotProvided() {
-        HeaderParser parser = new HeaderParser();
+        BasicHeaderParser parser = new BasicHeaderParser();
         String[] input = {"", "2"};
         byte[] mockResource = new byte[100];
         int[] result = parser.calculateStartAndEndBytes(input, mockResource);
@@ -61,7 +61,7 @@ public class HeaderParserTest {
 
     @Test
     public void calculateStartAndEndBytesReturnsBytesFromStartingPointUntilEndIfNoEndIsGiven() {
-        HeaderParser parser = new HeaderParser();
+        BasicHeaderParser parser = new BasicHeaderParser();
         String[] input = {"4"};
         byte[] mockResource = new byte[100];
         int[] result = parser.calculateStartAndEndBytes(input, mockResource);
@@ -72,7 +72,7 @@ public class HeaderParserTest {
 
     @Test
     public void isStartOfRangeMissingReturnsTrueIfTheStartOfTheRangeIsNotGiven() {
-        HeaderParser parser = new HeaderParser();
+        BasicHeaderParser parser = new BasicHeaderParser();
         String[] range = {"", "2"};
 
         assertTrue(parser.isStartOfRangeMissing(range));
@@ -80,7 +80,7 @@ public class HeaderParserTest {
 
     @Test
     public void isStartOfRangeMissingReturnsFalseIfTheStartOfTheRangeIsGiven() {
-        HeaderParser parser = new HeaderParser();
+        BasicHeaderParser parser = new BasicHeaderParser();
         String[] range = {"1", "2"};
 
         assertFalse(parser.isStartOfRangeMissing(range));
@@ -88,7 +88,7 @@ public class HeaderParserTest {
 
     @Test
     public void isEndOfRangeMissingReturnsTrueIfTheEndOfTheRangeIsNotGiven() {
-        HeaderParser parser = new HeaderParser();
+        BasicHeaderParser parser = new BasicHeaderParser();
         String[] range = {"1"};
 
         assertTrue(parser.isEndOfRangeMissing(range));
@@ -96,7 +96,7 @@ public class HeaderParserTest {
 
     @Test
     public void isEndOfRangeMissingReturnsFalseIfTheEndOfTheRangeIsGiven() {
-        HeaderParser parser = new HeaderParser();
+        BasicHeaderParser parser = new BasicHeaderParser();
         String[] range = {"1", "2"};
 
         assertFalse(parser.isEndOfRangeMissing(range));

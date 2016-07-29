@@ -68,8 +68,8 @@ public class HTTPRequest implements Request {
         return method + " " + pathWithParams + " " + version;
     }
 
-    public HeaderParser getHeaderParser() {
-        return new HeaderParser();
+    public BasicHeaderParser getHeaderParser() {
+        return new BasicHeaderParser();
     }
 
     public void setBody(String input) {

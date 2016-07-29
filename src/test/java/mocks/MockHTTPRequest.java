@@ -1,7 +1,7 @@
 package mocks;
 
 import request.Request;
-import httprequest.HeaderParser;
+import httprequest.BasicHeaderParser;
 
 import java.util.HashMap;
 
@@ -76,7 +76,7 @@ public class MockHTTPRequest implements Request {
     }
 
     @Override
-    public HeaderParser getHeaderParser() {
+    public BasicHeaderParser getHeaderParser() {
         return null;
     }
 }

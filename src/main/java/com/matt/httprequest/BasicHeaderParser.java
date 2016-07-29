@@ -1,11 +1,11 @@
 package httprequest;
 
-import request.AbstractHeaderParser;
+import request.HeaderParser;
 
 /**
  * Created by matthewhiggins on 7/13/16.
  */
-public class HeaderParser extends AbstractHeaderParser {
+public class BasicHeaderParser implements HeaderParser {
     public int[] parseRangeHeader(String rangeHeaderValue, byte[] resourceContents) {
         String[] startEnd = splitUpRangeHeader(rangeHeaderValue);
         return calculateStartAndEndBytes(startEnd, resourceContents);
