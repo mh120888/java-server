@@ -20,7 +20,7 @@ public class ConnectionHandlerTest {
     @Test
     public void readInInputTrimsEachLineAndEndsItWithANewlineCharacter() throws Exception {
         BufferedReader in = new BufferedReader(new StringReader("Some string with whitespace at the end    "));
-        String result = ConnectionHandler.readInFirstLineAndHeaders(in);
+        String result = ConnectionHandler.readInHeaders(in);
 
         Assert.assertEquals("Some string with whitespace at the end\n", result);
     }
@@ -28,7 +28,7 @@ public class ConnectionHandlerTest {
     @Test
     public void readInInputWorksProperlyForMultiLineInput() throws Exception {
         BufferedReader in = new BufferedReader(new StringReader("Line one\nLine two   "));
-        String result = ConnectionHandler.readInFirstLineAndHeaders(in);
+        String result = ConnectionHandler.readInHeaders(in);
 
         Assert.assertEquals("Line one\nLine two\n", result);
     }
@@ -44,7 +44,7 @@ public class ConnectionHandlerTest {
     }
 
     @Test
-    public void readInBodyReadsTheSpecifiedNumberOfOctets() throws Exception {
+    public void readInBodyReadsTheSpecifiedNumberOfBytes() throws Exception {
         BufferedReader reader = new BufferedReader(new StringReader("I am 18 bytes long"));
         Assert.assertEquals("I am 18 by", ConnectionHandler.readInBody(reader, 10));
     }

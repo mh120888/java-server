@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import request.Request;
+import request.request;
 import response.Response;
 import httprequest.HTTPRequest;
 import httpresponse.HTTPResponse;
@@ -58,7 +58,7 @@ public class PostableActionTest {
 
     @Test
     public void POSTRequestWithDataChangesTheValueOfStaticVarData() {
-        Request request = new HTTPRequest("POST /form HTTP/1.1");
+        request request = new HTTPRequest("POST /form HTTP/1.1");
         request.setBody("random stuff here");
 
         Response response = action.getResponse(request, new HTTPResponse());

@@ -63,6 +63,9 @@ public class MockHTTPRequest implements Request {
 
     }
 
+    @Override
+    public void setHeaders(String headers) {  }
+
     public boolean containsHeader(String header) {
         return true;
     }

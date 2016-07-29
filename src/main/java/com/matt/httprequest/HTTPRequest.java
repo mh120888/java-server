@@ -25,7 +25,6 @@ public class HTTPRequest implements Request {
         pathWithParams = splitIRL[1];
         version = splitIRL[2];
 
-        setHeaders(requestSeparatedByNewline);
         setParams(pathWithParams.split("\\?"));
     };
 
@@ -81,15 +80,13 @@ public class HTTPRequest implements Request {
         return body;
     }
 
-    private void setHeaders(String[] requestSeparatedByNewline) {
-        if (requestSeparatedByNewline.length > 1) {
-            String[] justTheHeaders = Arrays.copyOfRange(requestSeparatedByNewline, 1, requestSeparatedByNewline.length);
-            for (String headerPair : justTheHeaders) {
-                String[] separatePair = headerPair.split(":");
-                String headerName = separatePair[0];
-                String headerValue = String.join(":", Arrays.copyOfRange(separatePair, 1, separatePair.length)).trim();
-                headers.put(headerName, headerValue);
-            }
+    public void setHeaders(String headerInput) {
+        String[] justTheHeaders = headerInput.split("\n");
+        for (String headerPair : justTheHeaders) {
+            String[] separatePair = headerPair.split(":");
+            String headerName = separatePair[0];
+            String headerValue = String.join(":", Arrays.copyOfRange(separatePair, 1, separatePair.length)).trim();
+            headers.put(headerName, headerValue);
         }
     }
 

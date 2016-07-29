@@ -9,7 +9,7 @@ import org.junit.Test;
 public class HTTPRequestTest {
     @Test
     public void getMethodReturnsTheRequestMethodWhenItIsGET() {
-        HTTPRequest request = new HTTPRequest("GET / HTTP/1.1\n");
+        HTTPRequest request = new HTTPRequest("GET / HTTP/1.1");
 
         Assert.assertEquals("GET", request.getMethod());
     }
@@ -37,14 +37,16 @@ public class HTTPRequestTest {
 
     @Test
     public void getHeaderRetrievesTheValueAssociatedWithThatHeaderIfItExists() {
-        HTTPRequest request = new HTTPRequest("GET /somerandompath HTTP/1.1\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==\n");
+        HTTPRequest request = new HTTPRequest("GET /somerandompath HTTP/1.1");
+        request.setHeaders("Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
 
         Assert.assertEquals("Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==", request.getHeader("Authorization"));
     }
 
     @Test
     public void headerExistReturnsTrueForAHeaderThatExists() {
-        HTTPRequest request = new HTTPRequest("GET /somerandompath HTTP/1.1\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==\n");
+        HTTPRequest request = new HTTPRequest("GET /somerandompath HTTP/1.1");
+        request.setHeaders("Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
 
         Assert.assertTrue(request.containsHeader("Authorization"));
     }

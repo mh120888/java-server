@@ -11,6 +11,7 @@ public interface Request {
     String getVersion();
     String getInitialRequestLine();
     String getHeader(String headerName);
+    void setHeaders(String headers);
     boolean containsHeader(String headerName);
     HashMap<String, String> getAllParams();
     String getParam(String paramName);

@@ -28,7 +28,10 @@ public class ConnectionHandler implements Runnable {
     public void run() {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            HTTPRequest request = new HTTPRequest(readInFirstLineAndHeaders(reader));
+            HTTPRequest request = new HTTPRequest(readInFirstLine(reader));
+            if (reader.ready()) {
+                request.setHeaders(readInHeaders(reader));
+            }
             if (reader.ready() && request.containsHeader("Content-Length")) {
                 request.setBody(readInBody(reader, Integer.parseInt(request.getHeader("Content-Length"))));
             }
@@ -39,7 +42,17 @@ public class ConnectionHandler implements Runnable {
         }
     }
 
-    public static String readInFirstLineAndHeaders(BufferedReader br) {
+    public static String readInFirstLine(BufferedReader br) {
+        String input = "";
+        try {
+            input = br.readLine();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        return input;
+    }
+
+    public static String readInHeaders(BufferedReader br) {
         String input = "";
         try {
             String currentLine = br.readLine();

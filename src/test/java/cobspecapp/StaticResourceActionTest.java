@@ -116,7 +116,9 @@ public class StaticResourceActionTest {
 
     @Test
     public void getRequestWithRangeHeadersReturnsA206Response() {
-        Response response = ResponseGenerator.generateResponse("GET /partial_content.txt HTTP/1.1\nRange: bytes=0-10", action);
+        Request request = new HTTPRequest("GET /partial_content.txt HTTP/1.1");
+        request.setHeaders("Range: bytes=0-10");
+        Response response = action.getResponse(request, new HTTPResponse());
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 206 Partial Content"));
     }
@@ -126,8 +128,10 @@ public class StaticResourceActionTest {
         String path = publicDirectory + "/partial_content.txt";
         byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
         byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 0, 5);
+        Request request = new HTTPRequest("GET /partial_content.txt HTTP/1.1");
+        request.setHeaders("Range: bytes=0-4");
 
-        Response response = ResponseGenerator.generateResponse("GET /partial_content.txt HTTP/1.1\nRange: bytes=0-4", action);
+        Response response = action.getResponse(request, new HTTPResponse());
 
         assertTrue(Arrays.equals(requestedFileContents, response.getBody()));
     }
@@ -138,7 +142,9 @@ public class StaticResourceActionTest {
         byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
         byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 71, fullFileContents.length);
 
-        Response response = ResponseGenerator.generateResponse("GET /partial_content.txt HTTP/1.1\nRange: bytes=-6", action);
+        Request request = new HTTPRequest("GET /partial_content.txt HTTP/1.1");
+        request.setHeaders("Range: bytes=-6");
+        Response response = action.getResponse(request, new HTTPResponse());
 
         assertTrue(Arrays.equals(requestedFileContents, response.getBody()));
     }
@@ -150,7 +156,9 @@ public class StaticResourceActionTest {
         byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
         byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 4, fullFileContents.length);
 
-        Response response = ResponseGenerator.generateResponse("GET /partial_content.txt HTTP/1.1\nRange: bytes=4-", action);
+        Request request = new HTTPRequest("GET /partial_content.txt HTTP/1.1");
+        request.setHeaders("Range: bytes=4-");
+        Response response = action.getResponse(request, new HTTPResponse());
 
         assertTrue(Arrays.equals(response.getBody(), requestedFileContents));
     }
@@ -174,9 +182,8 @@ public class StaticResourceActionTest {
         String path = publicDirectory + "/does-not-matter.txt";
         Request request = new HTTPRequest("PATCH /does-not-matter.txt HTTP/1.1");
         request.setBody("some random content");
-        Response response = new HTTPResponse();
 
-        action.getResponse(request, response);
+        action.getResponse(request, new HTTPResponse());
 
         String fileContentsAfterPatchRequest = new String(action.fileIO.getAllBytesFromFile(path));
         Assert.assertEquals("default content", fileContentsAfterPatchRequest);
@@ -186,11 +193,11 @@ public class StaticResourceActionTest {
     public void modifyResourceWillOverwriteContentsOfSpecifiedResource() throws IOException {
         StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
         String path = publicDirectory + "/does-not-matter.txt";
-        Request request = new HTTPRequest("PATCH /does-not-matter.txt HTTP/1.1\nIf-Match: somethingGoesHere");
+        Request request = new HTTPRequest("PATCH /does-not-matter.txt HTTP/1.1");
+        request.setHeaders("If-Match: somethingGoesHere");
         request.setBody("some random content");
-        Response response = new HTTPResponse();
 
-        action.getResponse(request, response);
+        Response response = action.getResponse(request, new HTTPResponse());
 
         String fileContentsAfterPatchRequest = new String(action.fileIO.getAllBytesFromFile(path));
         Assert.assertEquals("some random content", fileContentsAfterPatchRequest);
