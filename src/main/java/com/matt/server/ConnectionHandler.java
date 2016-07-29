@@ -36,62 +36,42 @@ public class ConnectionHandler implements Runnable {
         }
     }
 
-     static HTTPRequest buildHttpRequest(BufferedReader reader) {
+     static HTTPRequest buildHttpRequest(BufferedReader reader) throws IOException {
          HTTPRequest request = new HTTPRequest(readInFirstLine(reader));
-         try {
-             if (reader.ready()) {
-                 request.setHeaders(readInHeaders(reader));
-             }
-             if (reader.ready() && request.containsHeader("Content-Length")) {
-                 request.setBody(readInBody(reader, Integer.parseInt(request.getHeader("Content-Length"))));
-             }
-         } catch (IOException e) {
-             System.err.println(e.getMessage());
+         if (reader.ready()) {
+             request.setHeaders(readInHeaders(reader));
+         }
+         if (reader.ready() && request.containsHeader("Content-Length")) {
+             request.setBody(readInBody(reader, Integer.parseInt(request.getHeader("Content-Length"))));
          }
          return request;
      }
 
-    public static String readInFirstLine(BufferedReader br) {
+    public static String readInFirstLine(BufferedReader br) throws IOException {
         String input = "";
-        try {
-            input = br.readLine();
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
+        input = br.readLine();
         return input.trim();
     }
 
-    public static String readInHeaders(BufferedReader br) {
+    public static String readInHeaders(BufferedReader br) throws IOException {
         String input = "";
-        try {
-            String currentLine = br.readLine();
-            while (currentLine != null && !currentLine.trim().isEmpty()) {
-                input += currentLine.trim() + "\n";
-                currentLine = br.readLine();
-            }
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
+        String currentLine = br.readLine();
+        while (currentLine != null && !currentLine.trim().isEmpty()) {
+            input += currentLine.trim() + "\n";
+            currentLine = br.readLine();
         }
         return input;
     }
 
-    static String readInBody(BufferedReader reader, int contentLength) {
+    static String readInBody(BufferedReader reader, int contentLength) throws IOException {
         char[] bodyInChars = new char[contentLength];
-        try {
-            reader.read(bodyInChars);
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
+        reader.read(bodyInChars);
         return new String(bodyInChars);
     }
 
-     static void generateOutput(Request request, PrintStream out, Application app) {
+     static void generateOutput(Request request, PrintStream out, Application app) throws IOException {
         Response response = app.getResponse(request, new HTTPResponse());
-        try {
-            out.write(response.getAllButBody().getBytes());
-            out.write(response.getBody());
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
+        out.write(response.getAllButBody().getBytes());
+        out.write(response.getBody());
     }
 }

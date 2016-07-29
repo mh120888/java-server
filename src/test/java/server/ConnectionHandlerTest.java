@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.StringReader;
 
 
@@ -18,7 +19,7 @@ import java.io.StringReader;
  */
 public class ConnectionHandlerTest {
     @Test
-    public void buildHttpRequestReturnsARequestObjectWithAProperRequestLine() {
+    public void buildHttpRequestReturnsARequestObjectWithAProperRequestLine() throws IOException {
         BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1\n"));
         Request request = ConnectionHandler.buildHttpRequest(in);
 
@@ -26,7 +27,7 @@ public class ConnectionHandlerTest {
     }
 
     @Test
-    public void buildHttpRequestReturnsARequestObjectWithAnEmptyBodyWhenNoneIsProvided() {
+    public void buildHttpRequestReturnsARequestObjectWithAnEmptyBodyWhenNoneIsProvided() throws IOException {
         BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1\n"));
         Request request = ConnectionHandler.buildHttpRequest(in);
 
@@ -34,7 +35,7 @@ public class ConnectionHandlerTest {
     }
 
     @Test
-    public void buildHttpRequestReturnsARequestObjectWithCorrectHeaders() {
+    public void buildHttpRequestReturnsARequestObjectWithCorrectHeaders() throws IOException {
         BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1\nTest header: 29393939\nAnother test: 40223840"));
         Request request = ConnectionHandler.buildHttpRequest(in);
 
@@ -43,7 +44,7 @@ public class ConnectionHandlerTest {
     }
 
     @Test
-    public void buildHttpRequestReturnsARequestObjectWithBody() {
+    public void buildHttpRequestReturnsARequestObjectWithBody() throws IOException {
         BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1\r\n" +
                                                                 "Content-Length: 12\n" +
                                                                 "\n" +
@@ -54,7 +55,7 @@ public class ConnectionHandlerTest {
     }
 
     @Test
-    public void readInFirstLineReturnsLineWithoutTrailingWhitespace() {
+    public void readInFirstLineReturnsLineWithoutTrailingWhitespace() throws IOException {
         BufferedReader in = new BufferedReader(new StringReader("Some string with whitespace at the end    "));
         String result = ConnectionHandler.readInFirstLine(in);
 
@@ -63,7 +64,7 @@ public class ConnectionHandlerTest {
     }
 
     @Test
-    public void readInFirstLineReturnsOnlyASingleLine() {
+    public void readInFirstLineReturnsOnlyASingleLine() throws IOException {
         BufferedReader in = new BufferedReader(new StringReader("Line one\nLine two"));
         String result = ConnectionHandler.readInFirstLine(in);
 
@@ -71,7 +72,7 @@ public class ConnectionHandlerTest {
     }
 
     @Test
-    public void readInFirstLineReturnEmptyStringIfGivenEmptyInput() {
+    public void readInFirstLineReturnEmptyStringIfGivenEmptyInput() throws IOException {
         BufferedReader in = new BufferedReader(new StringReader("  "));
         String result = ConnectionHandler.readInFirstLine(in);
 
