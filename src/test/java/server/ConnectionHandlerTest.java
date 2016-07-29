@@ -18,7 +18,32 @@ import java.io.StringReader;
  */
 public class ConnectionHandlerTest {
     @Test
-    public void readInInputTrimsEachLineAndEndsItWithANewlineCharacter() throws Exception {
+    public void readInFirstLineReturnsLineWithoutTrailingWhitespace() {
+        BufferedReader in = new BufferedReader(new StringReader("Some string with whitespace at the end    "));
+        String result = ConnectionHandler.readInFirstLine(in);
+
+        Assert.assertEquals("Some string with whitespace at the end", result);
+
+    }
+
+    @Test
+    public void readInFirstLineReturnsOnlyASingleLine() {
+        BufferedReader in = new BufferedReader(new StringReader("Line one\nLine two"));
+        String result = ConnectionHandler.readInFirstLine(in);
+
+        Assert.assertEquals("Line one", result);
+    }
+
+    @Test
+    public void readInFirstLineReturnEmptyStringIfGivenEmptyInput() {
+        BufferedReader in = new BufferedReader(new StringReader("  "));
+        String result = ConnectionHandler.readInFirstLine(in);
+
+        Assert.assertEquals("", result);
+    }
+
+    @Test
+    public void readInHeadersTrimsEachLineAndEndsItWithANewlineCharacter() throws Exception {
         BufferedReader in = new BufferedReader(new StringReader("Some string with whitespace at the end    "));
         String result = ConnectionHandler.readInHeaders(in);
 
@@ -26,7 +51,7 @@ public class ConnectionHandlerTest {
     }
 
     @Test
-    public void readInInputWorksProperlyForMultiLineInput() throws Exception {
+    public void readInHeadersWorksProperlyForMultiLineInput() throws Exception {
         BufferedReader in = new BufferedReader(new StringReader("Line one\nLine two   "));
         String result = ConnectionHandler.readInHeaders(in);
 

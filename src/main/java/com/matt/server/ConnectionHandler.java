@@ -49,7 +49,7 @@ public class ConnectionHandler implements Runnable {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
-        return input;
+        return input.trim();
     }
 
     public static String readInHeaders(BufferedReader br) {
