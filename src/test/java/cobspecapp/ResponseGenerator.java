@@ -11,7 +11,6 @@ import httpresponse.HTTPResponse;
 public class ResponseGenerator {
     static Response generateResponse(String requestLine, Action action) {
         Request request = new HTTPRequest(requestLine);
-        Response response = action.getResponse(request, new HTTPResponse());
-        return response;
+        return action.getResponse(request, new HTTPResponse());
     }
 }

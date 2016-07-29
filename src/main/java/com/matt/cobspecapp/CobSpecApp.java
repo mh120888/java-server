@@ -16,8 +16,7 @@ public class CobSpecApp extends Application {
 
     public Response getResponse(Request request, Response response) {
         Action action = Router.route(request, publicDirectory);
-        Response result = action.getResponse(request, response);
-        return result;
+        return action.getResponse(request, response);
     }
 }
 

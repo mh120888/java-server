@@ -39,8 +39,7 @@ public class PostableActionTest {
 
     @Test
     public void GETRequestsIncludeTheStaticVariableDataInBody() {
-        String fakeData = "some random data";
-        action.data = fakeData;
+        action.data = "some random data";
 
         Response response = ResponseGenerator.generateResponse("GET /form HTTP/1.1", action);
         Assert.assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));

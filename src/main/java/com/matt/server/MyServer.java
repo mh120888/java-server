@@ -16,7 +16,7 @@ public class MyServer {
     static String publicDirectory = "/Users/matthewhiggins/Desktop/cob_spec/public";
     static int myPort = 5000;
 
-    static ExecutorService executor = Executors.newFixedThreadPool(100);
+    private static ExecutorService executor = Executors.newFixedThreadPool(100);
 
     public static void main(String[] args) throws IOException {
         setOptions(args);

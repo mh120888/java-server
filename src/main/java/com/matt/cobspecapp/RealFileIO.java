@@ -27,8 +27,7 @@ public class RealFileIO implements FileIO {
         File myFile = new File(path);
         try {
             FileOutputStream fos = new FileOutputStream(myFile, false);
-            byte[] myBytes = newFileContents;
-            fos.write(myBytes);
+            fos.write(newFileContents);
             fos.close();
         } catch (Exception e) {
             System.err.println(e.getMessage());
