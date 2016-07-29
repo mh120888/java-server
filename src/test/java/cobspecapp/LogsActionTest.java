@@ -1,6 +1,7 @@
 package cobspecapp;
 
-import request.request;
+import httpresponse.HTTPResponse;
+import request.Request;
 import response.Response;
 import httprequest.HTTPRequest;
 import org.junit.Before;
@@ -35,21 +36,22 @@ public class LogsActionTest {
 
     @Test
     public void isAuthorizedReturnsTrueForCorrectCredentials() {
-        request request = new HTTPRequest("GET /logs HTTP/1.1\nAuthorization: Basic YWRtaW46aHVudGVyMg==");
+        Request request = new HTTPRequest("GET /logs HTTP/1.1");
+        request.setHeaders("Authorization: Basic YWRtaW46aHVudGVyMg==");
 
         assertTrue(action.isAuthorized(request));
     }
 
     @Test
     public void isAuthorizedReturnsFalseWithNoCredentials() {
-        request request = new HTTPRequest("GET /logs HTTP/1.1");
+        Request request = new HTTPRequest("GET /logs HTTP/1.1");
 
         assertFalse(action.isAuthorized(request));
     }
 
     @Test
     public void isAuthorizedReturnsFalseForIncorrectCredentials() {
-        request request = new HTTPRequest("GET /logs HTTP/1.1\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
+        Request request = new HTTPRequest("GET /logs HTTP/1.1\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
 
         assertFalse(action.isAuthorized(request));
     }
@@ -57,7 +59,9 @@ public class LogsActionTest {
     @Test
     public void requestToLogsWithCredentialsReturnsLogOfPreviousRequestsInBody() {
         Logger.addLog("GET / HTTP/1.1");
-        Response response = ResponseGenerator.generateResponse("GET /logs HTTP/1.1\nAuthorization: Basic YWRtaW46aHVudGVyMg==", action);
+        Request request = new HTTPRequest("GET /logs HTTP/1.1");
+        request.setHeaders("Authorization: Basic YWRtaW46aHVudGVyMg==");
+        Response response = action.getResponse(request, new HTTPResponse());
 
         assertTrue(response.getFormattedResponse().contains("GET / HTTP/1.1"));
     }
