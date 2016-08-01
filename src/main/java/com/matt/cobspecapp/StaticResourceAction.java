@@ -5,7 +5,6 @@ import response.Response;
 
 import java.util.Arrays;
 
-
 /**
  * Created by matthewhiggins on 7/11/16.
  */

@@ -7,6 +7,7 @@ import cobspecapp.FileIO;
  */
 public class MockFileIO implements FileIO {
     byte[] fileContents;
+    boolean isDirectory = false;
 
     public MockFileIO(String contents) {
         fileContents = contents.getBytes();
@@ -22,5 +23,9 @@ public class MockFileIO implements FileIO {
 
     public String[] getFilenames(String directory) { return null; }
 
-    public boolean isDirectory(String directory) { return true; }
+    public boolean isDirectory(String directory) { return isDirectory; }
+
+    public void responseToIsDirectoryWith(boolean value) {
+        isDirectory = value;
+    }
 }

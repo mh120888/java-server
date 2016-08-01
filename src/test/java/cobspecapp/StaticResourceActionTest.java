@@ -9,9 +9,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -69,95 +66,40 @@ public class StaticResourceActionTest {
     }
 
     @Test
-    public void isPathADirectoryReturnsTrueForADirectory() {
-        Response response = ResponseGenerator.generateResponse("GET", "/", action);
-
-        Assert.assertEquals(true, action.isPathADirectory());
-    }
-
-    @Test
-    public void isPathADirectoryReturnsFalseForAFile() {
-        Response response = ResponseGenerator.generateResponse("GET", "/file1", action);
-
-        Assert.assertEquals(false, action.isPathADirectory());
-    }
-
-    @Test
     public void getRequestForAnExistingFileReturnsTheContentsOfThatFile() throws IOException {
-        String path = publicDirectory + "/image.png";
-        byte[] imageContents = Files.readAllBytes(Paths.get(path));
+        MockFileIO fakeFileIO = new MockFileIO("Fake contents");
+        fakeFileIO.responseToIsDirectoryWith(false);
+        StaticResourceAction fakeAction = StaticResourceAction.getStaticResourceActionWithFileIO(publicDirectory, fakeFileIO);
+        MockHTTPRequest request = new MockHTTPRequest();
+        request.setMethod("GET");
+        request.setPathWithParams("/fake-image.png");
 
-        Response response = ResponseGenerator.generateResponse("GET", "/image.png", action);
+        Response response = fakeAction.getResponse(request, new HTTPResponse());
 
-        assertEquals(true, response.getFormattedResponse().contains(new String(imageContents)));
+        assertEquals(true, response.getFormattedResponse().contains("Fake contents"));
     }
 
     @Test
     public void getRequestWithRangeHeadersReturnsA206Response() {
+        MockFileIO fakeFileIO = new MockFileIO("Fake contents");
+        fakeFileIO.responseToIsDirectoryWith(false);
+        StaticResourceAction fakeAction = StaticResourceAction.getStaticResourceActionWithFileIO(publicDirectory, fakeFileIO);
         MockHTTPRequest request = new MockHTTPRequest();
         request.setMethod("GET");
-        request.setPathWithParams("/partial_content.txt");
-        request.addHeader("Range", "bytes=0-10");
-        Response response = action.getResponse(request, new HTTPResponse());
+        request.setPathWithParams("/fake-image.png");
+        request.addHeader("Range", "bytes=0-4");
+
+        Response response = fakeAction.getResponse(request, new HTTPResponse());
 
         assertTrue(response.getFormattedResponse().contains("206 Partial Content"));
     }
 
     @Test
-    public void getRequestWithRangeHeadersReturnsOnlyTheSpecifiedRangeOfTheRequestedResource() throws IOException {
-        String path = publicDirectory + "/partial_content.txt";
-        byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
-        byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 0, 5);
-        MockHTTPRequest request = new MockHTTPRequest();
-        request.setMethod("GET");
-        request.setPathWithParams("/partial_content.txt");
-        request.addHeader("Range", "bytes=0-4");
+    public void getCorrectPortionOfFileContentsReturnsTheCorrectPortionOfFile() {
+        byte[] fullContents = "All of the contents".getBytes();
+        int[] range = {0, 5};
 
-        Response response = action.getResponse(request, new HTTPResponse());
-
-        assertTrue(Arrays.equals(requestedFileContents, response.getBody()));
-    }
-
-    @Test
-    public void getRequestWithRangeHeadersReturnsCorrectPortionOfResourceWhenNoStartIsGiven() throws IOException {
-        String path = publicDirectory + "/partial_content.txt";
-        byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
-        byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 71, fullFileContents.length);
-
-        MockHTTPRequest request = new MockHTTPRequest();
-        request.setMethod("GET");
-        request.setPathWithParams("/partial_content.txt");
-        request.addHeader("Range", "bytes=-6");
-        Response response = action.getResponse(request, new HTTPResponse());
-
-        assertTrue(Arrays.equals(requestedFileContents, response.getBody()));
-    }
-
-    @Test
-    public void requestForPartialContentsReturnsResponseWithContentRangeHeader() {
-        MockHTTPRequest request = new MockHTTPRequest();
-        request.setMethod("GET");
-        request.setPathWithParams("/partial_content.txt");
-        request.addHeader("Range", "bytes=0-4");
-        Response response = action.getResponse(request, new HTTPResponse());
-
-        assertTrue(response.getStatusLineAndHeaders().contains("Content-Range: bytes 0-4/77"));
-    }
-
-
-    @Test
-    public void getRequestWithRangeHeadersReturnsCorrectPortionOfResourceWhenNoEndIsGiven() throws IOException {
-        String path = publicDirectory + "/partial_content.txt";
-        byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
-        byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 4, fullFileContents.length);
-        MockHTTPRequest request = new MockHTTPRequest();
-        request.setMethod("GET");
-        request.setPathWithParams("/partial_content.txt");
-        request.addHeader("Range", "bytes=4-");
-
-        Response response = action.getResponse(request, new HTTPResponse());
-
-        assertTrue(Arrays.equals(response.getBody(), requestedFileContents));
+        Assert.assertEquals("All of", new String(action.getCorrectPortionOfFileContents(fullContents, range)));
     }
 
     @Test
