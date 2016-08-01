@@ -33,4 +33,15 @@ public class RealFileIO implements FileIO {
             System.err.println(e.getMessage());
         }
     }
+
+    public String[] getFilenames(String directory) {
+        File file = new File(directory);
+        return file.list();
+    }
+
+    public boolean isDirectory(String filepath) {
+        File file = new File(filepath);
+        return file.isDirectory();
+    }
+
 }

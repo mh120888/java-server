@@ -19,4 +19,8 @@ public class MockFileIO implements FileIO {
     public void overwriteFile(String path, byte[] newFileContents) {
         fileContents = newFileContents;
     }
+
+    public String[] getFilenames(String directory) { return null; }
+
+    public boolean isDirectory(String directory) { return true; }
 }

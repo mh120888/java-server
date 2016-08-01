@@ -3,7 +3,6 @@ package cobspecapp;
 import request.Request;
 import response.Response;
 
-import java.io.File;
 import java.util.Arrays;
 
 
@@ -14,9 +13,6 @@ public class StaticResourceAction implements Action {
     private static String publicDirectory;
     private Request request;
     FileIO fileIO;
-    enum Filetype {
-        DIRECTORY, FILE
-    }
 
     public StaticResourceAction(String filepath) {
         publicDirectory = filepath;
@@ -95,7 +91,7 @@ public class StaticResourceAction implements Action {
     private byte[] getBody() {
         if (!request.getMethod().equals("GET")) {
             return new byte[0];
-        } else if (getFiletype() == Filetype.DIRECTORY) {
+        } else if (isPathADirectory()) {
             return getBodyForDirectory();
         } else {
             return getBodyDefault();
@@ -104,9 +100,8 @@ public class StaticResourceAction implements Action {
 
     byte[] getBodyForDirectory() {
         String body = "";
-        File file = new File(publicDirectory);
-        String[] fileNames = file.list();
-        for (String fileName : fileNames) {
+        String[] filenames = fileIO.getFilenames(publicDirectory);
+        for (String fileName : filenames) {
             body += ("<a href=\"/" + fileName + "\">" + fileName + "</a>\n");
         }
         return body.getBytes();
@@ -122,13 +117,8 @@ public class StaticResourceAction implements Action {
          return fileContents;
      }
 
-     Filetype getFiletype() {
-         return isPathADirectory() ? Filetype.DIRECTORY : Filetype.FILE;
-     }
-
      boolean isPathADirectory() {
          String filePath = publicDirectory + request.getPath();
-         File file = new File(filePath);
-         return file.isDirectory();
+         return fileIO.isDirectory(filePath);
      }
 }

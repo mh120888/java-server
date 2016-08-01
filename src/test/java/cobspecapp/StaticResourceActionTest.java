@@ -83,27 +83,6 @@ public class StaticResourceActionTest {
     }
 
     @Test
-    public void getFiletypeReturnsDIRECTORYForADirectory() {
-        Response response = ResponseGenerator.generateResponse("GET", "/", action);
-
-        Assert.assertEquals(StaticResourceAction.Filetype.DIRECTORY, action.getFiletype());
-    }
-
-    @Test
-    public void getFiletypeReturnsFILEForAnImage() {
-        Response response = ResponseGenerator.generateResponse("GET", "/image.png", action);
-
-        Assert.assertEquals(StaticResourceAction.Filetype.FILE, action.getFiletype());
-    }
-
-    @Test
-    public void getFiletypeReturnsFILEForATextFile() {
-        Response response = ResponseGenerator.generateResponse("GET", "/text-file.txt", action);
-
-        Assert.assertEquals(StaticResourceAction.Filetype.FILE, action.getFiletype());
-    }
-
-    @Test
     public void getRequestForAnExistingFileReturnsTheContentsOfThatFile() throws IOException {
         String path = publicDirectory + "/image.png";
         byte[] imageContents = Files.readAllBytes(Paths.get(path));
@@ -163,7 +142,6 @@ public class StaticResourceActionTest {
         Response response = action.getResponse(request, new HTTPResponse());
 
         assertTrue(response.getStatusLineAndHeaders().contains("Content-Range: bytes 0-4/77"));
-//        assertEquals("a", response.getStatusLineAndHeaders());
     }
 
 
