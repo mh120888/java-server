@@ -1,9 +1,7 @@
 package cobspecapp;
 
 import mocks.MockHTTPRequest;
-import request.Request;
 import response.Response;
-import httprequest.HTTPRequest;
 import httpresponse.HTTPResponse;
 import mocks.MockFileIO;
 import org.junit.After;
@@ -154,6 +152,17 @@ public class StaticResourceActionTest {
         Response response = action.getResponse(request, new HTTPResponse());
 
         assertTrue(Arrays.equals(requestedFileContents, response.getBody()));
+    }
+
+    @Test
+    public void requestForPartialContentsReturnsResponseWithContentRangeHeader() {
+        MockHTTPRequest request = new MockHTTPRequest();
+        request.setMethod("GET");
+        request.setPathWithParams("/partial_content.txt");
+        request.addHeader("Range", "bytes=0-4");
+        Response response = action.getResponse(request, new HTTPResponse());
+
+        assertTrue(response.getStatusLineAndHeaders().contains("Content-Range: bytes 0-4/77"));
     }
 
 

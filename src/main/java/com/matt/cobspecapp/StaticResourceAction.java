@@ -11,7 +11,13 @@ import java.util.Arrays;
  * Created by matthewhiggins on 7/11/16.
  */
 public class StaticResourceAction implements Action {
-    public static String publicDirectory;
+    private static String publicDirectory;
+    private Request request;
+    private Response response;
+    FileIO fileIO;
+    enum Filetype {
+        DIRECTORY, IMAGE, OTHER
+    }
 
     public StaticResourceAction(String filepath) {
         publicDirectory = filepath;
@@ -23,33 +29,30 @@ public class StaticResourceAction implements Action {
         fileIO = fileInputOuput;
     }
 
-    FileIO fileIO;
-
-    public enum Filetype {
-        DIRECTORY, IMAGE, OTHER
-    }
-
     public Response getResponse(Request request, Response response) {
-        response.setHTTPVersion(request.getVersion());
-        response.setStatus(getResponseLine(request));
-        response.setBody(getBody(request));
+        this.request = request;
+        this.response = response;
 
-        modifyResource(request);
+        response.setHTTPVersion(request.getVersion());
+        response.setStatus(getResponseLine());
+        response.setBody(getBody());
+
+        modifyResource();
 
         return response;
     }
 
-    private void modifyResource(Request request) {
-        if (isValidPatch(request)) {
+    private void modifyResource() {
+        if (isValidPatch()) {
             fileIO.writeToFile(publicDirectory + request.getPath(), request.getBody().getBytes());
         }
     }
 
-    private boolean isValidPatch(Request request) {
+    private boolean isValidPatch() {
         return request.getMethod().equals("PATCH") && !request.getBody().isEmpty() && request.containsHeader("If-Match");
     }
 
-    private int getResponseLine(Request request) {
+    private int getResponseLine() {
         String method = request.getMethod();
 
         if (request.containsHeader("Range")) {
@@ -79,7 +82,7 @@ public class StaticResourceAction implements Action {
         return Arrays.asList(listOfMethods).contains(method);
     }
 
-    private byte[] getBody(Request request) {
+    private byte[] getBody() {
         String method = request.getMethod();
         byte[] body = new byte[0];
         if (!method.equals("GET")) {
@@ -91,7 +94,7 @@ public class StaticResourceAction implements Action {
                 body = getBodyForDirectory();
                 break;
             default:
-                body = getBodyDefault(request);
+                body = getBodyDefault();
                 break;
         }
         return body;
@@ -108,16 +111,17 @@ public class StaticResourceAction implements Action {
         return body.getBytes();
     }
 
-     byte[] getBodyDefault(Request request) {
+     byte[] getBodyDefault() {
         String filePath = publicDirectory + request.getPath();
-        return getCorrectPortionOfFileContents(fileIO.getAllBytesFromFile(filePath), request);
+        return getCorrectPortionOfFileContents(fileIO.getAllBytesFromFile(filePath));
     }
 
-     byte[] getCorrectPortionOfFileContents(byte[] fileContents, Request request) {
+     byte[] getCorrectPortionOfFileContents(byte[] fileContents) {
         byte[] result = fileContents;
         if (request.containsHeader("Range")) {
             int[] range = request.getHeaderParser().parseRangeHeader(request.getHeader("Range"), fileContents);
             result = Arrays.copyOfRange(fileContents, range[0], range[1] + 1);
+            response.addHeader("Content-Range", "bytes " + range[0] + "-" + range[1] + "/" + fileContents.length);
         }
         return result;
     }
