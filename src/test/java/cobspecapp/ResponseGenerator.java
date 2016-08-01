@@ -10,7 +10,8 @@ import httpresponse.HTTPResponse;
  */
 public class ResponseGenerator {
     static Response generateResponse(String requestLine, Action action) {
-        Request request = new HTTPRequest(requestLine);
+        Request request = new HTTPRequest();
+        request.setRequestLine(requestLine);
         return action.getResponse(request, new HTTPResponse());
     }
 }

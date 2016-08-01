@@ -26,7 +26,8 @@ public class RouterTest {
 
     @Test
     public void routeReturnsStaticResourceActionForAStaticResource() {
-        Request request = new HTTPRequest("GET / HTTP/1.1");
+        Request request = new HTTPRequest();
+        request.setRequestLine("GET / HTTP/1.1");
         Action action = Router.route(request, publicDirectory);
 
         assertTrue(action instanceof StaticResourceAction);
@@ -34,7 +35,8 @@ public class RouterTest {
 
     @Test
     public void routeReturnsCoffeeActionWhenAppropriate() {
-        Request request = new HTTPRequest("GET /coffee HTTP/1.1");
+        Request request = new HTTPRequest();
+        request.setRequestLine("GET /coffee HTTP/1.1");
         Action action = Router.route(request, publicDirectory);
 
         assertTrue(action instanceof CoffeeAction);
@@ -42,7 +44,8 @@ public class RouterTest {
 
     @Test
     public void routeReturnsNotFoundActionWhenPathIsNotRecognized() {
-        Request request = new HTTPRequest("GET /foobar HTTP/1.1");
+        Request request = new HTTPRequest();
+        request.setRequestLine("GET /foobar HTTP/1.1");
         Action action = Router.route(request, publicDirectory);
 
         assertTrue(action instanceof NotFoundAction);
@@ -50,7 +53,8 @@ public class RouterTest {
 
     @Test
     public void routeReturnsPostableActionWhenAppropriate() {
-        Request request = new HTTPRequest("POST /form HTTP/1.1");
+        Request request = new HTTPRequest();
+        request.setRequestLine("POST /form HTTP/1.1");
         Action action = Router.route(request, publicDirectory);
 
         assertTrue(action instanceof PostableAction);
@@ -58,7 +62,8 @@ public class RouterTest {
 
     @Test
     public void routeReturnsLogsActionWhenAppropriatePathIsRequested() {
-        Request request = new HTTPRequest("GET /logs HTTP/1.1");
+        Request request = new HTTPRequest();
+        request.setRequestLine("GET /logs HTTP/1.1");
         Action action = Router.route(request, publicDirectory);
 
         assertTrue(action instanceof LogsAction);
@@ -67,7 +72,8 @@ public class RouterTest {
     @Test
     public void allRequestsAreLoggedAfterBeingRoutes() {
         String requestLine = "GET /logs HTTP/1.1";
-        Request request = new HTTPRequest(requestLine);
+        Request request = new HTTPRequest();
+        request.setRequestLine(requestLine);
         Router.route(request, publicDirectory);
 
         Assert.assertEquals(true, Logger.getLog().contains(requestLine));
@@ -75,7 +81,8 @@ public class RouterTest {
 
     @Test
     public void requestToParametersReturnsParametersAction() {
-        Request request = new HTTPRequest("GET /parameters HTTP/1.1");
+        Request request = new HTTPRequest();
+        request.setRequestLine("GET /parameters HTTP/1.1");
         Action action = Router.route(request, publicDirectory);
 
         assertTrue(action instanceof ParametersAction);
@@ -83,7 +90,8 @@ public class RouterTest {
 
     @Test
     public void routeReturnsOptionsActionWhenAppropriate() {
-        Request request = new HTTPRequest("GET /method_options HTTP/1.1");
+        Request request = new HTTPRequest();
+        request.setRequestLine("GET /method_options HTTP/1.1");
         Action action = Router.route(request, publicDirectory);
 
         assertTrue(action instanceof OptionsAction);
@@ -91,7 +99,8 @@ public class RouterTest {
 
     @Test
     public void routeReturnsRedirectResourceHandlerWhenAppropriate() {
-        Request request = new HTTPRequest("GET /redirect HTTP/1.1");
+        Request request = new HTTPRequest();
+        request.setRequestLine("GET /redirect HTTP/1.1");
         Action action = Router.route(request, publicDirectory);
 
         assertTrue(action instanceof RedirectAction);

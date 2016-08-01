@@ -59,9 +59,10 @@ public class MockHTTPRequest implements Request {
     }
 
     @Override
-    public void setBody(String input) {
+    public void setBody(String input) { }
 
-    }
+    @Override
+    public void setRequestLine(String input) {  }
 
     @Override
     public void setHeaders(String headers) {  }

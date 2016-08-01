@@ -18,7 +18,9 @@ public class HTTPRequest implements Request {
     private HashMap<String, String> params = new HashMap<>();;
     private String body = "";
 
-    public HTTPRequest(String requestAsString) {
+    public HTTPRequest() {}
+
+    public void setRequestLine(String requestAsString) {
         String[] requestSeparatedByNewline = requestAsString.split("\n");
         String[] splitIRL = requestSeparatedByNewline[0].split(" ");
         method = splitIRL[0];
@@ -27,58 +29,6 @@ public class HTTPRequest implements Request {
 
         setParams(pathWithParams.split("\\?"));
     };
-
-    public String getMethod() {
-        return method;
-    };
-
-    public String getPath() {
-        return pathWithParams.split("\\?")[0];
-    };
-
-    public String getVersion() {
-        return version;
-    };
-
-    public String getHeader(String headerName) {
-        return headers.get(headerName);
-    }
-
-    public boolean containsHeader(String headerName) {
-        return headers.containsKey(headerName);
-    }
-
-    public HashMap<String, String> getAllParams() {
-        return params;
-    }
-
-    public boolean paramExists(String paramName) {
-        return params.containsKey(paramName);
-    };
-
-    public String getParam(String paramName) {
-        return params.get(paramName);
-    }
-
-    public String getBaseLocation() {
-        return "http://localhost:5000/";
-    }
-
-    public String getInitialRequestLine() {
-        return method + " " + pathWithParams + " " + version;
-    }
-
-    public BasicHeaderParser getHeaderParser() {
-        return new BasicHeaderParser();
-    }
-
-    public void setBody(String input) {
-        body = input;
-    }
-
-    public String getBody() {
-        return body;
-    }
 
     public void setHeaders(String headerInput) {
         String[] justTheHeaders = headerInput.split("\n");
@@ -102,6 +52,58 @@ public class HTTPRequest implements Request {
                 params.put(paramValuePair[0], value);
             }
         }
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public String getPath() {
+        return pathWithParams.split("\\?")[0];
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public String getHeader(String headerName) {
+        return headers.get(headerName);
+    }
+
+    public boolean containsHeader(String headerName) {
+        return headers.containsKey(headerName);
+    }
+
+    public HashMap<String, String> getAllParams() {
+        return params;
+    }
+
+    public boolean paramExists(String paramName) {
+        return params.containsKey(paramName);
+    }
+
+    public String getParam(String paramName) {
+        return params.get(paramName);
+    }
+
+    public String getBaseLocation() {
+        return "http://localhost:5000/";
+    }
+
+    public String getInitialRequestLine() {
+        return method + " " + pathWithParams + " " + version;
+    }
+
+    public BasicHeaderParser getHeaderParser() {
+        return new BasicHeaderParser();
+    }
+
+    public void setBody(String input) {
+        body = input;
+    }
+
+    public String getBody() {
+        return body;
     }
 
     private static Map<String, String> decoderPairs = new HashMap<>();

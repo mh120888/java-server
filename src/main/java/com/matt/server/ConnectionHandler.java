@@ -44,12 +44,13 @@ public class ConnectionHandler implements Runnable {
             generateOutput(request, new PrintStream(clientSocket.getOutputStream()));
             clientSocket.close();
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
      static HTTPRequest buildHttpRequest(BufferedReader reader) throws IOException {
-         HTTPRequest request = new HTTPRequest(readInFirstLine(reader));
+         HTTPRequest request = new HTTPRequest();
+         request.setRequestLine(readInFirstLine(reader));
          if (reader.ready()) {
              request.setHeaders(readInHeaders(reader));
          }
@@ -59,13 +60,13 @@ public class ConnectionHandler implements Runnable {
          return request;
      }
 
-    public static String readInFirstLine(BufferedReader br) throws IOException {
+     static String readInFirstLine(BufferedReader br) throws IOException {
         String input = "";
         input = br.readLine();
         return input.trim();
-    }
+     }
 
-    public static String readInHeaders(BufferedReader br) throws IOException {
+     static String readInHeaders(BufferedReader br) throws IOException {
         String input = "";
         String currentLine = br.readLine();
         while (currentLine != null && !currentLine.trim().isEmpty()) {
@@ -73,13 +74,13 @@ public class ConnectionHandler implements Runnable {
             currentLine = br.readLine();
         }
         return input;
-    }
+     }
 
-    static String readInBody(BufferedReader reader, int contentLength) throws IOException {
+     static String readInBody(BufferedReader reader, int contentLength) throws IOException {
         char[] bodyInChars = new char[contentLength];
         reader.read(bodyInChars);
         return new String(bodyInChars);
-    }
+     }
 
      void generateOutput(Request request, PrintStream out) throws IOException {
         Response response = application.getResponse(request, new HTTPResponse());

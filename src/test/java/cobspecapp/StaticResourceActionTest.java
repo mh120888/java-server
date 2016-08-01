@@ -116,7 +116,8 @@ public class StaticResourceActionTest {
 
     @Test
     public void getRequestWithRangeHeadersReturnsA206Response() {
-        Request request = new HTTPRequest("GET /partial_content.txt HTTP/1.1");
+        Request request = new HTTPRequest();
+        request.setRequestLine("GET /partial_content.txt HTTP/1.1");
         request.setHeaders("Range: bytes=0-10");
         Response response = action.getResponse(request, new HTTPResponse());
 
@@ -128,7 +129,8 @@ public class StaticResourceActionTest {
         String path = publicDirectory + "/partial_content.txt";
         byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
         byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 0, 5);
-        Request request = new HTTPRequest("GET /partial_content.txt HTTP/1.1");
+        Request request = new HTTPRequest();
+        request.setRequestLine("GET /partial_content.txt HTTP/1.1");
         request.setHeaders("Range: bytes=0-4");
 
         Response response = action.getResponse(request, new HTTPResponse());
@@ -142,7 +144,8 @@ public class StaticResourceActionTest {
         byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
         byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 71, fullFileContents.length);
 
-        Request request = new HTTPRequest("GET /partial_content.txt HTTP/1.1");
+        Request request = new HTTPRequest();
+        request.setRequestLine("GET /partial_content.txt HTTP/1.1");
         request.setHeaders("Range: bytes=-6");
         Response response = action.getResponse(request, new HTTPResponse());
 
@@ -156,7 +159,8 @@ public class StaticResourceActionTest {
         byte[] fullFileContents = Files.readAllBytes(Paths.get(path));
         byte[] requestedFileContents = Arrays.copyOfRange(fullFileContents, 4, fullFileContents.length);
 
-        Request request = new HTTPRequest("GET /partial_content.txt HTTP/1.1");
+        Request request = new HTTPRequest();
+        request.setRequestLine("GET /partial_content.txt HTTP/1.1");
         request.setHeaders("Range: bytes=4-");
         Response response = action.getResponse(request, new HTTPResponse());
 
@@ -167,7 +171,8 @@ public class StaticResourceActionTest {
     public void patchRequestWithContentReturnsA204() {
         StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
         String path = publicDirectory + "/does-not-matter.txt";
-        Request request = new HTTPRequest("PATCH /does-not-matter.txt HTTP/1.1");
+        Request request = new HTTPRequest();
+        request.setRequestLine("PATCH /does-not-matter.txt HTTP/1.1");
         request.setBody("some random content");
         Response response = new HTTPResponse();
 
@@ -180,7 +185,8 @@ public class StaticResourceActionTest {
     public void modifyResourceWillNotOverwriteContentsOfSpecifiedResourceWithoutIfMatchHeader() throws IOException {
         StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
         String path = publicDirectory + "/does-not-matter.txt";
-        Request request = new HTTPRequest("PATCH /does-not-matter.txt HTTP/1.1");
+        Request request = new HTTPRequest();
+        request.setRequestLine("PATCH /does-not-matter.txt HTTP/1.1");
         request.setBody("some random content");
 
         action.getResponse(request, new HTTPResponse());
@@ -193,7 +199,8 @@ public class StaticResourceActionTest {
     public void modifyResourceWillOverwriteContentsOfSpecifiedResource() throws IOException {
         StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
         String path = publicDirectory + "/does-not-matter.txt";
-        Request request = new HTTPRequest("PATCH /does-not-matter.txt HTTP/1.1");
+        Request request = new HTTPRequest();
+        request.setRequestLine("PATCH /does-not-matter.txt HTTP/1.1");
         request.setHeaders("If-Match: somethingGoesHere");
         request.setBody("some random content");
 

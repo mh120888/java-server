@@ -57,7 +57,8 @@ public class PostableActionTest {
 
     @Test
     public void POSTRequestWithDataChangesTheValueOfStaticVarData() {
-        Request request = new HTTPRequest("POST /form HTTP/1.1");
+        Request request = new HTTPRequest();
+        request.setRequestLine("POST /form HTTP/1.1");
         request.setBody("random stuff here");
 
         Response response = action.getResponse(request, new HTTPResponse());

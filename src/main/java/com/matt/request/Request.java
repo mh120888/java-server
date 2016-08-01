@@ -18,6 +18,7 @@ public interface Request {
     boolean paramExists(String paramName);
     String getBaseLocation();
     HeaderParser getHeaderParser();
+    void setRequestLine(String input);
     void setBody(String input);
     String getBody();
 }

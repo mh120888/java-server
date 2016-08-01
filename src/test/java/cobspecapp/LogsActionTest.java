@@ -36,7 +36,8 @@ public class LogsActionTest {
 
     @Test
     public void isAuthorizedReturnsTrueForCorrectCredentials() {
-        Request request = new HTTPRequest("GET /logs HTTP/1.1");
+        Request request = new HTTPRequest();
+        request.setRequestLine("GET /logs HTTP/1.1");
         request.setHeaders("Authorization: Basic YWRtaW46aHVudGVyMg==");
 
         assertTrue(action.isAuthorized(request));
@@ -44,14 +45,17 @@ public class LogsActionTest {
 
     @Test
     public void isAuthorizedReturnsFalseWithNoCredentials() {
-        Request request = new HTTPRequest("GET /logs HTTP/1.1");
+        Request request = new HTTPRequest();
+        request.setRequestLine("GET /logs HTTP/1.1");
 
         assertFalse(action.isAuthorized(request));
     }
 
     @Test
     public void isAuthorizedReturnsFalseForIncorrectCredentials() {
-        Request request = new HTTPRequest("GET /logs HTTP/1.1\nAuthorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
+        Request request = new HTTPRequest();
+        request.setRequestLine("GET /logs HTTP/1.1");
+        request.setHeaders("Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
 
         assertFalse(action.isAuthorized(request));
     }
@@ -59,7 +63,8 @@ public class LogsActionTest {
     @Test
     public void requestToLogsWithCredentialsReturnsLogOfPreviousRequestsInBody() {
         Logger.addLog("GET / HTTP/1.1");
-        Request request = new HTTPRequest("GET /logs HTTP/1.1");
+        Request request = new HTTPRequest();
+        request.setRequestLine("GET /logs HTTP/1.1");
         request.setHeaders("Authorization: Basic YWRtaW46aHVudGVyMg==");
         Response response = action.getResponse(request, new HTTPResponse());
 
