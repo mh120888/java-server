@@ -12,7 +12,7 @@ public class MockHTTPRequest implements Request {
 
     private String method;
     private String pathWithParams;
-    private String version;
+    private String version = "HTTP/1.1";
     private HashMap<String, String> headers = new HashMap<>();
     private HashMap<String, String> params = new HashMap<>();
     private String body = "";

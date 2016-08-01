@@ -5,5 +5,5 @@ package cobspecapp;
  */
 public interface FileIO {
     byte[] getAllBytesFromFile(String path);
-    void writeToFile(String path, byte[] newFileContents);
+    void overwriteFile(String path, byte[] newFileContents);
 }

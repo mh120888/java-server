@@ -13,10 +13,9 @@ import java.util.Arrays;
 public class StaticResourceAction implements Action {
     private static String publicDirectory;
     private Request request;
-    private Response response;
     FileIO fileIO;
     enum Filetype {
-        DIRECTORY, IMAGE, OTHER
+        DIRECTORY, FILE
     }
 
     public StaticResourceAction(String filepath) {
@@ -24,46 +23,57 @@ public class StaticResourceAction implements Action {
         fileIO = new RealFileIO();
     }
 
-    public StaticResourceAction(String filepath, FileIO fileInputOuput) {
+    private StaticResourceAction(String filepath, FileIO fileInputOutput) {
         publicDirectory = filepath;
-        fileIO = fileInputOuput;
+        fileIO = fileInputOutput;
+    }
+
+    public static StaticResourceAction getStaticResourceActionWithFileIO(String filepath, FileIO fileInputOutput) {
+        return new StaticResourceAction(filepath, fileInputOutput);
     }
 
     public Response getResponse(Request request, Response response) {
         this.request = request;
-        this.response = response;
 
         response.setHTTPVersion(request.getVersion());
-        response.setStatus(getResponseLine());
-        response.setBody(getBody());
 
-        modifyResource();
+        if (isPartialContentRequest()) {
+            response.setStatus(206);
+            setBodyAndHeadersForPartialContentRequest(response);
+        } else if (isValidPatchRequest()) {
+            response.setStatus(204);
+            overwriteFile();
+        } else if (isAnyOtherValidRequest()) {
+            response.setStatus(200);
+            response.setBody(getBody());
+        } else {
+            response.setStatus(405);
+        }
 
         return response;
     }
 
-    private void modifyResource() {
-        if (isValidPatch()) {
-            fileIO.writeToFile(publicDirectory + request.getPath(), request.getBody().getBytes());
-        }
+    private void setBodyAndHeadersForPartialContentRequest(Response response) {
+        byte[] fullBodyContents = getBody();
+        int[] range = request.getHeaderParser().parseRangeHeader(request.getHeader("Range"), fullBodyContents);
+        response.addHeader("Content-Range", "bytes " + range[0] + "-" + range[1] + "/" + fullBodyContents.length);
+        response.setBody(getCorrectPortionOfFileContents(fullBodyContents, range));
     }
 
-    private boolean isValidPatch() {
+    private boolean isPartialContentRequest() {
+        return request.containsHeader("Range");
+    }
+
+    private boolean isValidPatchRequest() {
         return request.getMethod().equals("PATCH") && !request.getBody().isEmpty() && request.containsHeader("If-Match");
     }
 
-    private int getResponseLine() {
-        String method = request.getMethod();
+    private boolean isAnyOtherValidRequest() {
+        return isAcceptableMethodWithoutParams(request.getMethod()) || isAcceptableMethodWithParams(request.getMethod());
+    }
 
-        if (request.containsHeader("Range")) {
-            return 206;
-        } else if (!request.getBody().isEmpty() && method.equals("PATCH")) {
-            return 204;
-        } else if (isAcceptableMethodWithoutParams(method)) {
-            return 200;
-        } else {
-            return 405;
-        }
+    private void overwriteFile() {
+        fileIO.overwriteFile(publicDirectory + request.getPath(), request.getBody().getBytes());
     }
 
     private boolean isAcceptableMethodWithoutParams(String method) {
@@ -73,9 +83,9 @@ public class StaticResourceAction implements Action {
     }
 
     private boolean isAcceptableMethodWithParams(String method) {
-        String[] acceptableMethodsWithParams = {"POST", "PUT"};
+        String[] acceptableMethodsWithParams = {"POST", "PUT", "DELETE"};
 
-        return isAcceptableMethod(method, acceptableMethodsWithParams);
+        return isAcceptableMethod(method, acceptableMethodsWithParams) && !request.getBody().isEmpty();
     }
 
     private boolean isAcceptableMethod(String method, String[] listOfMethods) {
@@ -83,28 +93,19 @@ public class StaticResourceAction implements Action {
     }
 
     private byte[] getBody() {
-        String method = request.getMethod();
-        byte[] body = new byte[0];
-        if (!method.equals("GET")) {
-            return body;
+        if (!request.getMethod().equals("GET")) {
+            return new byte[0];
+        } else if (getFiletype() == Filetype.DIRECTORY) {
+            return getBodyForDirectory();
+        } else {
+            return getBodyDefault();
         }
-        String path = request.getPath();
-        switch (getFiletype(path)) {
-            case DIRECTORY:
-                body = getBodyForDirectory();
-                break;
-            default:
-                body = getBodyDefault();
-                break;
-        }
-        return body;
     }
 
     byte[] getBodyForDirectory() {
         String body = "";
         File file = new File(publicDirectory);
         String[] fileNames = file.list();
-
         for (String fileName : fileNames) {
             body += ("<a href=\"/" + fileName + "\">" + fileName + "</a>\n");
         }
@@ -112,36 +113,22 @@ public class StaticResourceAction implements Action {
     }
 
      byte[] getBodyDefault() {
-        String filePath = publicDirectory + request.getPath();
-        return getCorrectPortionOfFileContents(fileIO.getAllBytesFromFile(filePath));
-    }
+         String filePath = publicDirectory + request.getPath();
+         return fileIO.getAllBytesFromFile(filePath);
+     }
 
-     byte[] getCorrectPortionOfFileContents(byte[] fileContents) {
-        byte[] result = fileContents;
-        if (request.containsHeader("Range")) {
-            int[] range = request.getHeaderParser().parseRangeHeader(request.getHeader("Range"), fileContents);
-            result = Arrays.copyOfRange(fileContents, range[0], range[1] + 1);
-            response.addHeader("Content-Range", "bytes " + range[0] + "-" + range[1] + "/" + fileContents.length);
-        }
-        return result;
-    }
+     byte[] getCorrectPortionOfFileContents(byte[] fileContents, int[] range) {
+         fileContents = Arrays.copyOfRange(fileContents, range[0], range[1] + 1);
+         return fileContents;
+     }
 
-    Filetype getFiletype(String path) {
-        String[] splitUpPath = path.split("\\.");
-        String[] imageExtensions = {"png", "jpeg", "gif"};
+     Filetype getFiletype() {
+         return isPathADirectory() ? Filetype.DIRECTORY : Filetype.FILE;
+     }
 
-        if (isPathADirectory(path)) {
-            return Filetype.DIRECTORY;
-        } else if (Arrays.asList(imageExtensions).contains(splitUpPath[splitUpPath.length - 1])) {
-            return Filetype.IMAGE;
-        } else {
-            return Filetype.OTHER;
-        }
-    }
-
-    boolean isPathADirectory(String path) {
-        String filePath = publicDirectory + path;
-        File file = new File(filePath);
-        return file.isDirectory();
-    }
+     boolean isPathADirectory() {
+         String filePath = publicDirectory + request.getPath();
+         File file = new File(filePath);
+         return file.isDirectory();
+     }
 }

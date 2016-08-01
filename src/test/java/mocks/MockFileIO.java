@@ -16,7 +16,7 @@ public class MockFileIO implements FileIO {
         return fileContents;
     }
 
-    public void writeToFile(String path, byte[] newFileContents) {
+    public void overwriteFile(String path, byte[] newFileContents) {
         fileContents = newFileContents;
     }
 }

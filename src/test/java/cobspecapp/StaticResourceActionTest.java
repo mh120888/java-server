@@ -70,37 +70,37 @@ public class StaticResourceActionTest {
 
     @Test
     public void isPathADirectoryReturnsTrueForADirectory() {
-        String path = "/";
+        Response response = ResponseGenerator.generateResponse("GET", "/", action);
 
-        Assert.assertEquals(true, action.isPathADirectory(path));
+        Assert.assertEquals(true, action.isPathADirectory());
     }
 
     @Test
     public void isPathADirectoryReturnsFalseForAFile() {
-        String path = "/file1";
+        Response response = ResponseGenerator.generateResponse("GET", "/file1", action);
 
-        Assert.assertEquals(false, action.isPathADirectory(path));
+        Assert.assertEquals(false, action.isPathADirectory());
     }
 
     @Test
     public void getFiletypeReturnsDIRECTORYForADirectory() {
-        String path = "/";
+        Response response = ResponseGenerator.generateResponse("GET", "/", action);
 
-        Assert.assertEquals(StaticResourceAction.Filetype.DIRECTORY, action.getFiletype(path));
+        Assert.assertEquals(StaticResourceAction.Filetype.DIRECTORY, action.getFiletype());
     }
 
     @Test
-    public void getFiletypeReturnsIMAGEForAnImage() {
-        String path = "/image.png";
+    public void getFiletypeReturnsFILEForAnImage() {
+        Response response = ResponseGenerator.generateResponse("GET", "/image.png", action);
 
-        Assert.assertEquals(StaticResourceAction.Filetype.IMAGE, action.getFiletype(path));
+        Assert.assertEquals(StaticResourceAction.Filetype.FILE, action.getFiletype());
     }
 
     @Test
-    public void getFiletypeReturnsOTHERForATextFile() {
-        String path = "/text-file.txt";
+    public void getFiletypeReturnsFILEForATextFile() {
+        Response response = ResponseGenerator.generateResponse("GET", "/text-file.txt", action);
 
-        Assert.assertEquals(StaticResourceAction.Filetype.OTHER, action.getFiletype(path));
+        Assert.assertEquals(StaticResourceAction.Filetype.FILE, action.getFiletype());
     }
 
     @Test
@@ -163,6 +163,7 @@ public class StaticResourceActionTest {
         Response response = action.getResponse(request, new HTTPResponse());
 
         assertTrue(response.getStatusLineAndHeaders().contains("Content-Range: bytes 0-4/77"));
+//        assertEquals("a", response.getStatusLineAndHeaders());
     }
 
 
@@ -183,10 +184,11 @@ public class StaticResourceActionTest {
 
     @Test
     public void patchRequestWithContentReturnsA204() {
-        StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
+        StaticResourceAction action = StaticResourceAction.getStaticResourceActionWithFileIO(publicDirectory, new MockFileIO("default content"));
         MockHTTPRequest request = new MockHTTPRequest();
         request.setMethod("PATCH");
         request.setPathWithParams("/partial_content.txt");
+        request.addHeader("If-Match", "somethingGoesHere");
         request.setBody("some random content");
         Response response = new HTTPResponse();
 
@@ -197,7 +199,7 @@ public class StaticResourceActionTest {
 
     @Test
     public void modifyResourceWillNotOverwriteContentsOfSpecifiedResourceWithoutIfMatchHeader() throws IOException {
-        StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
+        StaticResourceAction action = StaticResourceAction.getStaticResourceActionWithFileIO(publicDirectory, new MockFileIO("default content"));
         String path = publicDirectory + "/does-not-matter.txt";
         MockHTTPRequest request = new MockHTTPRequest();
         request.setMethod("PATCH");
@@ -212,13 +214,12 @@ public class StaticResourceActionTest {
 
     @Test
     public void modifyResourceWillOverwriteContentsOfSpecifiedResource() throws IOException {
-        StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
+        StaticResourceAction action = StaticResourceAction.getStaticResourceActionWithFileIO(publicDirectory, new MockFileIO("default content"));
         String path = publicDirectory + "/does-not-matter.txt";
         MockHTTPRequest request = new MockHTTPRequest();
         request.setMethod("PATCH");
         request.setPathWithParams("/does-not-matter.txt");
         request.setBody("some random content");
-
         request.addHeader("If-Match", "somethingGoesHere");
 
         action.getResponse(request, new HTTPResponse());

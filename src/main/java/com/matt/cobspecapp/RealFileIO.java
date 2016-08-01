@@ -23,7 +23,7 @@ public class RealFileIO implements FileIO {
         return result;
     }
 
-    public void writeToFile(String path, byte[] newFileContents) {
+    public void overwriteFile(String path, byte[] newFileContents) {
         File myFile = new File(path);
         try {
             FileOutputStream fos = new FileOutputStream(myFile, false);
