@@ -28,7 +28,7 @@ public class MyServer {
         try {
             while (true) {
                 Socket socket = server.accept();
-                Runnable connectionHandler = new ConnectionHandler(socket, app);
+                Runnable connectionHandler = ConnectionHandler.getNewConnectionHandler(socket, app);
                 executor.execute(connectionHandler);
             }
         } catch (IOException e) {

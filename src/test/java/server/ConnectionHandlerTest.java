@@ -12,6 +12,8 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 
 /**
@@ -100,7 +102,7 @@ public class ConnectionHandlerTest {
         Request request = new MockHTTPRequest();
         MockPrintStream out = new MockPrintStream(new MockOutputStream());
         Application app = new MockApplication("Random response");
-        ConnectionHandler.generateOutput(request, out, app);
+        ConnectionHandler.getNewTestConnectionHandler(app).generateOutput(request, out);
 
         Assert.assertTrue(out.lastMessage.contains("Random response"));
     }

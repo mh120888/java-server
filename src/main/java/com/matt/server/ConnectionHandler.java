@@ -20,16 +20,28 @@ public class ConnectionHandler implements Runnable {
     private Socket clientSocket;
     private Application application;
 
-    public ConnectionHandler(Socket socket, Application app) {
+    private ConnectionHandler(Application app) {
+        application = app;
+    }
+
+    private ConnectionHandler(Socket socket, Application app) {
         clientSocket = socket;
         application = app;
+    }
+
+    public static ConnectionHandler getNewConnectionHandler(Socket socket, Application app) {
+        return new ConnectionHandler(socket, app);
+    }
+
+    public static ConnectionHandler getNewTestConnectionHandler(Application app) {
+        return new ConnectionHandler(app);
     }
 
     public void run() {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             HTTPRequest request = buildHttpRequest(reader);
-            generateOutput(request, new PrintStream(clientSocket.getOutputStream()), application);
+            generateOutput(request, new PrintStream(clientSocket.getOutputStream()));
             clientSocket.close();
         } catch (IOException e) {
             System.err.println(e.getMessage());
@@ -69,8 +81,8 @@ public class ConnectionHandler implements Runnable {
         return new String(bodyInChars);
     }
 
-     static void generateOutput(Request request, PrintStream out, Application app) throws IOException {
-        Response response = app.getResponse(request, new HTTPResponse());
+     void generateOutput(Request request, PrintStream out) throws IOException {
+        Response response = application.getResponse(request, new HTTPResponse());
         out.write(response.getAllButBody().getBytes());
         out.write(response.getBody());
     }
