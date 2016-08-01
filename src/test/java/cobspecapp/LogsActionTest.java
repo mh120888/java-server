@@ -1,6 +1,7 @@
 package cobspecapp;
 
 import httpresponse.HTTPResponse;
+import mocks.MockHTTPRequest;
 import request.Request;
 import response.Response;
 import httprequest.HTTPRequest;
@@ -22,40 +23,43 @@ public class LogsActionTest {
 
     @Test
     public void getLogsWithoutCredentialsReturnsA401() {
-        Response response = ResponseGenerator.generateResponse("GET /logs HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET", "/logs", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 401"));
     }
 
     @Test
     public void requestToLogsWithoutProperCredentialsReturnsWWWAuthenticateHeader() {
-        Response response = ResponseGenerator.generateResponse("GET /logs HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET", "/logs", action);
 
         assertTrue(response.getFormattedResponse().contains("WWW-Authenticate: Basic realm=\"User Visible Realm\""));
     }
 
     @Test
     public void isAuthorizedReturnsTrueForCorrectCredentials() {
-        Request request = new HTTPRequest();
-        request.setRequestLine("GET /logs HTTP/1.1");
-        request.setHeaders("Authorization: Basic YWRtaW46aHVudGVyMg==");
+        MockHTTPRequest request = new MockHTTPRequest();
+        request.setMethod("GET");
+        request.setPathWithParams("/logs");
+        request.addHeader("Authorization", "Basic YWRtaW46aHVudGVyMg==");
 
         assertTrue(action.isAuthorized(request));
     }
 
     @Test
     public void isAuthorizedReturnsFalseWithNoCredentials() {
-        Request request = new HTTPRequest();
-        request.setRequestLine("GET /logs HTTP/1.1");
+        MockHTTPRequest request = new MockHTTPRequest();
+        request.setMethod("GET");
+        request.setPathWithParams("/logs");
 
         assertFalse(action.isAuthorized(request));
     }
 
     @Test
     public void isAuthorizedReturnsFalseForIncorrectCredentials() {
-        Request request = new HTTPRequest();
-        request.setRequestLine("GET /logs HTTP/1.1");
-        request.setHeaders("Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
+        MockHTTPRequest request = new MockHTTPRequest();
+        request.setMethod("GET");
+        request.setPathWithParams("/logs");
+        request.addHeader("Authorization", "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
 
         assertFalse(action.isAuthorized(request));
     }
@@ -63,9 +67,10 @@ public class LogsActionTest {
     @Test
     public void requestToLogsWithCredentialsReturnsLogOfPreviousRequestsInBody() {
         Logger.addLog("GET / HTTP/1.1");
-        Request request = new HTTPRequest();
-        request.setRequestLine("GET /logs HTTP/1.1");
-        request.setHeaders("Authorization: Basic YWRtaW46aHVudGVyMg==");
+        MockHTTPRequest request = new MockHTTPRequest();
+        request.setMethod("GET");
+        request.setPathWithParams("/logs");
+        request.addHeader("Authorization", "Basic YWRtaW46aHVudGVyMg==");
         Response response = action.getResponse(request, new HTTPResponse());
 
         assertTrue(response.getFormattedResponse().contains("GET / HTTP/1.1"));

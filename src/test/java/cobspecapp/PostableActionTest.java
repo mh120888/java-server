@@ -1,5 +1,6 @@
 package cobspecapp;
 
+import mocks.MockHTTPRequest;
 import request.Request;
 import response.Response;
 import httprequest.HTTPRequest;
@@ -25,14 +26,14 @@ public class PostableActionTest {
 
     @Test
     public void getResponseReturnsA200forPOST() {
-        Response response = ResponseGenerator.generateResponse("POST /form HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("POST", "/form", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200 OK"));
     }
 
     @Test
     public void getResponseReturnsA200ForPUT() {
-        Response response = ResponseGenerator.generateResponse("PUT /form HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("PUT", "/form", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200 OK"));
     }
@@ -41,7 +42,7 @@ public class PostableActionTest {
     public void GETRequestsIncludeTheStaticVariableDataInBody() {
         action.data = "some random data";
 
-        Response response = ResponseGenerator.generateResponse("GET /form HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET", "/form", action);
         Assert.assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
     }
     @Test
@@ -50,18 +51,19 @@ public class PostableActionTest {
         String fakeData = "some random data";
         endpoint.data = fakeData;
 
-        Response response = ResponseGenerator.generateResponse("POST /form HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("POST", "/form", action);
 
         Assert.assertFalse(response.getFormattedResponse().contains(fakeData));
     }
 
     @Test
     public void POSTRequestWithDataChangesTheValueOfStaticVarData() {
-        Request request = new HTTPRequest();
-        request.setRequestLine("POST /form HTTP/1.1");
+        MockHTTPRequest request = new MockHTTPRequest();
+        request.setMethod("POST");
+        request.setPathWithParams("/form");
         request.setBody("random stuff here");
 
-        Response response = action.getResponse(request, new HTTPResponse());
+        action.getResponse(request, new HTTPResponse());
 
         assertEquals("random stuff here", action.data);
     }

@@ -24,7 +24,7 @@ public class NotFoundActionTest {
     @Test
     public void returnsAStatusOf404() {
         NotFoundAction action = new NotFoundAction();
-        Response response = ResponseGenerator.generateResponse("GET /foobar HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET", "/foobar HTTP/1.1", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 404"));
     }

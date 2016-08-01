@@ -9,24 +9,32 @@ import java.util.HashMap;
  * Created by matthewhiggins on 7/25/16.
  */
 public class MockHTTPRequest implements Request {
+
+    private String method;
+    private String pathWithParams;
+    private String version;
+    private HashMap<String, String> headers = new HashMap<>();
+    private HashMap<String, String> params = new HashMap<>();
+    private String body = "";
+
     @Override
     public String getPath() {
-        return null;
+        return pathWithParams;
     }
 
     @Override
     public String getMethod() {
-        return null;
+        return method;
     }
 
     @Override
     public String getVersion() {
-        return null;
+        return version;
     }
 
     @Override
     public String getHeader(String headerName) {
-        return null;
+        return headers.get(headerName);
     }
 
     public boolean headerExists(String headerName) {
@@ -35,31 +43,33 @@ public class MockHTTPRequest implements Request {
 
     @Override
     public HashMap<String, String> getAllParams() {
-        return null;
+        return params;
     }
 
     @Override
     public String getParam(String paramName) {
-        return null;
+        return params.get(paramName);
     }
 
     @Override
     public boolean paramExists(String paramName) {
-        return false;
+        return params.containsKey(paramName);
     }
 
     @Override
     public String getBaseLocation() {
-        return null;
+        return "http://localhost:5000/";
     }
 
     @Override
     public String getInitialRequestLine() {
-        return null;
+        return method + " " + pathWithParams + " " + version;
     }
 
     @Override
-    public void setBody(String input) { }
+    public void setBody(String body) {
+        this.body = body;
+    }
 
     @Override
     public void setRequestLine(String input) {  }
@@ -68,16 +78,37 @@ public class MockHTTPRequest implements Request {
     public void setHeaders(String headers) {  }
 
     public boolean containsHeader(String header) {
-        return true;
+        return headers.containsKey(header);
     }
 
     @Override
     public String getBody() {
-        return null;
+        return body;
     }
 
     @Override
     public BasicHeaderParser getHeaderParser() {
-        return null;
+        return new BasicHeaderParser();
     }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public void setPathWithParams(String pathWithParams) {
+        this.pathWithParams = pathWithParams;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public void addParam(String paramKey, String paramValue) {
+        this.params.put(paramKey, paramValue);
+    }
+
+    public void addHeader(String headerKey, String headerValue) {
+        this.headers.put(headerKey, headerValue);
+    }
+
 }

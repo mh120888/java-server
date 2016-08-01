@@ -24,21 +24,21 @@ public class CoffeeActionTest {
 
     @Test
     public void returns418ForGETCoffee() {
-        Response response = ResponseGenerator.generateResponse("GET /coffee HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET", "/coffee", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 418"));
     }
 
     @Test
     public void bodyContainsCorrectStringIfPathIsCoffee() {
-        Response response = ResponseGenerator.generateResponse("GET /coffee HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET", "/coffee", action);
 
         assertTrue(response.getFormattedResponse().contains("I'm a teapot"));
     }
 
     @Test
     public void returns200ForGETTea() {
-        Response response = ResponseGenerator.generateResponse("GET /tea HTTP/1.1", action);
+        Response response = ResponseGenerator.generateResponse("GET", "/tea", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
     }
