@@ -88,7 +88,7 @@ public class ConnectionHandler implements Runnable {
 
      void generateOutput(Request request, PrintStream out) throws IOException {
         Response response = application.getResponse(request, new HTTPResponse());
-        out.write(response.getAllButBody().getBytes());
+        out.write(response.getStatusLineAndHeaders().getBytes());
         out.write(response.getBody());
     }
 }

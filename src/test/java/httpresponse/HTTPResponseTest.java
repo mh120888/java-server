@@ -29,7 +29,7 @@ public class HTTPResponseTest {
     public void setBodyUpdatesTheBodyMemberToTheProvidedString() {
         HTTPResponse response = new HTTPResponse();
 
-        response.setBodyFromString("random body content");
+        response.setBody("random body content".getBytes());
 
         Assert.assertEquals("random body content", new String(response.body));
     }
@@ -37,9 +37,9 @@ public class HTTPResponseTest {
     @Test
     public void setBodyOverwritesPreviousBodyContents() {
         HTTPResponse response = new HTTPResponse();
-        response.setBodyFromString("random body content");
+        response.setBody("random body content".getBytes());
 
-        response.setBodyFromString("new body content");
+        response.setBody("new body content".getBytes());
 
         Assert.assertEquals("new body content", new String(response.body));
     }
@@ -58,7 +58,7 @@ public class HTTPResponseTest {
         HTTPResponse response = new HTTPResponse();
         response.setStatus(200);
         response.setHTTPVersion("HTTP/1.1");
-        response.setBodyFromString("Some content");
+        response.setBody("Some content".getBytes());
         response.addHeader("One header", "one value");
 
         Assert.assertEquals("HTTP/1.1 200 OK\nOne header: one value\n\nSome content", response.getFormattedResponse());

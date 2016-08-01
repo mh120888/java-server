@@ -175,7 +175,6 @@ public class StaticResourceActionTest {
     @Test
     public void patchRequestWithContentReturnsA204() {
         StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
-        String path = publicDirectory + "/does-not-matter.txt";
         MockHTTPRequest request = new MockHTTPRequest();
         request.setMethod("PATCH");
         request.setPathWithParams("/partial_content.txt");

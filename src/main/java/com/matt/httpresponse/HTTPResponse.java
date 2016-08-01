@@ -22,10 +22,6 @@ public class HTTPResponse implements Response {
         version = httpVersion;
     }
 
-    public void setBodyFromString(String bodyContent) {
-        body = bodyContent.getBytes();
-    }
-
     public void setBody (byte[] bodyBytes) {
         body = bodyBytes;
     }
@@ -39,13 +35,13 @@ public class HTTPResponse implements Response {
     }
 
     public String getFormattedResponse() {
-        String result = getAllButBody();
+        String result = getStatusLineAndHeaders();
         result += new String(body);
 
         return result;
     }
 
-    public String getAllButBody() {
+    public String getStatusLineAndHeaders() {
         String result = "";
         result += version + " " + status + " " + getStatusText() + "\n";
         result += getFormattedHeaders() + "\n";

@@ -8,7 +8,7 @@ public interface Response {
     void setHTTPVersion(String version);
     void addHeader(String name, String value);
     String getFormattedResponse();
-    String getAllButBody();
+    String getStatusLineAndHeaders();
     byte[] getBody();
     void setBody(byte[] body);
 }
