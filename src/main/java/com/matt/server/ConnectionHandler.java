@@ -48,14 +48,18 @@ public class ConnectionHandler implements Runnable {
         }
     }
 
-     static HTTPRequest buildHttpRequest(BufferedReader reader) throws IOException {
+     static HTTPRequest buildHttpRequest(BufferedReader reader) {
          HTTPRequest request = new HTTPRequest();
-         request.setRequestLine(readInFirstLine(reader));
-         if (reader.ready()) {
-             request.setHeaders(readInHeaders(reader));
-         }
-         if (reader.ready() && request.containsHeader("Content-Length")) {
-             request.setBody(readInBody(reader, Integer.parseInt(request.getHeader("Content-Length"))));
+         try {
+             request.setRequestLine(readInFirstLine(reader));
+             if (reader.ready()) {
+                 request.setHeaders(readInHeaders(reader));
+             }
+             if (reader.ready() && request.containsHeader("Content-Length")) {
+                 request.setBody(readInBody(reader, Integer.parseInt(request.getHeader("Content-Length"))));
+             }
+         } catch (IOException e) {
+             e.printStackTrace();
          }
          return request;
      }

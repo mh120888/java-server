@@ -1,5 +1,6 @@
 package httprequest;
 
+import request.HeaderParser;
 import request.Request;
 
 import java.util.Arrays;
@@ -14,8 +15,8 @@ public class HTTPRequest implements Request {
     private String method;
     private String pathWithParams;
     private String version;
-    private HashMap<String, String> headers = new HashMap<>();;
-    private HashMap<String, String> params = new HashMap<>();;
+    private HashMap<String, String> headers = new HashMap<>();
+    private HashMap<String, String> params = new HashMap<>();
     private String body = "";
 
     public HTTPRequest() {}
@@ -31,8 +32,8 @@ public class HTTPRequest implements Request {
     };
 
     public void setHeaders(String headerInput) {
-        String[] justTheHeaders = headerInput.split("\n");
-        for (String headerPair : justTheHeaders) {
+        String[] splitUpHeaders = headerInput.split("\n");
+        for (String headerPair : splitUpHeaders) {
             String[] separatePair = headerPair.split(":");
             String headerName = separatePair[0];
             String headerValue = String.join(":", Arrays.copyOfRange(separatePair, 1, separatePair.length)).trim();
@@ -94,7 +95,7 @@ public class HTTPRequest implements Request {
         return method + " " + pathWithParams + " " + version;
     }
 
-    public BasicHeaderParser getHeaderParser() {
+    public HeaderParser getHeaderParser() {
         return new BasicHeaderParser();
     }
 
