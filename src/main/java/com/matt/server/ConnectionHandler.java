@@ -1,11 +1,11 @@
 package server;
 
+import httpresponse.HTTPResponseFactory;
 import request.Request;
 import request.RequestFactory;
 import response.Response;
 import app.Application;
-import httprequest.HTTPRequest;
-import httpresponse.HTTPResponse;
+import response.ResponseFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,24 +21,27 @@ public class ConnectionHandler implements Runnable {
     private Socket clientSocket;
     private Application application;
     private RequestFactory requestFactory;
+    private ResponseFactory responseFactory;
 
-    private ConnectionHandler(Application app, RequestFactory requestFactory) {
+    private ConnectionHandler(Application app, RequestFactory requestFactory, ResponseFactory responseFactory) {
         this.application = app;
         this.requestFactory = requestFactory;
+        this.responseFactory = responseFactory;
     }
 
-    private ConnectionHandler(Socket socket, Application app, RequestFactory requestFactory) {
+    private ConnectionHandler(Socket socket, Application app, RequestFactory requestFactory, ResponseFactory responseFactory) {
         this.clientSocket = socket;
         this.application = app;
         this.requestFactory = requestFactory;
+        this.responseFactory = responseFactory;
     }
 
-    public static ConnectionHandler getNewConnectionHandler(Socket socket, Application app, RequestFactory requestFactory) {
-        return new ConnectionHandler(socket, app, requestFactory);
+    public static ConnectionHandler getNewConnectionHandler(Socket socket, Application app, RequestFactory requestFactory, ResponseFactory responseFactory) {
+        return new ConnectionHandler(socket, app, requestFactory, responseFactory);
     }
 
-    public static ConnectionHandler getNewTestConnectionHandler(Application app, RequestFactory requestFactory) {
-        return new ConnectionHandler(app, requestFactory);
+    public static ConnectionHandler getNewTestConnectionHandler(Application app, RequestFactory requestFactory, ResponseFactory responseFactory) {
+        return new ConnectionHandler(app, requestFactory, responseFactory);
     }
 
     public void run() {
@@ -91,7 +94,7 @@ public class ConnectionHandler implements Runnable {
      }
 
      void generateOutput(Request request, PrintStream out) throws IOException {
-        Response response = application.getResponse(request, new HTTPResponse());
+        Response response = application.getResponse(request, responseFactory.getResponse());
         out.write(response.getStatusLineAndHeaders().getBytes());
         out.write(response.getBody());
     }
