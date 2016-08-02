@@ -1,8 +1,8 @@
 package cobspecapp;
 
+import basichttpmessage.BasicHTTPRequestResponseFactory;
 import mocks.MockHTTPRequest;
-import response.Response;
-import httpresponse.HTTPResponse;
+import httpmessage.HTTPResponse;
 import mocks.MockFileIO;
 import org.junit.After;
 import org.junit.Assert;
@@ -32,35 +32,35 @@ public class StaticResourceActionTest {
 
     @Test
     public void getResponseDataReturnsCorrectResponseLineForGet() {
-        Response response = ResponseGenerator.generateResponse("GET", "/", action);
+        HTTPResponse response = ResponseGenerator.generateResponse("GET", "/", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
     }
 
     @Test
     public void getResponseReturns200ForHeadRequest() {
-        Response response = ResponseGenerator.generateResponse("HEAD",  "/", action);
+        HTTPResponse response = ResponseGenerator.generateResponse("HEAD",  "/", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
     }
 
     @Test
     public void getResponseReturns405ForInvalidMethods() {
-        Response response = ResponseGenerator.generateResponse("NOTAREALMETHOD", "/", action);
+        HTTPResponse response = ResponseGenerator.generateResponse("NOTAREALMETHOD", "/", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 405"));
     }
 
     @Test
     public void getIndexResponseIncludesLinksToOtherResourcesInPublic() {
-        Response response = ResponseGenerator.generateResponse("GET", "/", action);
+        HTTPResponse response = ResponseGenerator.generateResponse("GET", "/", action);
 
         assertTrue(response.getFormattedResponse().contains("<a href=\"/file1\">file1</a>"));
     }
 
     @Test
     public void postRequestWithNoParamsReturnsA405() {
-        Response response = ResponseGenerator.generateResponse("POST", "/", action);
+        HTTPResponse response = ResponseGenerator.generateResponse("POST", "/", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 405"));
     }
@@ -74,7 +74,7 @@ public class StaticResourceActionTest {
         request.setMethod("GET");
         request.setPathWithParams("/fake-image.png");
 
-        Response response = fakeAction.getResponse(request, new HTTPResponse());
+        HTTPResponse response = fakeAction.getResponse(request, new BasicHTTPRequestResponseFactory.HTTPResponse());
 
         assertEquals(true, response.getFormattedResponse().contains("Fake contents"));
     }
@@ -89,7 +89,7 @@ public class StaticResourceActionTest {
         request.setPathWithParams("/fake-image.png");
         request.addHeader("Range", "bytes=0-4");
 
-        Response response = fakeAction.getResponse(request, new HTTPResponse());
+        HTTPResponse response = fakeAction.getResponse(request, new BasicHTTPRequestResponseFactory.HTTPResponse());
 
         assertTrue(response.getFormattedResponse().contains("206 Partial Content"));
     }
@@ -110,7 +110,7 @@ public class StaticResourceActionTest {
         request.setPathWithParams("/partial_content.txt");
         request.addHeader("If-Match", "somethingGoesHere");
         request.setBody("some random content");
-        Response response = new HTTPResponse();
+        HTTPResponse response = new BasicHTTPRequestResponseFactory.HTTPResponse();
 
         action.getResponse(request, response);
 
@@ -126,7 +126,7 @@ public class StaticResourceActionTest {
         request.setPathWithParams("/does-not-matter.txt");
         request.setBody("some random content");
 
-        action.getResponse(request, new HTTPResponse());
+        action.getResponse(request, new BasicHTTPRequestResponseFactory.HTTPResponse());
 
         String fileContentsAfterPatchRequest = new String(action.fileIO.getAllBytesFromFile(path));
         Assert.assertEquals("default content", fileContentsAfterPatchRequest);
@@ -142,7 +142,7 @@ public class StaticResourceActionTest {
         request.setBody("some random content");
         request.addHeader("If-Match", "somethingGoesHere");
 
-        action.getResponse(request, new HTTPResponse());
+        action.getResponse(request, new BasicHTTPRequestResponseFactory.HTTPResponse());
 
         String fileContentsAfterPatchRequest = new String(action.fileIO.getAllBytesFromFile(path));
         Assert.assertEquals("some random content", fileContentsAfterPatchRequest);

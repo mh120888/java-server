@@ -1,7 +1,7 @@
 package cobspecapp;
 
-import request.Request;
-import response.Response;
+import httpmessage.HTTPRequest;
+import httpmessage.HTTPResponse;
 
 import java.util.Map;
 
@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class ParametersAction implements Action {
 
-    public Response getResponse(Request request, Response response) {
+    public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {
         response.setHTTPVersion(request.getVersion());
 
         if (request.getMethod().equals("GET")) {

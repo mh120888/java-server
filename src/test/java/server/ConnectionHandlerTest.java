@@ -1,10 +1,9 @@
 package server;
 
-import httprequest.HTTPRequestFactory;
-import httpresponse.HTTPResponseFactory;
+import basichttpmessage.BasicHTTPRequestResponseFactory;
 import mocks.*;
 import org.junit.Before;
-import request.Request;
+import httpmessage.HTTPRequest;
 import app.Application;
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,13 +22,13 @@ public class ConnectionHandlerTest {
 
     @Before
     public void setUp() {
-        connectionHandler = ConnectionHandler.getNewTestConnectionHandler(new MockApplication("Random response"), new HTTPRequestFactory(), new HTTPResponseFactory());
+        connectionHandler = ConnectionHandler.getNewTestConnectionHandler(new MockApplication("Random response"), new BasicHTTPRequestResponseFactory());
     }
 
     @Test
     public void buildHttpRequestReturnsARequestObjectWithAProperRequestLine() throws IOException {
         BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1\n"));
-        Request request = connectionHandler.buildHttpRequest(in);
+        HTTPRequest request = connectionHandler.buildHttpRequest(in);
 
         Assert.assertEquals("GET / HTTP/1.1", request.getInitialRequestLine());
     }
@@ -37,7 +36,7 @@ public class ConnectionHandlerTest {
     @Test
     public void buildHttpRequestReturnsARequestObjectWithAnEmptyBodyWhenNoneIsProvided() throws IOException {
         BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1\n"));
-        Request request = connectionHandler.buildHttpRequest(in);
+        HTTPRequest request = connectionHandler.buildHttpRequest(in);
 
         Assert.assertTrue(request.getBody().isEmpty());
     }
@@ -45,7 +44,7 @@ public class ConnectionHandlerTest {
     @Test
     public void buildHttpRequestReturnsARequestObjectWithCorrectHeaders() throws IOException {
         BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1\nTest header: 29393939\nAnother test: 40223840"));
-        Request request = connectionHandler.buildHttpRequest(in);
+        HTTPRequest request = connectionHandler.buildHttpRequest(in);
 
         Assert.assertTrue(request.containsHeader("Another test"));
         Assert.assertTrue(request.containsHeader("Test header"));
@@ -57,7 +56,7 @@ public class ConnectionHandlerTest {
                                                                 "Content-Length: 12\n" +
                                                                 "\n" +
                                                                 "body content"));
-        Request request = connectionHandler.buildHttpRequest(in);
+        HTTPRequest request = connectionHandler.buildHttpRequest(in);
 
         Assert.assertEquals("body content", request.getBody());
     }
@@ -105,7 +104,7 @@ public class ConnectionHandlerTest {
 
     @Test
     public void generateOutputWritesToOutputStream() throws Exception {
-        Request request = new MockHTTPRequest();
+        HTTPRequest request = new MockHTTPRequest();
         MockPrintStream out = new MockPrintStream(new MockOutputStream());
         Application app = new MockApplication("Random response");
         connectionHandler.generateOutput(request, out);

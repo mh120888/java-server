@@ -1,14 +1,14 @@
 package cobspecapp;
 
-import request.Request;
-import response.Response;
+import httpmessage.HTTPRequest;
+import httpmessage.HTTPResponse;
 
 /**
  * Created by matthewhiggins on 7/14/16.
  */
 public class OptionsAction implements Action {
 
-    public Response getResponse(Request request, Response response) {
+    public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {
         response.setHTTPVersion(request.getVersion());
         response.setStatus(200);
         response.addHeader("Allow", buildHeaders(request.getPath()));

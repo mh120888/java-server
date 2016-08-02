@@ -1,4 +1,4 @@
-package httprequest;
+package basichttpmessage;
 
 import org.junit.Test;
 

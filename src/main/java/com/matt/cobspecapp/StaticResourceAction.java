@@ -1,7 +1,7 @@
 package cobspecapp;
 
-import request.Request;
-import response.Response;
+import httpmessage.HTTPRequest;
+import httpmessage.HTTPResponse;
 
 import java.util.Arrays;
 
@@ -10,7 +10,7 @@ import java.util.Arrays;
  */
 public class StaticResourceAction implements Action {
     private static String publicDirectory;
-    private Request request;
+    private HTTPRequest request;
     FileIO fileIO;
 
     public StaticResourceAction(String filepath) {
@@ -27,7 +27,7 @@ public class StaticResourceAction implements Action {
         return new StaticResourceAction(filepath, fileInputOutput);
     }
 
-    public Response getResponse(Request request, Response response) {
+    public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {
         this.request = request;
 
         response.setHTTPVersion(request.getVersion());
@@ -48,7 +48,7 @@ public class StaticResourceAction implements Action {
         return response;
     }
 
-    private void setBodyAndHeadersForPartialContentRequest(Response response) {
+    private void setBodyAndHeadersForPartialContentRequest(HTTPResponse response) {
         byte[] fullBodyContents = getBody();
         int[] range = request.getHeaderParser().parseRangeHeader(request.getHeader("Range"), fullBodyContents);
         response.addHeader("Content-Range", "bytes " + range[0] + "-" + range[1] + "/" + fullBodyContents.length);

@@ -1,11 +1,11 @@
-package request;
+package httpmessage;
 
 import java.util.HashMap;
 
 /**
  * Created by matthewhiggins on 7/20/16.
  */
-public interface Request {
+public interface HTTPRequest {
     String getPath();
     String getMethod();
     String getVersion();

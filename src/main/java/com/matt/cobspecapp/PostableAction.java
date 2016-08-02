@@ -1,7 +1,7 @@
 package cobspecapp;
 
-import request.Request;
-import response.Response;
+import httpmessage.HTTPRequest;
+import httpmessage.HTTPResponse;
 
 /**
  * Created by matthewhiggins on 7/11/16.
@@ -9,7 +9,7 @@ import response.Response;
 public class PostableAction implements Action {
     static String data = "default";
 
-    public Response getResponse(Request request, Response response) {
+    public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {
         response.setHTTPVersion(request.getVersion());
         response.setStatus(200);
 

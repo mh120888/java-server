@@ -1,11 +1,9 @@
 package server;
 
-import httpresponse.HTTPResponseFactory;
-import request.Request;
-import request.RequestFactory;
-import response.Response;
+import httpmessage.HTTPRequest;
+import httpmessage.BasicRequestResponseFactory;
+import httpmessage.HTTPResponse;
 import app.Application;
-import response.ResponseFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,34 +18,31 @@ public class ConnectionHandler implements Runnable {
 
     private Socket clientSocket;
     private Application application;
-    private RequestFactory requestFactory;
-    private ResponseFactory responseFactory;
+    private BasicRequestResponseFactory requestResponseFactory;
 
-    private ConnectionHandler(Application app, RequestFactory requestFactory, ResponseFactory responseFactory) {
+    private ConnectionHandler(Application app, BasicRequestResponseFactory requestResponseFactory) {
         this.application = app;
-        this.requestFactory = requestFactory;
-        this.responseFactory = responseFactory;
+        this.requestResponseFactory = requestResponseFactory;
     }
 
-    private ConnectionHandler(Socket socket, Application app, RequestFactory requestFactory, ResponseFactory responseFactory) {
+    private ConnectionHandler(Socket socket, Application app, BasicRequestResponseFactory requestResponseFactory) {
         this.clientSocket = socket;
         this.application = app;
-        this.requestFactory = requestFactory;
-        this.responseFactory = responseFactory;
+        this.requestResponseFactory = requestResponseFactory;
     }
 
-    public static ConnectionHandler getNewConnectionHandler(Socket socket, Application app, RequestFactory requestFactory, ResponseFactory responseFactory) {
-        return new ConnectionHandler(socket, app, requestFactory, responseFactory);
+    public static ConnectionHandler getNewConnectionHandler(Socket socket, Application app, BasicRequestResponseFactory requestResponseFactory) {
+        return new ConnectionHandler(socket, app, requestResponseFactory);
     }
 
-    public static ConnectionHandler getNewTestConnectionHandler(Application app, RequestFactory requestFactory, ResponseFactory responseFactory) {
-        return new ConnectionHandler(app, requestFactory, responseFactory);
+    public static ConnectionHandler getNewTestConnectionHandler(Application app, BasicRequestResponseFactory requestResponseFactory) {
+        return new ConnectionHandler(app, requestResponseFactory);
     }
 
     public void run() {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            Request request = buildHttpRequest(reader);
+            HTTPRequest request = buildHttpRequest(reader);
             generateOutput(request, new PrintStream(clientSocket.getOutputStream()));
             clientSocket.close();
         } catch (IOException e) {
@@ -55,8 +50,8 @@ public class ConnectionHandler implements Runnable {
         }
     }
 
-    Request buildHttpRequest(BufferedReader reader) {
-         Request request = requestFactory.getNewRequest();
+    HTTPRequest buildHttpRequest(BufferedReader reader) {
+         HTTPRequest request = requestResponseFactory.getNewRequest();
          try {
              request.setRequestLine(readInFirstLine(reader));
              if (reader.ready()) {
@@ -93,8 +88,8 @@ public class ConnectionHandler implements Runnable {
         return new String(bodyInChars);
      }
 
-     void generateOutput(Request request, PrintStream out) throws IOException {
-        Response response = application.getResponse(request, responseFactory.getResponse());
+     void generateOutput(HTTPRequest request, PrintStream out) throws IOException {
+        HTTPResponse response = application.getResponse(request, requestResponseFactory.getNewResponse());
         out.write(response.getStatusLineAndHeaders().getBytes());
         out.write(response.getBody());
     }

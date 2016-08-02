@@ -1,4 +1,4 @@
-package httpresponse;
+package basichttpmessage;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -6,10 +6,10 @@ import org.junit.Test;
 /**
  * Created by matthewhiggins on 7/21/16.
  */
-public class HTTPResponseTest {
+public class BasicHTTPResponseTest {
     @Test
     public void setStatusChangesStatusMember() {
-        HTTPResponse response = new HTTPResponse();
+        BasicHTTPRequestResponseFactory.HTTPResponse response = new BasicHTTPRequestResponseFactory.HTTPResponse();
 
         response.setStatus(200);
 
@@ -18,7 +18,7 @@ public class HTTPResponseTest {
 
     @Test
     public void setHTTPVersionChangesVersionMember() {
-        HTTPResponse response = new HTTPResponse();
+        BasicHTTPRequestResponseFactory.HTTPResponse response = new BasicHTTPRequestResponseFactory.HTTPResponse();
 
         response.setHTTPVersion("HTTP/1.1");
 
@@ -27,7 +27,7 @@ public class HTTPResponseTest {
 
     @Test
     public void setBodyUpdatesTheBodyMemberToTheProvidedString() {
-        HTTPResponse response = new HTTPResponse();
+        BasicHTTPRequestResponseFactory.HTTPResponse response = new BasicHTTPRequestResponseFactory.HTTPResponse();
 
         response.setBody("random body content".getBytes());
 
@@ -36,7 +36,7 @@ public class HTTPResponseTest {
 
     @Test
     public void setBodyOverwritesPreviousBodyContents() {
-        HTTPResponse response = new HTTPResponse();
+        BasicHTTPRequestResponseFactory.HTTPResponse response = new BasicHTTPRequestResponseFactory.HTTPResponse();
         response.setBody("random body content".getBytes());
 
         response.setBody("new body content".getBytes());
@@ -46,7 +46,7 @@ public class HTTPResponseTest {
 
     @Test
     public void addHeaderAddsANewHeaderToTheResponse() {
-        HTTPResponse response = new HTTPResponse();
+        BasicHTTPRequestResponseFactory.HTTPResponse response = new BasicHTTPRequestResponseFactory.HTTPResponse();
 
         response.addHeader("some name", "some value");
 
@@ -55,7 +55,7 @@ public class HTTPResponseTest {
 
     @Test
     public void getFormattedResponseReturnsAProperlyFormattedVersionOfTheResponse() {
-        HTTPResponse response = new HTTPResponse();
+        BasicHTTPRequestResponseFactory.HTTPResponse response = new BasicHTTPRequestResponseFactory.HTTPResponse();
         response.setStatus(200);
         response.setHTTPVersion("HTTP/1.1");
         response.setBody("Some content".getBytes());
@@ -66,7 +66,7 @@ public class HTTPResponseTest {
 
     @Test
     public void getFormattedHeadersReturnsAStringOfAllHeaderProperlyFormatted() {
-        HTTPResponse response = new HTTPResponse();
+        BasicHTTPRequestResponseFactory.HTTPResponse response = new BasicHTTPRequestResponseFactory.HTTPResponse();
         response.addHeader("One header", "one value");
         response.addHeader("second", "something random");
 
@@ -75,7 +75,7 @@ public class HTTPResponseTest {
 
     @Test
     public void getStatusTextReturnsOKFor200() {
-        HTTPResponse response = new HTTPResponse();
+        BasicHTTPRequestResponseFactory.HTTPResponse response = new BasicHTTPRequestResponseFactory.HTTPResponse();
         response.setStatus(200);
 
         Assert.assertEquals("OK", response.getStatusText());
@@ -83,7 +83,7 @@ public class HTTPResponseTest {
 
     @Test
     public void getStatusTextReturnsNotFoundFor404() {
-        HTTPResponse response = new HTTPResponse();
+        BasicHTTPRequestResponseFactory.HTTPResponse response = new BasicHTTPRequestResponseFactory.HTTPResponse();
         response.setStatus(404);
 
         Assert.assertEquals("Not Found", response.getStatusText());
@@ -91,7 +91,7 @@ public class HTTPResponseTest {
 
     @Test
     public void getStatusTextReturnsMethodNotAllowedFor405() {
-        HTTPResponse response = new HTTPResponse();
+        BasicHTTPRequestResponseFactory.HTTPResponse response = new BasicHTTPRequestResponseFactory.HTTPResponse();
         response.setStatus(405);
 
         Assert.assertEquals("Method Not Allowed", response.getStatusText());
@@ -99,7 +99,7 @@ public class HTTPResponseTest {
 
     @Test
     public void getStatusTextReturnsAnEmptyStringForAnUnknownStatusCode() {
-        HTTPResponse response = new HTTPResponse();
+        BasicHTTPRequestResponseFactory.HTTPResponse response = new BasicHTTPRequestResponseFactory.HTTPResponse();
         response.setStatus(0);
 
         Assert.assertEquals("", response.getStatusText());

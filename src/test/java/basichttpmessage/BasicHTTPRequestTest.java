@@ -1,16 +1,16 @@
-package httprequest;
+package basichttpmessage;
 
 import org.junit.Assert;
 import org.junit.Test;
-import request.HeaderParser;
+import httpmessage.HeaderParser;
 
 /**
  * Created by matthewhiggins on 7/20/16.
  */
-public class HTTPRequestTest {
+public class BasicHTTPRequestTest {
     @Test
     public void getMethodReturnsTheRequestMethodWhenItIsGET() {
-        HTTPRequest request = new HTTPRequest();
+        BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET / HTTP/1.1");
 
         Assert.assertEquals("GET", request.getMethod());
@@ -18,7 +18,7 @@ public class HTTPRequestTest {
 
     @Test
     public void getMethodReturnsTheRequestMethodWhenItIsPOST() {
-        HTTPRequest request = new HTTPRequest();
+        BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("POST / HTTP/1.1\n");
 
         Assert.assertEquals("POST", request.getMethod());
@@ -26,7 +26,7 @@ public class HTTPRequestTest {
 
     @Test
     public void getPathReturnsTheCorrectPath() {
-        HTTPRequest request = new HTTPRequest();
+        BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /somerandompath HTTP/1.1\n");
 
         Assert.assertEquals("/somerandompath", request.getPath());
@@ -34,7 +34,7 @@ public class HTTPRequestTest {
 
     @Test
     public void getVersionReturnsTheCorrectHTTPVersion() {
-        HTTPRequest request = new HTTPRequest();
+        BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /somerandompath HTTP/1.1\n");
 
         Assert.assertEquals("HTTP/1.1", request.getVersion());
@@ -42,7 +42,7 @@ public class HTTPRequestTest {
 
     @Test
     public void getHeaderRetrievesTheValueAssociatedWithThatHeaderIfItExists() {
-        HTTPRequest request = new HTTPRequest();
+        BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /somerandompath HTTP/1.1");
         request.setHeaders("Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
 
@@ -51,7 +51,7 @@ public class HTTPRequestTest {
 
     @Test
     public void headerExistReturnsTrueForAHeaderThatExists() {
-        HTTPRequest request = new HTTPRequest();
+        BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /somerandompath HTTP/1.1");
         request.setHeaders("Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
 
@@ -60,7 +60,7 @@ public class HTTPRequestTest {
 
     @Test
     public void headerExistReturnsFalseForAHeaderThatDoesNotExist() {
-        HTTPRequest request = new HTTPRequest();
+        BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /somerandompath HTTP/1.1");
         request.setHeaders("Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
 
@@ -69,7 +69,7 @@ public class HTTPRequestTest {
 
     @Test
     public void getAllParamsReturnsNoParamsIfNoneWerePassed() {
-        HTTPRequest request = new HTTPRequest();
+        BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /path-with-no-params HTTP/1.1\n");
 
         Assert.assertEquals(0, request.getAllParams().size());
@@ -77,7 +77,7 @@ public class HTTPRequestTest {
 
     @Test
     public void getAllParamsReturnsTheCorrectNumberOfParamsForARequestWithParams() {
-        HTTPRequest request = new HTTPRequest();
+        BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /path-with-two-params?firstParam=foobar&secondParam=alsoFoobar HTTP/1.1\n");
 
         Assert.assertEquals(2, request.getAllParams().size());
@@ -85,7 +85,7 @@ public class HTTPRequestTest {
 
     @Test
     public void getAllParamsContainsASpecificParamThatWasPassed() {
-        HTTPRequest request = new HTTPRequest();
+        BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /path-with-two-params?firstParam=foobar&secondParam=alsoFoobar HTTP/1.1\n");
 
         Assert.assertEquals("foobar", request.getAllParams().get("firstParam"));
@@ -93,7 +93,7 @@ public class HTTPRequestTest {
 
     @Test
     public void paramExistsReturnsTrueForAParamThatExists() {
-        HTTPRequest request = new HTTPRequest();
+        BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /path-with-two-params?firstParam=foobar&secondParam=alsoFoobar HTTP/1.1\n");
 
         Assert.assertTrue(request.paramExists("firstParam"));
@@ -101,7 +101,7 @@ public class HTTPRequestTest {
 
     @Test
     public void paramExistsReturnsFalseForAParamThatDoesNotExist() {
-        HTTPRequest request = new HTTPRequest();
+        BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /path-with-two-params?firstParam=foobar&secondParam=alsoFoobar HTTP/1.1\n");
 
         Assert.assertFalse(request.paramExists("notreal"));
@@ -109,7 +109,7 @@ public class HTTPRequestTest {
 
     @Test
     public void getParamRetrievesTheValueOfASpecificParam() {
-        HTTPRequest request = new HTTPRequest();
+        BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /path-with-two-params?firstParam=foobar&secondParam=alsoFoobar HTTP/1.1\n");
 
         Assert.assertEquals("alsoFoobar", request.getParam("secondParam"));
@@ -117,7 +117,7 @@ public class HTTPRequestTest {
 
     @Test
     public void paramValueHas20ReplacedWithASpace() {
-        HTTPRequest request = new HTTPRequest();
+        BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /pathwithoneparam?singleParam=two%20words HTTP/1.1\n");
 
         Assert.assertEquals("two words", request.getParam("singleParam"));
@@ -125,7 +125,7 @@ public class HTTPRequestTest {
 
     @Test
     public void paramValueHasPercent3CReplacedWithASpace() {
-        HTTPRequest request = new HTTPRequest();
+        BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /pathwithoneparam?lessThan=%3C HTTP/1.1\n");
 
         Assert.assertEquals("<", request.getParam("lessThan"));
@@ -133,7 +133,7 @@ public class HTTPRequestTest {
 
     @Test
     public void getBaseLocationReturnsTheCorrectDefaultLocation() {
-        HTTPRequest request = new HTTPRequest();
+        BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET / HTTP/1.1\n");
 
         Assert.assertEquals("http://localhost:5000/", request.getBaseLocation());
@@ -141,7 +141,7 @@ public class HTTPRequestTest {
 
     @Test
     public void getInitialRequestLineReturnsTheFirstLineOfTheRequest() {
-        HTTPRequest request = new HTTPRequest();
+        BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET / HTTP/1.1\n");
 
         Assert.assertEquals("GET / HTTP/1.1", request.getInitialRequestLine());
@@ -149,7 +149,7 @@ public class HTTPRequestTest {
 
     @Test
     public void getInitialRequestLineIncludesParams() {
-        HTTPRequest request = new HTTPRequest();
+        BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /some-path?somerandomparam=33 HTTP/1.1\n");
 
         Assert.assertEquals("GET /some-path?somerandomparam=33 HTTP/1.1", request.getInitialRequestLine());
@@ -157,7 +157,7 @@ public class HTTPRequestTest {
 
     @Test
     public void getHeaderParserReturnsANewHeaderParser() {
-        HTTPRequest request = new HTTPRequest();
+        BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /path-does-not-matter HTTP/1.1\n");
 
         Assert.assertTrue(request.getHeaderParser() instanceof HeaderParser);

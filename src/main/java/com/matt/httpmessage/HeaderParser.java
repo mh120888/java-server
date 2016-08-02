@@ -1,4 +1,4 @@
-package request;
+package httpmessage;
 
 /**
  * Created by matthewhiggins on 7/22/16.
