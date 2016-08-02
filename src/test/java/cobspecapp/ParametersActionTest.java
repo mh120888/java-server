@@ -1,8 +1,8 @@
 package cobspecapp;
 
-import httpresponse.HTTPResponse;
+import basichttpmessage.BasicHTTPRequestResponseFactory;
 import mocks.MockHTTPRequest;
-import response.Response;
+import httpmessage.HTTPResponse;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
@@ -20,14 +20,14 @@ public class ParametersActionTest {
 
     @Test
     public void GETRequestReturns200() {
-        Response response = ResponseGenerator.generateResponse("GET", "/parameters", action);
+        HTTPResponse response = ResponseGenerator.generateResponse("GET", "/parameters", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
     }
 
     @Test
     public void POSTRequestReturns405() {
-        Response response = ResponseGenerator.generateResponse("POST", "/parameters", action);
+        HTTPResponse response = ResponseGenerator.generateResponse("POST", "/parameters", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 405"));
     }
@@ -38,7 +38,7 @@ public class ParametersActionTest {
         request.setMethod("GET");
         request.setPathWithParams("/parameters");
         request.addParam("someParam", "newValue");
-        Response response = action.getResponse(request, new HTTPResponse());
+        HTTPResponse response = action.getResponse(request, new BasicHTTPRequestResponseFactory.HTTPResponse());
 
         assertTrue(response.getFormattedResponse().contains("someParam = newValue"));
     }

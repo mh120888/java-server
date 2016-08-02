@@ -1,7 +1,7 @@
 package cobspecapp;
 
-import request.Request;
-import httprequest.HTTPRequest;
+import httpmessage.HTTPRequest;
+import basichttpmessage.BasicHTTPRequest;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,7 +26,7 @@ public class RouterTest {
 
     @Test
     public void routeReturnsStaticResourceActionForAStaticResource() {
-        Request request = new HTTPRequest();
+        HTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET / HTTP/1.1");
         Action action = Router.route(request, publicDirectory);
 
@@ -35,7 +35,7 @@ public class RouterTest {
 
     @Test
     public void routeReturnsCoffeeActionWhenAppropriate() {
-        Request request = new HTTPRequest();
+        HTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /coffee HTTP/1.1");
         Action action = Router.route(request, publicDirectory);
 
@@ -44,7 +44,7 @@ public class RouterTest {
 
     @Test
     public void routeReturnsNotFoundActionWhenPathIsNotRecognized() {
-        Request request = new HTTPRequest();
+        HTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /foobar HTTP/1.1");
         Action action = Router.route(request, publicDirectory);
 
@@ -53,7 +53,7 @@ public class RouterTest {
 
     @Test
     public void routeReturnsPostableActionWhenAppropriate() {
-        Request request = new HTTPRequest();
+        HTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("POST /form HTTP/1.1");
         Action action = Router.route(request, publicDirectory);
 
@@ -62,7 +62,7 @@ public class RouterTest {
 
     @Test
     public void routeReturnsLogsActionWhenAppropriatePathIsRequested() {
-        Request request = new HTTPRequest();
+        HTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /logs HTTP/1.1");
         Action action = Router.route(request, publicDirectory);
 
@@ -72,7 +72,7 @@ public class RouterTest {
     @Test
     public void allRequestsAreLoggedAfterBeingRoutes() {
         String requestLine = "GET /logs HTTP/1.1";
-        Request request = new HTTPRequest();
+        HTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine(requestLine);
         Router.route(request, publicDirectory);
 
@@ -81,7 +81,7 @@ public class RouterTest {
 
     @Test
     public void requestToParametersReturnsParametersAction() {
-        Request request = new HTTPRequest();
+        HTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /parameters HTTP/1.1");
         Action action = Router.route(request, publicDirectory);
 
@@ -90,7 +90,7 @@ public class RouterTest {
 
     @Test
     public void routeReturnsOptionsActionWhenAppropriate() {
-        Request request = new HTTPRequest();
+        HTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /method_options HTTP/1.1");
         Action action = Router.route(request, publicDirectory);
 
@@ -99,7 +99,7 @@ public class RouterTest {
 
     @Test
     public void routeReturnsRedirectResourceHandlerWhenAppropriate() {
-        Request request = new HTTPRequest();
+        HTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /redirect HTTP/1.1");
         Action action = Router.route(request, publicDirectory);
 

@@ -1,14 +1,14 @@
-package httpresponse;
-
-import response.Response;
-
-import java.util.HashMap;
-import java.util.Map;
+package basichttpmessage;
 
 /**
  * Created by matthewhiggins on 7/21/16.
  */
-public class HTTPResponse implements Response {
+import httpmessage.HTTPResponse;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class BasicHTTPResponse implements HTTPResponse {
     int status;
     String version = "";
     byte[] body = new byte[0];
@@ -70,4 +70,3 @@ public class HTTPResponse implements Response {
         }
     }
 }
-

@@ -1,6 +1,6 @@
-package httprequest;
+package basichttpmessage;
 
-import request.HeaderParser;
+import httpmessage.HeaderParser;
 
 /**
  * Created by matthewhiggins on 7/13/16.

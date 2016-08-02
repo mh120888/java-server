@@ -1,7 +1,7 @@
 package cobspecapp;
 
-import request.Request;
-import response.Response;
+import httpmessage.HTTPRequest;
+import httpmessage.HTTPResponse;
 
 /**L
  * Created by matthewhiggins on 7/12/16.
@@ -9,7 +9,7 @@ import response.Response;
 public class LogsAction implements Action {
     private String correctCredentials = "admin:hunter2";
 
-    public Response getResponse(Request request, Response response) {
+    public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {
         response.setHTTPVersion(request.getVersion());
 
         if (isAuthorized(request)) {
@@ -22,7 +22,7 @@ public class LogsAction implements Action {
         return response;
     }
 
-    public boolean isAuthorized(Request request) {
+    public boolean isAuthorized(HTTPRequest request) {
         String encodedCredentials = "";
         if (request.containsHeader("Authorization")) {
             encodedCredentials = request.getHeader("Authorization").replace("Basic ", "");

@@ -1,14 +1,14 @@
 package mocks;
 
-import request.Request;
-import httprequest.BasicHeaderParser;
+import httpmessage.HTTPRequest;
+import basichttpmessage.BasicHeaderParser;
 
 import java.util.HashMap;
 
 /**
  * Created by matthewhiggins on 7/25/16.
  */
-public class MockHTTPRequest implements Request {
+public class MockHTTPRequest implements HTTPRequest {
 
     private String method;
     private String pathWithParams;

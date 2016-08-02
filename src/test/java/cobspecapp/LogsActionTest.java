@@ -1,10 +1,8 @@
 package cobspecapp;
 
-import httpresponse.HTTPResponse;
+import basichttpmessage.BasicHTTPRequestResponseFactory;
 import mocks.MockHTTPRequest;
-import request.Request;
-import response.Response;
-import httprequest.HTTPRequest;
+import httpmessage.HTTPResponse;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -23,14 +21,14 @@ public class LogsActionTest {
 
     @Test
     public void getLogsWithoutCredentialsReturnsA401() {
-        Response response = ResponseGenerator.generateResponse("GET", "/logs", action);
+        HTTPResponse response = ResponseGenerator.generateResponse("GET", "/logs", action);
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 401"));
     }
 
     @Test
     public void requestToLogsWithoutProperCredentialsReturnsWWWAuthenticateHeader() {
-        Response response = ResponseGenerator.generateResponse("GET", "/logs", action);
+        HTTPResponse response = ResponseGenerator.generateResponse("GET", "/logs", action);
 
         assertTrue(response.getFormattedResponse().contains("WWW-Authenticate: Basic realm=\"User Visible Realm\""));
     }
@@ -71,7 +69,7 @@ public class LogsActionTest {
         request.setMethod("GET");
         request.setPathWithParams("/logs");
         request.addHeader("Authorization", "Basic YWRtaW46aHVudGVyMg==");
-        Response response = action.getResponse(request, new HTTPResponse());
+        HTTPResponse response = action.getResponse(request, new BasicHTTPRequestResponseFactory.HTTPResponse());
 
         assertTrue(response.getFormattedResponse().contains("GET / HTTP/1.1"));
     }

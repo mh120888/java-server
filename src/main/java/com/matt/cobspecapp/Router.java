@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import request.Request;
+import httpmessage.HTTPRequest;
 
 import java.io.File;
 import java.util.Arrays;
@@ -9,7 +9,7 @@ import java.util.Arrays;
  * Created by matthewhiggins on 7/11/16.
  */
 public class Router {
-    public static Action route(Request request, String publicDirectory) {
+    public static Action route(HTTPRequest request, String publicDirectory) {
         Logger.addLog(request.getInitialRequestLine());
 
         File file = new File(publicDirectory);

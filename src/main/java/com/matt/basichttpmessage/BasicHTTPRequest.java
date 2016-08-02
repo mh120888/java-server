@@ -1,7 +1,7 @@
-package httprequest;
+package basichttpmessage;
 
-import request.HeaderParser;
-import request.Request;
+import httpmessage.HeaderParser;
+import httpmessage.HTTPRequest;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Created by matthewhiggins on 7/20/16.
  */
-public class HTTPRequest implements Request {
+public class BasicHTTPRequest implements HTTPRequest {
 
     private String method;
     private String pathWithParams;
@@ -19,7 +19,7 @@ public class HTTPRequest implements Request {
     private HashMap<String, String> params = new HashMap<>();
     private String body = "";
 
-    public HTTPRequest() {}
+    public BasicHTTPRequest() {}
 
     public void setRequestLine(String requestAsString) {
         String[] requestSeparatedByNewline = requestAsString.split("\n");
