@@ -4,6 +4,8 @@ package server; /**
 
 import app.Application;
 import cobspecapp.CobSpecApp;
+import httprequest.HTTPRequestFactory;
+import request.RequestFactory;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -20,15 +22,15 @@ public class MyServer {
 
     public static void main(String[] args) throws IOException {
         setOptions(args);
-        runServer(new CobSpecApp(publicDirectory));
+        runServer(new CobSpecApp(publicDirectory), new HTTPRequestFactory());
     }
 
-    public static void runServer(Application app) throws IOException {
+    public static void runServer(Application app, RequestFactory requestFactory) throws IOException {
         ServerSocket server = new ServerSocket(myPort);
         try {
             while (true) {
                 Socket socket = server.accept();
-                Runnable connectionHandler = ConnectionHandler.getNewConnectionHandler(socket, app);
+                Runnable connectionHandler = ConnectionHandler.getNewConnectionHandler(socket, app, requestFactory);
                 executor.execute(connectionHandler);
             }
         } catch (IOException e) {

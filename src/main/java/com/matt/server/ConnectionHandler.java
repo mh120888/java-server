@@ -1,6 +1,7 @@
 package server;
 
 import request.Request;
+import request.RequestFactory;
 import response.Response;
 import app.Application;
 import httprequest.HTTPRequest;
@@ -19,28 +20,31 @@ public class ConnectionHandler implements Runnable {
 
     private Socket clientSocket;
     private Application application;
+    private RequestFactory requestFactory;
 
-    private ConnectionHandler(Application app) {
-        application = app;
+    private ConnectionHandler(Application app, RequestFactory requestFactory) {
+        this.application = app;
+        this.requestFactory = requestFactory;
     }
 
-    private ConnectionHandler(Socket socket, Application app) {
-        clientSocket = socket;
-        application = app;
+    private ConnectionHandler(Socket socket, Application app, RequestFactory requestFactory) {
+        this.clientSocket = socket;
+        this.application = app;
+        this.requestFactory = requestFactory;
     }
 
-    public static ConnectionHandler getNewConnectionHandler(Socket socket, Application app) {
-        return new ConnectionHandler(socket, app);
+    public static ConnectionHandler getNewConnectionHandler(Socket socket, Application app, RequestFactory requestFactory) {
+        return new ConnectionHandler(socket, app, requestFactory);
     }
 
-    public static ConnectionHandler getNewTestConnectionHandler(Application app) {
-        return new ConnectionHandler(app);
+    public static ConnectionHandler getNewTestConnectionHandler(Application app, RequestFactory requestFactory) {
+        return new ConnectionHandler(app, requestFactory);
     }
 
     public void run() {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            HTTPRequest request = buildHttpRequest(reader);
+            Request request = buildHttpRequest(reader);
             generateOutput(request, new PrintStream(clientSocket.getOutputStream()));
             clientSocket.close();
         } catch (IOException e) {
@@ -48,8 +52,8 @@ public class ConnectionHandler implements Runnable {
         }
     }
 
-     static HTTPRequest buildHttpRequest(BufferedReader reader) {
-         HTTPRequest request = new HTTPRequest();
+    Request buildHttpRequest(BufferedReader reader) {
+         Request request = requestFactory.getNewRequest();
          try {
              request.setRequestLine(readInFirstLine(reader));
              if (reader.ready()) {
@@ -64,13 +68,13 @@ public class ConnectionHandler implements Runnable {
          return request;
      }
 
-     static String readInFirstLine(BufferedReader br) throws IOException {
+    String readInFirstLine(BufferedReader br) throws IOException {
         String input = "";
         input = br.readLine();
         return input.trim();
      }
 
-     static String readInHeaders(BufferedReader br) throws IOException {
+    String readInHeaders(BufferedReader br) throws IOException {
         String input = "";
         String currentLine = br.readLine();
         while (currentLine != null && !currentLine.trim().isEmpty()) {
@@ -80,7 +84,7 @@ public class ConnectionHandler implements Runnable {
         return input;
      }
 
-     static String readInBody(BufferedReader reader, int contentLength) throws IOException {
+    String readInBody(BufferedReader reader, int contentLength) throws IOException {
         char[] bodyInChars = new char[contentLength];
         reader.read(bodyInChars);
         return new String(bodyInChars);
