@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import basichttpmessage.BasicHTTPRequestResponseFactory;
+import basichttpmessage.BasicHTTPMessageFactory;
 import mocks.MockHTTPRequest;
 import httpmessage.HTTPResponse;
 import org.junit.Before;
@@ -69,7 +69,7 @@ public class LogsActionTest {
         request.setMethod("GET");
         request.setPathWithParams("/logs");
         request.addHeader("Authorization", "Basic YWRtaW46aHVudGVyMg==");
-        HTTPResponse response = action.getResponse(request, new BasicHTTPRequestResponseFactory.HTTPResponse());
+        HTTPResponse response = action.getResponse(request, new BasicHTTPMessageFactory.HTTPResponse());
 
         assertTrue(response.getFormattedResponse().contains("GET / HTTP/1.1"));
     }

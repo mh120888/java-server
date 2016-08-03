@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import basichttpmessage.BasicHTTPRequestResponseFactory;
+import basichttpmessage.BasicHTTPMessageFactory;
 import mocks.MockHTTPRequest;
 import httpmessage.HTTPResponse;
 import org.junit.Before;
@@ -38,7 +38,7 @@ public class ParametersActionTest {
         request.setMethod("GET");
         request.setPathWithParams("/parameters");
         request.addParam("someParam", "newValue");
-        HTTPResponse response = action.getResponse(request, new BasicHTTPRequestResponseFactory.HTTPResponse());
+        HTTPResponse response = action.getResponse(request, new BasicHTTPMessageFactory.HTTPResponse());
 
         assertTrue(response.getFormattedResponse().contains("someParam = newValue"));
     }

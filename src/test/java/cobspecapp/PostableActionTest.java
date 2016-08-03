@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import basichttpmessage.BasicHTTPRequestResponseFactory;
+import basichttpmessage.BasicHTTPMessageFactory;
 import mocks.MockHTTPRequest;
 import httpmessage.HTTPResponse;
 import org.junit.Assert;
@@ -61,7 +61,7 @@ public class PostableActionTest {
         request.setPathWithParams("/form");
         request.setBody("random stuff here");
 
-        action.getResponse(request, new BasicHTTPRequestResponseFactory.HTTPResponse());
+        action.getResponse(request, new BasicHTTPMessageFactory.HTTPResponse());
 
         assertEquals("random stuff here", action.data);
     }

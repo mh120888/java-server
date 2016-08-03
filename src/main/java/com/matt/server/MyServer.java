@@ -4,8 +4,8 @@ package server; /**
 
 import app.Application;
 import cobspecapp.CobSpecApp;
-import basichttpmessage.BasicHTTPRequestResponseFactory;
-import httpmessage.BasicRequestResponseFactory;
+import basichttpmessage.BasicHTTPMessageFactory;
+import httpmessage.HTTPMessageFactory;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -22,10 +22,10 @@ public class MyServer {
 
     public static void main(String[] args) throws IOException {
         setOptions(args);
-        runServer(new CobSpecApp(publicDirectory), new BasicHTTPRequestResponseFactory());
+        runServer(new CobSpecApp(publicDirectory), new BasicHTTPMessageFactory());
     }
 
-    public static void runServer(Application app, BasicRequestResponseFactory requestResponseFactory) throws IOException {
+    public static void runServer(Application app, HTTPMessageFactory requestResponseFactory) throws IOException {
         ServerSocket server = new ServerSocket(myPort);
         try {
             while (true) {

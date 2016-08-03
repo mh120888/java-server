@@ -1,6 +1,6 @@
 package cobspecapp;
 
-import basichttpmessage.BasicHTTPRequestResponseFactory;
+import basichttpmessage.BasicHTTPMessageFactory;
 import mocks.MockHTTPRequest;
 import httpmessage.HTTPResponse;
 
@@ -13,6 +13,6 @@ public class ResponseGenerator {
         request.setMethod(method);
         request.setPathWithParams(pathWithParams);
         request.setVersion("HTTP/1.1");
-        return action.getResponse(request, new BasicHTTPRequestResponseFactory.HTTPResponse());
+        return action.getResponse(request, new BasicHTTPMessageFactory.HTTPResponse());
     }
 }

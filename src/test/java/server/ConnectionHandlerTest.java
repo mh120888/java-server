@@ -1,6 +1,6 @@
 package server;
 
-import basichttpmessage.BasicHTTPRequestResponseFactory;
+import basichttpmessage.BasicHTTPMessageFactory;
 import mocks.*;
 import org.junit.Before;
 import httpmessage.HTTPRequest;
@@ -22,7 +22,7 @@ public class ConnectionHandlerTest {
 
     @Before
     public void setUp() {
-        connectionHandler = ConnectionHandler.getNewTestConnectionHandler(new MockApplication("Random response"), new BasicHTTPRequestResponseFactory());
+        connectionHandler = ConnectionHandler.getNewTestConnectionHandler(new MockApplication("Random response"), new BasicHTTPMessageFactory());
     }
 
     @Test

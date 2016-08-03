@@ -1,7 +1,7 @@
 package server;
 
 import httpmessage.HTTPRequest;
-import httpmessage.BasicRequestResponseFactory;
+import httpmessage.HTTPMessageFactory;
 import httpmessage.HTTPResponse;
 import app.Application;
 
@@ -18,24 +18,24 @@ public class ConnectionHandler implements Runnable {
 
     private Socket clientSocket;
     private Application application;
-    private BasicRequestResponseFactory requestResponseFactory;
+    private HTTPMessageFactory httpMessageFactory;
 
-    private ConnectionHandler(Application app, BasicRequestResponseFactory requestResponseFactory) {
+    private ConnectionHandler(Application app, HTTPMessageFactory httpMessageFactory) {
         this.application = app;
-        this.requestResponseFactory = requestResponseFactory;
+        this.httpMessageFactory = httpMessageFactory;
     }
 
-    private ConnectionHandler(Socket socket, Application app, BasicRequestResponseFactory requestResponseFactory) {
+    private ConnectionHandler(Socket socket, Application app, HTTPMessageFactory httpMessageFactory) {
         this.clientSocket = socket;
         this.application = app;
-        this.requestResponseFactory = requestResponseFactory;
+        this.httpMessageFactory = httpMessageFactory;
     }
 
-    public static ConnectionHandler getNewConnectionHandler(Socket socket, Application app, BasicRequestResponseFactory requestResponseFactory) {
+    public static ConnectionHandler getNewConnectionHandler(Socket socket, Application app, HTTPMessageFactory requestResponseFactory) {
         return new ConnectionHandler(socket, app, requestResponseFactory);
     }
 
-    public static ConnectionHandler getNewTestConnectionHandler(Application app, BasicRequestResponseFactory requestResponseFactory) {
+    public static ConnectionHandler getNewTestConnectionHandler(Application app, HTTPMessageFactory requestResponseFactory) {
         return new ConnectionHandler(app, requestResponseFactory);
     }
 
@@ -51,7 +51,7 @@ public class ConnectionHandler implements Runnable {
     }
 
     HTTPRequest buildHttpRequest(BufferedReader reader) {
-         HTTPRequest request = requestResponseFactory.getNewRequest();
+         HTTPRequest request = httpMessageFactory.getNewRequest();
          try {
              request.setRequestLine(readInFirstLine(reader));
              if (reader.ready()) {
@@ -89,7 +89,7 @@ public class ConnectionHandler implements Runnable {
      }
 
      void generateOutput(HTTPRequest request, PrintStream out) throws IOException {
-        HTTPResponse response = application.getResponse(request, requestResponseFactory.getNewResponse());
+        HTTPResponse response = application.getResponse(request, httpMessageFactory.getNewResponse());
         out.write(response.getStatusLineAndHeaders().getBytes());
         out.write(response.getBody());
     }

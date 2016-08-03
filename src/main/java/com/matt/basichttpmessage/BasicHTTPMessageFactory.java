@@ -1,6 +1,6 @@
 package basichttpmessage;
 
-import httpmessage.BasicRequestResponseFactory;
+import httpmessage.HTTPMessageFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Created by matthewhiggins on 8/2/16.
  */
-public class BasicHTTPRequestResponseFactory implements BasicRequestResponseFactory {
+public class BasicHTTPMessageFactory implements HTTPMessageFactory {
     public BasicHTTPRequest getNewRequest() {
         return new BasicHTTPRequest();
     }
