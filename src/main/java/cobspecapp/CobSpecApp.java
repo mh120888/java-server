@@ -7,7 +7,7 @@ import app.Application;
 /**
  * Created by matthewhiggins on 7/19/16.
  */
-public class CobSpecApp extends Application {
+public class CobSpecApp implements Application {
     public String publicDirectory;
 
     public CobSpecApp(String filepath) {

@@ -69,7 +69,7 @@ public class LogsActionTest {
         request.setMethod("GET");
         request.setPathWithParams("/logs");
         request.addHeader("Authorization", "Basic YWRtaW46aHVudGVyMg==");
-        HTTPResponse response = action.getResponse(request, new BasicHTTPMessageFactory.HTTPResponse());
+        HTTPResponse response = action.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
 
         assertTrue(response.getFormattedResponse().contains("GET / HTTP/1.1"));
     }

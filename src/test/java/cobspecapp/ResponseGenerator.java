@@ -13,6 +13,6 @@ public class ResponseGenerator {
         request.setMethod(method);
         request.setPathWithParams(pathWithParams);
         request.setVersion("HTTP/1.1");
-        return action.getResponse(request, new BasicHTTPMessageFactory.HTTPResponse());
+        return action.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
     }
 }

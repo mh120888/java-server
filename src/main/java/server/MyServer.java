@@ -17,12 +17,13 @@ import java.util.concurrent.Executors;
 public class MyServer {
     static String publicDirectory = "/Users/matthewhiggins/Desktop/cob_spec/public";
     static int myPort = 5000;
+    static Application app = new CobSpecApp(publicDirectory);
 
     private static ExecutorService executor = Executors.newFixedThreadPool(100);
 
     public static void main(String[] args) throws IOException {
         setOptions(args);
-        runServer(new CobSpecApp(publicDirectory), new BasicHTTPMessageFactory());
+        runServer(app, new BasicHTTPMessageFactory());
     }
 
     public static void runServer(Application app, HTTPMessageFactory requestResponseFactory) throws IOException {
@@ -41,7 +42,7 @@ public class MyServer {
         }
     }
 
-    private static void setOptions(String[] args) {
+    public static void setOptions(String[] args) {
         HashMap<String, String> options = CommandLineArgsParser.groupOptions(args);
         myPort = getPortNumber(options);
         publicDirectory = setPublicDirectory(options);

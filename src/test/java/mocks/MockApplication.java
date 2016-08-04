@@ -7,7 +7,7 @@ import app.Application;
 /**
  * Created by matthewhiggins on 7/19/16.
  */
-public class MockApplication extends Application {
+public class MockApplication implements Application {
     public String defaultBody = "999 Not a Real Status Code";
 
     public MockApplication() {};

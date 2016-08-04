@@ -61,7 +61,7 @@ public class PostableActionTest {
         request.setPathWithParams("/form");
         request.setBody("random stuff here");
 
-        action.getResponse(request, new BasicHTTPMessageFactory.HTTPResponse());
+        action.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
 
         assertEquals("random stuff here", action.data);
     }

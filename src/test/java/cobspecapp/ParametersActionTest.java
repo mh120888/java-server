@@ -38,7 +38,7 @@ public class ParametersActionTest {
         request.setMethod("GET");
         request.setPathWithParams("/parameters");
         request.addParam("someParam", "newValue");
-        HTTPResponse response = action.getResponse(request, new BasicHTTPMessageFactory.HTTPResponse());
+        HTTPResponse response = action.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
 
         assertTrue(response.getFormattedResponse().contains("someParam = newValue"));
     }

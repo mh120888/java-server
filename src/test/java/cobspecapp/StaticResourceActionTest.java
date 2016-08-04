@@ -74,7 +74,7 @@ public class StaticResourceActionTest {
         request.setMethod("GET");
         request.setPathWithParams("/fake-image.png");
 
-        HTTPResponse response = fakeAction.getResponse(request, new BasicHTTPMessageFactory.HTTPResponse());
+        HTTPResponse response = fakeAction.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
 
         assertEquals(true, response.getFormattedResponse().contains("Fake contents"));
     }
@@ -89,7 +89,7 @@ public class StaticResourceActionTest {
         request.setPathWithParams("/fake-image.png");
         request.addHeader("Range", "bytes=0-4");
 
-        HTTPResponse response = fakeAction.getResponse(request, new BasicHTTPMessageFactory.HTTPResponse());
+        HTTPResponse response = fakeAction.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
 
         assertTrue(response.getFormattedResponse().contains("206 Partial Content"));
     }
@@ -110,7 +110,7 @@ public class StaticResourceActionTest {
         request.setPathWithParams("/partial_content.txt");
         request.addHeader("If-Match", "somethingGoesHere");
         request.setBody("some random content");
-        HTTPResponse response = new BasicHTTPMessageFactory.HTTPResponse();
+        HTTPResponse response = new BasicHTTPMessageFactory().getNewResponse();
 
         action.getResponse(request, response);
 
@@ -126,7 +126,7 @@ public class StaticResourceActionTest {
         request.setPathWithParams("/does-not-matter.txt");
         request.setBody("some random content");
 
-        action.getResponse(request, new BasicHTTPMessageFactory.HTTPResponse());
+        action.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
 
         String fileContentsAfterPatchRequest = new String(action.fileIO.getAllBytesFromFile(path));
         Assert.assertEquals("default content", fileContentsAfterPatchRequest);
@@ -142,7 +142,7 @@ public class StaticResourceActionTest {
         request.setBody("some random content");
         request.addHeader("If-Match", "somethingGoesHere");
 
-        action.getResponse(request, new BasicHTTPMessageFactory.HTTPResponse());
+        action.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
 
         String fileContentsAfterPatchRequest = new String(action.fileIO.getAllBytesFromFile(path));
         Assert.assertEquals("some random content", fileContentsAfterPatchRequest);
