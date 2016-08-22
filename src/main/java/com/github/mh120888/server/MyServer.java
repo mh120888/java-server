@@ -13,15 +13,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MyServer {
-    static String publicDirectory = "/Users/matthewhiggins/Desktop/cob_spec/public";
+    static String publicDirectory;
     static int myPort = 5000;
-    static Application app = new CobSpecApp(publicDirectory);
 
     private static ExecutorService executor = Executors.newFixedThreadPool(100);
 
     public static void main(String[] args) throws IOException {
         verifyAndSetOptions(args);
-        runServer(app, new BasicHTTPMessageFactory());
+        runServer(new CobSpecApp(publicDirectory), new BasicHTTPMessageFactory());
     }
 
     static void runServer(Application app, HTTPMessageFactory requestResponseFactory) throws IOException {
