@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class CommandLineArgsParser {
     private static String usage = "Usage: java -jar javaserver-1.0-SNAPSHOT.jar [-pd]\n" +
             "\t-p <port number> {80}\n" +
-            "\t-d <public directory> {.}";
+            "\t-d <public directory> {.} (required)";
 
     public static HashMap<String, String> groupOptions(String[] args) {
         HashMap<String, String> parsedArgs = new HashMap<>();

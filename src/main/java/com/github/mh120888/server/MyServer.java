@@ -20,11 +20,11 @@ public class MyServer {
     private static ExecutorService executor = Executors.newFixedThreadPool(100);
 
     public static void main(String[] args) throws IOException {
-        setOptions(args);
+        verifyAndSetOptions(args);
         runServer(app, new BasicHTTPMessageFactory());
     }
 
-    public static void runServer(Application app, HTTPMessageFactory requestResponseFactory) throws IOException {
+    static void runServer(Application app, HTTPMessageFactory requestResponseFactory) throws IOException {
         ServerSocket server = new ServerSocket(myPort);
         try {
             while (true) {
@@ -40,13 +40,30 @@ public class MyServer {
         }
     }
 
-    public static void setOptions(String[] args) {
+    static void verifyAndSetOptions(String[] args) {
         HashMap<String, String> options = CommandLineArgsParser.groupOptions(args);
-        myPort = getPortNumber(options);
-        publicDirectory = setPublicDirectory(options);
+        if (isDirectoryOptionPresentAndValid(options)) {
+            myPort = getPortNumber(options);
+            publicDirectory = getPublicDirectory(options);
+        } else {
+            CommandLineArgsParser.printUsageAndExit();
+        }
     }
 
-     static int getPortNumber(HashMap<String, String> options) {
+    private static boolean isDirectoryOptionPresentAndValid(HashMap<String, String> options) {
+        return (isDirectoryOptionPresent(options) && isDirectoryOptionValid(options));
+    }
+
+    private static boolean isDirectoryOptionPresent(HashMap<String, String> options) {
+        return options.containsKey("-d");
+    }
+
+    private static boolean isDirectoryOptionValid(HashMap<String, String> options) {
+        File file = new File(options.get("-d"));
+        return file.exists();
+    }
+
+    static int getPortNumber(HashMap<String, String> options) {
         int port = myPort;
         if (options.containsKey("-p")) {
             try {
@@ -58,17 +75,7 @@ public class MyServer {
         return port;
     }
 
-    static String setPublicDirectory(HashMap<String, String> options) {
-        String directory = publicDirectory;
-        String directoryFromOptions = options.get("-d");
-        if (directoryFromOptions == null) {
-            directory = publicDirectory;
-        } else {
-            File file = new File(directoryFromOptions);
-            if (file.exists()) {
-                directory = directoryFromOptions;
-            }
-        }
-        return directory;
+    static String getPublicDirectory(HashMap<String, String> options) {
+        return options.get("-d");
     }
 }

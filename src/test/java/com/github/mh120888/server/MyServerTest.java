@@ -1,13 +1,19 @@
 package com.github.mh120888.server;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import java.io.*;
+import java.security.Permission;
 import java.util.HashMap;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class MyServerTest {
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+    private SecurityManager securityManager;
 
     @org.junit.Before
     public void setUp() throws Exception {
@@ -15,10 +21,28 @@ public class MyServerTest {
         System.setErr(new PrintStream(errContent));
         MyServer.myPort = 3000;
         MyServer.publicDirectory = "~/";
+
+        securityManager = System.getSecurityManager();
+        System.setSecurityManager(new SecurityManager() {
+            @Override
+            public void checkPermission(Permission perm) {
+            }
+
+            @Override
+            public void checkPermission(Permission perm, Object context) {
+            }
+
+            @Override
+            public void checkExit(int status) {
+                String message = "System exit requested with error " + status;
+                throw new SecurityException(message);
+            }
+        });
     }
 
-    @org.junit.After
+    @After
     public void tearDown() throws Exception {
+        System.setSecurityManager(securityManager);
         System.setOut(null);
         System.setErr(null);
     }
@@ -50,28 +74,24 @@ public class MyServerTest {
     }
 
     @Test
-    public void getPublicDirectoryReturnsDefaultIfNoneIsSpecifiedInOptions() {
-        HashMap<String, String> options = new HashMap<>();
-
-        String directory = MyServer.setPublicDirectory(options);
-        Assert.assertEquals("~/", directory);
-    }
-
-    @Test
-    public void getPublicDirectoryReturnsDefaultIfOptionsSpecifyDirectoryThatDoesNotExist() {
-        HashMap<String, String> options = new HashMap<>();
-        options.put("-d", "this is not a real directory");
-
-        String directory = MyServer.setPublicDirectory(options);
-        Assert.assertEquals("~/", directory);
-    }
-
-    @Test
-    public void getPublicDirectoryReturnsDirectoryFromOptionsIfItsValid() {
+    public void getPublicDirectoryReturnsDirectoryFromOptions() {
         HashMap<String, String> options = new HashMap<>();
         options.put("-d", "/Users/");
 
-        String directory = MyServer.setPublicDirectory(options);
+        String directory = MyServer.getPublicDirectory(options);
         Assert.assertEquals("/Users/", directory);
+    }
+
+    @Test
+    public void setOptionsWithValidPortButWithoutPublicDirectoryOptionExitsWithStatus64() throws Exception {
+        String[] args = {"-p", "5000"};
+        String exceptionMessage = "no error";
+        try {
+            MyServer.verifyAndSetOptions(args);
+        } catch (SecurityException e) {
+            exceptionMessage = e.getMessage();
+        } finally {
+            assertEquals("System exit requested with error 64", exceptionMessage);
+        }
     }
 }
