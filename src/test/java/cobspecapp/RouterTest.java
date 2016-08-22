@@ -16,11 +16,6 @@ public class RouterTest {
         Logger.clearLog();
     }
 
-    @After
-    public void tearDown() throws Exception {
-
-    }
-
     @Test
     public void routeReturnsStaticResourceActionForAStaticResource() {
         HTTPRequest request = new BasicHTTPRequest();

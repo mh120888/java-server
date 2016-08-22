@@ -14,11 +14,6 @@ public class CoffeeActionTest {
         action = new CoffeeAction();
     }
 
-    @After
-    public void tearDown() throws Exception {
-
-    }
-
     @Test
     public void returns418ForGETCoffee() {
         HTTPResponse response = ResponseGenerator.generateResponse("GET", "/coffee", action);

@@ -8,16 +8,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 public class NotFoundActionTest {
-    @Before
-    public void setUp() throws Exception {
-
-    }
-
-    @After
-    public void tearDown() throws Exception {
-
-    }
-
     @Test
     public void returnsAStatusOf404() {
         NotFoundAction action = new NotFoundAction();
@@ -25,5 +15,4 @@ public class NotFoundActionTest {
 
         assertTrue(response.getFormattedResponse().contains("HTTP/1.1 404"));
     }
-
 }

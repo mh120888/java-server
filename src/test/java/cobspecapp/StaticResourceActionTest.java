@@ -22,11 +22,6 @@ public class StaticResourceActionTest {
         action = new StaticResourceAction(publicDirectory);
     }
 
-    @After
-    public void tearDown() throws Exception {
-
-    }
-
     @Test
     public void getResponseDataReturnsCorrectResponseLineForGet() {
         HTTPResponse response = ResponseGenerator.generateResponse("GET", "/", action);
