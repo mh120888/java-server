@@ -4,9 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import httpmessage.HeaderParser;
 
-/**
- * Created by matthewhiggins on 7/20/16.
- */
 public class BasicHTTPRequestTest {
     @Test
     public void getMethodReturnsTheRequestMethodWhenItIsGET() {

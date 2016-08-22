@@ -3,9 +3,6 @@ package mocks;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-/**
- * Created by matthewhiggins on 7/19/16.
- */
 public class MockPrintStream extends PrintStream {
     public String lastMessage;
 

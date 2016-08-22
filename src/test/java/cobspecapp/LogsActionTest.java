@@ -7,9 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- * Created by matthewhiggins on 7/12/16.
- */
 public class LogsActionTest {
     LogsAction action;
 

@@ -5,9 +5,6 @@ import basichttpmessage.BasicHeaderParser;
 
 import java.util.HashMap;
 
-/**
- * Created by matthewhiggins on 7/25/16.
- */
 public class MockHTTPRequest implements HTTPRequest {
 
     private String method;

@@ -7,9 +7,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by matthewhiggins on 7/11/16.
- */
 public class NotFoundActionTest {
     @Before
     public void setUp() throws Exception {

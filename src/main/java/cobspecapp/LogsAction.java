@@ -3,9 +3,6 @@ package cobspecapp;
 import httpmessage.HTTPRequest;
 import httpmessage.HTTPResponse;
 
-/**L
- * Created by matthewhiggins on 7/12/16.
- */
 public class LogsAction implements Action {
     private String correctCredentials = "admin:hunter2";
 

@@ -6,9 +6,6 @@ import org.junit.Test;
 import java.io.*;
 import java.util.HashMap;
 
-/**
- * Created by matthewhiggins on 7/5/16.
- */
 public class MyServerTest {
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();

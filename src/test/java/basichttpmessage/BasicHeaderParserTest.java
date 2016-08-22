@@ -6,9 +6,6 @@ import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by matthewhiggins on 7/13/16.
- */
 public class BasicHeaderParserTest {
     @Test
     public void splitUpRangeHeaderReturnsTheStartingAndEndingBytes() {

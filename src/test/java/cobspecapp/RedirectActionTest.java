@@ -5,9 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by matthewhiggins on 7/14/16.
- */
 public class RedirectActionTest {
     RedirectAction action;
 

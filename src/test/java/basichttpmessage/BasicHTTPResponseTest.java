@@ -3,9 +3,6 @@ package basichttpmessage;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * Created by matthewhiggins on 7/21/16.
- */
 public class BasicHTTPResponseTest {
     @Test
     public void setStatusChangesStatusMember() {

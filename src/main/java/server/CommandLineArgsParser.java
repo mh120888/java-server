@@ -2,9 +2,6 @@ package server;
 
 import java.util.HashMap;
 
-/**
- * Created by matthewhiggins on 7/15/16.
- */
 public class CommandLineArgsParser {
     public static HashMap<String, String> groupOptions(String[] args) {
         HashMap<String, String> parsedArgs = new HashMap<>();

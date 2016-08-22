@@ -10,10 +10,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by matthewhiggins on 7/11/16.
- */
-
 public class PostableActionTest {
     PostableAction action;
 

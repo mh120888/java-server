@@ -12,11 +12,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 
-
-/**
- * Created by matthewhiggins on 7/27/16.
- */
-
 public class ConnectionHandlerTest {
     ConnectionHandler connectionHandler;
 

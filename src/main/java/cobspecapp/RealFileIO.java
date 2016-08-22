@@ -6,9 +6,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-/**
- * Created by matthewhiggins on 7/26/16.
- */
 public class RealFileIO implements FileIO {
 
     public RealFileIO() {}

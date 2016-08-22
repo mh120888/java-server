@@ -13,9 +13,6 @@ import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by matthewhiggins on 7/11/16.
- */
 public class StaticResourceActionTest {
     public static String publicDirectory = "/Users/matthewhiggins/Desktop/cob_spec/public";
     StaticResourceAction action;

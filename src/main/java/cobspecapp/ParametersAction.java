@@ -5,9 +5,6 @@ import httpmessage.HTTPResponse;
 
 import java.util.Map;
 
-/**
- * Created by matthewhiggins on 7/13/16.
- */
 public class ParametersAction implements Action {
 
     public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {

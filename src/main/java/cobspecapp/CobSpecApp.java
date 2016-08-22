@@ -4,9 +4,6 @@ import httpmessage.HTTPRequest;
 import httpmessage.HTTPResponse;
 import app.Application;
 
-/**
- * Created by matthewhiggins on 7/19/16.
- */
 public class CobSpecApp implements Application {
     public String publicDirectory;
 

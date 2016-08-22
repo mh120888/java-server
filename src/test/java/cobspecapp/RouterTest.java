@@ -8,9 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by matthewhiggins on 7/11/16.
- */
 public class RouterTest {
     public static String publicDirectory = "/Users/matthewhiggins/Desktop/cob_spec/public";
 

@@ -5,9 +5,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-/**
- * Created by matthewhiggins on 7/14/16.
- */
 public class OptionsActionTest {
     OptionsAction action;
 

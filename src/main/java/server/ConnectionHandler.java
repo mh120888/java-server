@@ -11,9 +11,6 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 
-/**
- * Created by matthewhiggins on 7/27/16.
- */
 public class ConnectionHandler implements Runnable {
 
     private Socket clientSocket;

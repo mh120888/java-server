@@ -1,8 +1,5 @@
 package basichttpmessage;
 
-/**
- * Created by matthewhiggins on 7/21/16.
- */
 import httpmessage.HTTPResponse;
 
 import java.util.HashMap;

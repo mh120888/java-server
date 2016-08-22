@@ -5,9 +5,6 @@ import org.junit.Test;
 import java.util.HashMap;
 import static org.junit.Assert.*;
 
-/**
- * Created by matthewhiggins on 7/15/16.
- */
 public class CommandLineArgsParserTest {
     @Test
     public void groupOptionsMatchesSingleFlagWithValue() {

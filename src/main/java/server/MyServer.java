@@ -1,6 +1,4 @@
-package server; /**
- * Created by matthewhiggins on 7/5/16.
- */
+package server;
 
 import app.Application;
 import cobspecapp.CobSpecApp;

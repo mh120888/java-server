@@ -5,9 +5,6 @@ import httpmessage.HTTPResponse;
 
 import java.util.Arrays;
 
-/**
- * Created by matthewhiggins on 7/11/16.
- */
 public class StaticResourceAction implements Action {
     private static String publicDirectory;
     private HTTPRequest request;

@@ -4,9 +4,6 @@ import org.junit.Test;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by matthewhiggins on 7/12/16.
- */
 public class LoggerTest {
     @Test
     public void requestLogContainsPreviousRequest() {
