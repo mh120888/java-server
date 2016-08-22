@@ -2,8 +2,6 @@ package com.github.mh120888.cobspecapp;
 
 import com.github.mh120888.httpmessage.HTTPResponse;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;

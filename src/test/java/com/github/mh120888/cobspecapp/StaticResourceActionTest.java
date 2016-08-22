@@ -5,7 +5,6 @@ import com.github.mh120888.httpmessage.HTTPResponse;
 import com.github.mh120888.mocks.MockHTTPRequest;
 import com.github.mh120888.mocks.MockFileIO;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
