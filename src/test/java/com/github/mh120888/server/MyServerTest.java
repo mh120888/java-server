@@ -9,18 +9,20 @@ import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 
 public class MyServerTest {
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
     private SecurityManager securityManager;
+    private final int DEFAULTPORT = 3000;
 
     @org.junit.Before
     public void setUp() throws Exception {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
-        MyServer.myPort = 3000;
-        MyServer.publicDirectory = "~/";
+        MyServer.myPort = DEFAULTPORT;
+        MyServer.publicDirectory = null;
 
         securityManager = System.getSecurityManager();
         System.setSecurityManager(new SecurityManager() {
@@ -83,7 +85,7 @@ public class MyServerTest {
     }
 
     @Test
-    public void setOptionsWithValidPortButWithoutPublicDirectoryOptionExitsWithStatus64() throws Exception {
+    public void verifyAndSetOptionsWithValidPortButWithoutPublicDirectoryOptionExitsWithStatus64() throws Exception {
         String[] args = {"-p", "5000"};
         String exceptionMessage = "no error";
         try {
@@ -94,4 +96,28 @@ public class MyServerTest {
             assertEquals("System exit requested with error 64", exceptionMessage);
         }
     }
+
+    @Test
+    public void verifyAndSetOptionsDoesNotSetPortOrDirectoryIfDirectoryIsPresentButInvalid() throws Exception {
+        String[] args = {"-p", "5000", "-d", "not a valid directory"};
+        try {
+            MyServer.verifyAndSetOptions(args);
+        } catch (SecurityException e) {
+
+        } finally {
+            assertNull(MyServer.publicDirectory);
+            assertEquals(DEFAULTPORT, MyServer.myPort);
+        }
+    }
+
+    @Test
+    public void verifyAndSetOptionsSetsPortAndDirectoryWhenBothOptionsArePresentAndValid() throws Exception {
+        String[] args = {"-p", "5000", "-d", "/Users/"};
+
+        MyServer.verifyAndSetOptions(args);
+
+        assertEquals(5000, MyServer.myPort);
+        assertEquals("/Users/", MyServer.publicDirectory);
+    }
+
 }
