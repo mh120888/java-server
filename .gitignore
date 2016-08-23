@@ -13,3 +13,4 @@ index.html
 *.pdf
 *.mp3
 .DS_Store
+*.xml.asc
