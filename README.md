@@ -21,10 +21,6 @@ java -jar target/javaserver-1.0-SNAPSHOT.jar -d [public directory]
 
 *the public directory option is required and must exist on your system
 
-##API Reference
-
-Depending on the size of the project, if it is small and simple enough the reference docs can be added to the README. For medium size to larger projects it is important to at least provide a link to where the API reference docs live.
-
 ##Tests
 
 Unit tests for this project are written with JUnit and can be run in an IDE with support for JUnit or using maven with `mvn test`.
