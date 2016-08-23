@@ -27,6 +27,7 @@ public class MyServer {
 
     static void runServer(Application app, HTTPMessageFactory requestResponseFactory) throws IOException {
         ServerSocket server = new ServerSocket(myPort);
+        printRunningMessage();
         try {
             while (true) {
                 Socket socket = server.accept();
@@ -49,6 +50,10 @@ public class MyServer {
         } else {
             CommandLineArgsParser.printUsageAndExit();
         }
+    }
+
+    static void printRunningMessage() {
+        System.out.println("Server running on port " + myPort);
     }
 
     private static boolean isDirectoryOptionPresentAndValid(HashMap<String, String> options) {

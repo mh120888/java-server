@@ -126,4 +126,11 @@ public class MyServerTest {
         assertEquals("/Users/", MyServer.publicDirectory);
     }
 
+    @Test
+    public void printRunningMessageDisplaysThatTheServerIsRunningOnTheCorrectPort() {
+        MyServer.printRunningMessage();
+
+        assertEquals("Server running on port " + MyServer.myPort + "\n", outContent.toString());
+    }
+
 }
