@@ -19,7 +19,7 @@ mvn package
 java -jar target/javaserver-1.0-SNAPSHOT.jar -d [public directory]
 ```
 
-*the public directory option is required and must exist on your system
+*the public directory option is required and must exist on your system*
 
 ##Tests
 
