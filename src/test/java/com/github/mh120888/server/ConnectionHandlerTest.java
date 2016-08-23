@@ -5,6 +5,7 @@ import com.github.mh120888.basichttpmessage.BasicHTTPMessageFactory;
 import com.github.mh120888.httpmessage.HTTPRequest;
 import com.github.mh120888.mocks.*;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,13 +13,25 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class ConnectionHandlerTest {
     ConnectionHandler connectionHandler;
+    ServerSocket dummyServerSocket;
+    Socket dummySocket;
 
     @Before
-    public void setUp() {
-        connectionHandler = ConnectionHandler.getNewTestConnectionHandler(new MockApplication("Random response"), new BasicHTTPMessageFactory());
+    public void setUp() throws IOException {
+        dummyServerSocket = new ServerSocket(3000);
+        dummySocket = new Socket("localhost", 3000);
+        connectionHandler = new ConnectionHandler(dummySocket, new MockApplication("Random response"), new BasicHTTPMessageFactory());
+    }
+
+    @After
+    public void tearDown() throws IOException {
+        dummySocket.close();
+        dummyServerSocket.close();
     }
 
     @Test

@@ -17,23 +17,10 @@ public class ConnectionHandler implements Runnable {
     private Application application;
     private HTTPMessageFactory httpMessageFactory;
 
-    private ConnectionHandler(Application app, HTTPMessageFactory httpMessageFactory) {
-        this.application = app;
-        this.httpMessageFactory = httpMessageFactory;
-    }
-
-    private ConnectionHandler(Socket socket, Application app, HTTPMessageFactory httpMessageFactory) {
+    public ConnectionHandler(Socket socket, Application app, HTTPMessageFactory httpMessageFactory) {
         this.clientSocket = socket;
         this.application = app;
         this.httpMessageFactory = httpMessageFactory;
-    }
-
-    public static ConnectionHandler getNewConnectionHandler(Socket socket, Application app, HTTPMessageFactory requestResponseFactory) {
-        return new ConnectionHandler(socket, app, requestResponseFactory);
-    }
-
-    public static ConnectionHandler getNewTestConnectionHandler(Application app, HTTPMessageFactory requestResponseFactory) {
-        return new ConnectionHandler(app, requestResponseFactory);
     }
 
     public void run() {

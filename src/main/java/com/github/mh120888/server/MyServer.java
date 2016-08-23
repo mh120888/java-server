@@ -13,8 +13,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class MyServer {
+    static final int DEFAULTPORT = 5000;
+
     static String publicDirectory;
-    static int myPort = 5000;
+    static int myPort = DEFAULTPORT;
 
     private static ExecutorService executor = Executors.newFixedThreadPool(100);
 
@@ -28,7 +30,7 @@ public class MyServer {
         try {
             while (true) {
                 Socket socket = server.accept();
-                Runnable connectionHandler = ConnectionHandler.getNewConnectionHandler(socket, app, requestResponseFactory);
+                Runnable connectionHandler = new ConnectionHandler(socket, app, requestResponseFactory);
                 executor.execute(connectionHandler);
             }
         } catch (IOException e) {
