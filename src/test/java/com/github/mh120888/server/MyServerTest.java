@@ -8,21 +8,21 @@ import java.security.Permission;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 
 public class MyServerTest {
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
     private SecurityManager securityManager;
     private final int DEFAULTPORT = 3000;
+    private final String DEFAULTDIRECTORY = "/default/";
 
     @org.junit.Before
     public void setUp() throws Exception {
+        MyServer.myPort = DEFAULTPORT;
+        MyServer.publicDirectory = DEFAULTDIRECTORY;
+
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
-        MyServer.myPort = DEFAULTPORT;
-        MyServer.publicDirectory = null;
 
         securityManager = System.getSecurityManager();
         System.setSecurityManager(new SecurityManager() {
@@ -54,15 +54,17 @@ public class MyServerTest {
         HashMap<String, String> options = new HashMap<>();
 
         int port = MyServer.getPortNumber(options);
-        Assert.assertEquals(3000, port);
+
+        Assert.assertEquals(DEFAULTPORT, port);
     }
 
     @Test
-    public void getPortNumberWillReturnNewPortNumberIfItsAnInt() {
+    public void getPortNumberWillReturnNewPortNumberIfItIsAnInt() {
         HashMap<String, String> options = new HashMap<>();
         options.put("-p", "5001");
 
         int port = MyServer.getPortNumber(options);
+
         Assert.assertEquals(5001, port);
     }
 
@@ -72,15 +74,17 @@ public class MyServerTest {
         options.put("-p", "not an int");
 
         int port = MyServer.getPortNumber(options);
-        Assert.assertEquals(3000, port);
+
+        Assert.assertEquals(DEFAULTPORT, port);
     }
 
     @Test
-    public void getPublicDirectoryReturnsDirectoryFromOptions() {
+    public void getPublicDirectoryReturnsDirectoryFromOptionsIfItIsAValidDirectory() {
         HashMap<String, String> options = new HashMap<>();
         options.put("-d", "/Users/");
 
         String directory = MyServer.getPublicDirectory(options);
+
         Assert.assertEquals("/Users/", directory);
     }
 
@@ -88,6 +92,7 @@ public class MyServerTest {
     public void verifyAndSetOptionsWithValidPortButWithoutPublicDirectoryOptionExitsWithStatus64() throws Exception {
         String[] args = {"-p", "5000"};
         String exceptionMessage = "no error";
+
         try {
             MyServer.verifyAndSetOptions(args);
         } catch (SecurityException e) {
@@ -100,12 +105,13 @@ public class MyServerTest {
     @Test
     public void verifyAndSetOptionsDoesNotSetPortOrDirectoryIfDirectoryIsPresentButInvalid() throws Exception {
         String[] args = {"-p", "5000", "-d", "not a valid directory"};
+
         try {
             MyServer.verifyAndSetOptions(args);
         } catch (SecurityException e) {
 
         } finally {
-            assertNull(MyServer.publicDirectory);
+            assertEquals(DEFAULTDIRECTORY, MyServer.publicDirectory);
             assertEquals(DEFAULTPORT, MyServer.myPort);
         }
     }
