@@ -6,24 +6,46 @@ import com.github.mh120888.httpmessage.HTTPResponse;
 import java.util.Map;
 
 public class ParametersAction implements Action {
+    private HTTPRequest request;
+    private HTTPResponse response;
 
     public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {
-        if (request.getMethod().equals("GET")) {
-            response.setStatus(200);
-        } else {
-            response.setStatus(405);
-        }
+        this.request = request;
+        this.response = response;
 
-        Map<String, String> parameters = request.getAllParams();
-
-        if (parameters.size() > 0) {
-            String body = "";
-            for (Map.Entry<String, String> entry : parameters.entrySet()) {
-                body += entry.getKey() + " = " + entry.getValue() + "\n";
-            }
-            response.setBody(body.getBytes());
-        }
+        response.setStatus(getStatus());
+        response.setBody(getBody());
 
         return response;
+    }
+
+    private int getStatus() {
+        if (request.getMethod().equals("GET")) {
+            return 200;
+        } else {
+            return 405;
+        }
+    }
+
+    private byte[] getBody() {
+        Map<String, String> parameters = request.getAllParams();
+
+        String body = "";
+        if (areThereAnyParameters(parameters)) {
+            body = formatParametersForBody(parameters);
+        }
+        return body.getBytes();
+    }
+
+    private String formatParametersForBody(Map<String, String> parameters) {
+        String body = "";
+        for (Map.Entry<String, String> entry : parameters.entrySet()) {
+            body += entry.getKey() + " = " + entry.getValue() + "\n";
+        }
+        return body;
+    }
+
+    private boolean areThereAnyParameters(Map<String, String> parameters) {
+        return parameters.size() > 0;
     }
 }
