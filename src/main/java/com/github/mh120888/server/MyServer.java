@@ -75,7 +75,7 @@ public class MyServer {
             try {
                 port = Integer.parseInt(options.get("-p"));
             } catch (NumberFormatException e) {
-                port = myPort;
+                System.err.println(e.getMessage()) ;
             }
         }
         return port;
