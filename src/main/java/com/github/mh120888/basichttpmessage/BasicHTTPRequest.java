@@ -63,7 +63,7 @@ public class BasicHTTPRequest implements HTTPRequest {
     }
 
     public String getBaseLocation() {
-        return "http://localhost:5000/";
+        return "http://" + headers.getOrDefault("Host", "localhost:3000") + "/";
     }
 
     public String getInitialRequestLine() {

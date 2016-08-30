@@ -10,6 +10,7 @@ public class ResponseGenerator {
         request.setMethod(method);
         request.setPathWithParams(pathWithParams);
         request.setVersion("HTTP/1.1");
+        request.addHeader("Host", "localhost:5000");
         return action.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
     }
 }

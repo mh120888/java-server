@@ -133,8 +133,9 @@ public class BasicHTTPRequestTest {
     public void getBaseLocationReturnsTheCorrectDefaultLocation() {
         BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET / HTTP/1.1\n");
+        request.setHeaders("Host: localhost:5555");
 
-        Assert.assertEquals("http://localhost:5000/", request.getBaseLocation());
+        Assert.assertEquals("http://localhost:5555/", request.getBaseLocation());
     }
 
     @Test
