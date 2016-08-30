@@ -3,12 +3,11 @@ package com.github.mh120888.basichttpmessage;
 import com.github.mh120888.httpmessage.HeaderParser;
 import com.github.mh120888.httpmessage.HTTPRequest;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 public class BasicHTTPRequest implements HTTPRequest {
 
+    private RequestParser requestParser;
     private String method;
     private String pathWithParams;
     private String version;
@@ -19,37 +18,16 @@ public class BasicHTTPRequest implements HTTPRequest {
     public BasicHTTPRequest() {}
 
     public void setRequestLine(String requestAsString) {
-        String[] requestSeparatedByNewline = requestAsString.split("\n");
-        String[] splitIRL = requestSeparatedByNewline[0].split(" ");
-        method = splitIRL[0];
-        pathWithParams = splitIRL[1];
-        version = splitIRL[2];
+        requestParser = new RequestParser(requestAsString);
 
-        setParams(pathWithParams.split("\\?"));
+        method = requestParser.getMethod();
+        pathWithParams = requestParser.getPath();
+        version = requestParser.getVersion();
+        params = requestParser.getParams(pathWithParams);
     };
 
     public void setHeaders(String headerInput) {
-        String[] splitUpHeaders = headerInput.split("\n");
-        for (String headerPair : splitUpHeaders) {
-            String[] separatePair = headerPair.split(":");
-            String headerName = separatePair[0];
-            String headerValue = String.join(":", Arrays.copyOfRange(separatePair, 1, separatePair.length)).trim();
-            headers.put(headerName, headerValue);
-        }
-    }
-
-    private void setParams(String[] splitPathFromParams) {
-        if (splitPathFromParams.length > 1) {
-            String[] allParams = splitPathFromParams[1].split("&");
-            for (String singleParam: allParams) {
-                String[] paramValuePair = singleParam.split("=");
-                String value = paramValuePair[1];
-                for (Map.Entry<String, String> entry : decoderPairs.entrySet()) {
-                    value = value.replaceAll(entry.getKey(), entry.getValue());
-                }
-                params.put(paramValuePair[0], value);
-            }
-        }
+        headers = requestParser.getHeaders(headerInput);
     }
 
     public String getMethod() {
@@ -102,25 +80,5 @@ public class BasicHTTPRequest implements HTTPRequest {
 
     public String getBody() {
         return body;
-    }
-
-    private static Map<String, String> decoderPairs = new HashMap<>();
-    static {
-        decoderPairs.put("%20", " ");
-        decoderPairs.put("%3C", "<");
-        decoderPairs.put("%2C", ",");
-        decoderPairs.put("%3E", ">");
-        decoderPairs.put("%3D", "=");
-        decoderPairs.put("%3B", ";");
-        decoderPairs.put("%2B", "+");
-        decoderPairs.put("%26", "&");
-        decoderPairs.put("%40", "@");
-        decoderPairs.put("%23", "#");
-        decoderPairs.put("%24", "\\$");
-        decoderPairs.put("%5B", "[");
-        decoderPairs.put("%5D", "]");
-        decoderPairs.put("%3A", ":");
-        decoderPairs.put("%22", "\"");
-        decoderPairs.put("%3F", "\\?");
     }
 }
