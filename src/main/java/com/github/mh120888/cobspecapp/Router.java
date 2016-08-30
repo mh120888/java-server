@@ -12,8 +12,10 @@ public class Router {
 
         if (isInPublicDirectory(publicDirectory, fileIO, path)) {
             return new StaticResourceAction(publicDirectory);
-        } else if (path.contains("/coffee") || path.contains("/tea")) {
+        } else if (path.contains("/coffee")) {
             return new CoffeeAction();
+        } else if (path.contains("/tea")) {
+            return new TeaAction();
         } else if (path.contains("/form")) {
             return new PostableAction();
         } else if (path.contains("/logs")) {

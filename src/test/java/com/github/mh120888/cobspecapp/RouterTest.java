@@ -37,6 +37,14 @@ public class RouterTest {
     }
 
     @Test
+    public void routeReturnsTeaActionWhenAppropriate() {
+        request.setRequestLine("GET /tea HTTP/1.1");
+        Action action = Router.route(request, fileIO, publicDirectory);
+
+        assertTrue(action instanceof TeaAction);
+    }
+
+    @Test
     public void routeReturnsNotFoundActionWhenPathIsNotRecognized() {
         request.setRequestLine("GET /foobar HTTP/1.1");
         Action action = Router.route(request, fileIO, publicDirectory);

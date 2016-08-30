@@ -26,12 +26,4 @@ public class CoffeeActionTest {
 
         assertTrue(response.getFormattedResponse().contains("I'm a teapot"));
     }
-
-    @Test
-    public void returns200ForGETTea() {
-        HTTPResponse response = ResponseGenerator.generateResponse("GET", "/tea", action);
-
-        assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
-    }
-
 }
