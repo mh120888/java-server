@@ -7,10 +7,12 @@ import com.github.mh120888.mocks.MockHTTPRequest;
 public class ResponseGenerator {
     static HTTPResponse generateResponse(String method, String pathWithParams, Action action) {
         MockHTTPRequest request = new MockHTTPRequest();
+        HTTPResponse response = new BasicHTTPMessageFactory().getNewResponse();
         request.setMethod(method);
         request.setPathWithParams(pathWithParams);
         request.setVersion("HTTP/1.1");
         request.addHeader("Host", "localhost:5000");
-        return action.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
+        response.setHTTPVersion(request.getVersion());
+        return action.getResponse(request, response);
     }
 }

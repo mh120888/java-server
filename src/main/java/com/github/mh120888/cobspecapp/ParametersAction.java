@@ -8,8 +8,6 @@ import java.util.Map;
 public class ParametersAction implements Action {
 
     public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {
-        response.setHTTPVersion(request.getVersion());
-
         if (request.getMethod().equals("GET")) {
             response.setStatus(200);
         } else {

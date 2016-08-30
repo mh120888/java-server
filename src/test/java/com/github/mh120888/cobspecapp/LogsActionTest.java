@@ -32,35 +32,6 @@ public class LogsActionTest {
     }
 
     @Test
-    public void isAuthorizedReturnsTrueForCorrectCredentials() {
-        MockHTTPRequest request = new MockHTTPRequest();
-        request.setMethod("GET");
-        request.setPathWithParams("/logs");
-        request.addHeader("Authorization", "Basic YWRtaW46aHVudGVyMg==");
-
-        assertTrue(action.isAuthorized(request));
-    }
-
-    @Test
-    public void isAuthorizedReturnsFalseWithNoCredentials() {
-        MockHTTPRequest request = new MockHTTPRequest();
-        request.setMethod("GET");
-        request.setPathWithParams("/logs");
-
-        assertFalse(action.isAuthorized(request));
-    }
-
-    @Test
-    public void isAuthorizedReturnsFalseForIncorrectCredentials() {
-        MockHTTPRequest request = new MockHTTPRequest();
-        request.setMethod("GET");
-        request.setPathWithParams("/logs");
-        request.addHeader("Authorization", "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
-
-        assertFalse(action.isAuthorized(request));
-    }
-
-    @Test
     public void requestToLogsWithCredentialsReturnsLogOfPreviousRequestsInBody() {
         Logger.addLog("GET / HTTP/1.1");
         MockHTTPRequest request = new MockHTTPRequest();

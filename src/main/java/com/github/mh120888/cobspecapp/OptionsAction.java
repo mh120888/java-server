@@ -6,7 +6,6 @@ import com.github.mh120888.httpmessage.HTTPResponse;
 public class OptionsAction implements Action {
 
     public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {
-        response.setHTTPVersion(request.getVersion());
         response.setStatus(200);
         response.addHeader("Allow", buildHeaders(request.getPath()));
 

@@ -23,8 +23,6 @@ public class StaticResourceAction implements Action {
     public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {
         this.request = request;
 
-        response.setHTTPVersion(request.getVersion());
-
         if (isPartialContentRequest()) {
             response.setStatus(206);
             setBodyAndHeadersForPartialContentRequest(response);

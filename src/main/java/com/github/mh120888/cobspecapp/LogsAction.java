@@ -7,19 +7,25 @@ public class LogsAction implements Action {
     private String correctCredentials = "admin:hunter2";
 
     public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {
-        response.setHTTPVersion(request.getVersion());
-
         if (isAuthorized(request)) {
-            response.setStatus(200);
-            response.setBody(String.join("\n", Logger.getLog()).getBytes());
+            setAuthorizedResponse(response);
         } else {
-            response.setStatus(401);
-            response.addHeader("WWW-Authenticate", "Basic realm=\"User Visible Realm\"");
+            setUnauthorizedResponse(response);
         }
         return response;
     }
 
-    public boolean isAuthorized(HTTPRequest request) {
+    private void setUnauthorizedResponse(HTTPResponse response) {
+        response.setStatus(401);
+        response.addHeader("WWW-Authenticate", "Basic realm=\"User Visible Realm\"");
+    }
+
+    private void setAuthorizedResponse(HTTPResponse response) {
+        response.setStatus(200);
+        response.setBody(String.join("\n", Logger.getLog()).getBytes());
+    }
+
+    private boolean isAuthorized(HTTPRequest request) {
         String encodedCredentials = "";
         if (request.containsHeader("Authorization")) {
             encodedCredentials = request.getHeader("Authorization").replace("Basic ", "");
