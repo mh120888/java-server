@@ -6,6 +6,8 @@ public class MockFileIO implements FileIO {
     byte[] fileContents;
     boolean isDirectory = false;
 
+    public MockFileIO() {}
+
     public MockFileIO(String contents) {
         fileContents = contents.getBytes();
     }
@@ -18,11 +20,11 @@ public class MockFileIO implements FileIO {
         fileContents = newFileContents;
     }
 
-    public String[] getFilenames(String directory) { return null; }
+    public String[] getFilenames(String directory) { return new String[0]; }
 
     public boolean isDirectory(String directory) { return isDirectory; }
 
-    public void responseToIsDirectoryWith(boolean value) {
+    public void respondToIsDirectoryWith(boolean value) {
         isDirectory = value;
     }
 }

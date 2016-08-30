@@ -60,7 +60,7 @@ public class StaticResourceActionTest {
     @Test
     public void getRequestForAnExistingFileReturnsTheContentsOfThatFile() throws IOException {
         MockFileIO fakeFileIO = new MockFileIO("Fake contents");
-        fakeFileIO.responseToIsDirectoryWith(false);
+        fakeFileIO.respondToIsDirectoryWith(false);
         StaticResourceAction fakeAction = StaticResourceAction.getStaticResourceActionWithFileIO(publicDirectory, fakeFileIO);
         MockHTTPRequest request = new MockHTTPRequest();
         request.setMethod("GET");
@@ -74,7 +74,7 @@ public class StaticResourceActionTest {
     @Test
     public void getRequestWithRangeHeadersReturnsA206Response() {
         MockFileIO fakeFileIO = new MockFileIO("Fake contents");
-        fakeFileIO.responseToIsDirectoryWith(false);
+        fakeFileIO.respondToIsDirectoryWith(false);
         StaticResourceAction fakeAction = StaticResourceAction.getStaticResourceActionWithFileIO(publicDirectory, fakeFileIO);
         MockHTTPRequest request = new MockHTTPRequest();
         request.setMethod("GET");

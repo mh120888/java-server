@@ -2,18 +2,15 @@ package com.github.mh120888.cobspecapp;
 
 import com.github.mh120888.httpmessage.HTTPRequest;
 
-import java.io.File;
 import java.util.Arrays;
 
 public class Router {
-    public static Action route(HTTPRequest request, String publicDirectory) {
-        Logger.addLog(request.getInitialRequestLine());
 
-        File file = new File(publicDirectory);
-        String[] fileNames = file.list();
+    public static Action route(HTTPRequest request, FileIO fileIO, String publicDirectory) {
+        Logger.addLog(request.getInitialRequestLine());
         String path = request.getPath();
 
-        if (Arrays.asList(fileNames).contains(path.replace("/", "")) || path.equals("/")) {
+        if (isInPublicDirectory(publicDirectory, fileIO, path)) {
             return new StaticResourceAction(publicDirectory);
         } else if (path.contains("/coffee") || path.contains("/tea")) {
             return new CoffeeAction();
@@ -30,5 +27,11 @@ public class Router {
         } else {
             return new NotFoundAction();
         }
+    }
+
+    private static boolean isInPublicDirectory(String publicDirectory, FileIO fileIO, String path) {
+        String[] fileNames = fileIO.getFilenames(publicDirectory);
+
+        return Arrays.asList(fileNames).contains(path.replace("/", "")) || path.equals("/");
     }
 }
