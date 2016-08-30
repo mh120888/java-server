@@ -60,7 +60,7 @@ public class ConnectionHandler implements Runnable {
         String input = "";
         String currentLine = br.readLine();
         while (currentLine != null && !currentLine.trim().isEmpty()) {
-            input += currentLine.trim() + "\n";
+            input += currentLine.trim() + System.lineSeparator();
             currentLine = br.readLine();
         }
         return input;

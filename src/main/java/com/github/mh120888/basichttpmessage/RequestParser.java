@@ -45,7 +45,7 @@ public class RequestParser {
 
     public HashMap getHeaders(String headerInput) {
         HashMap<String, String> headers = new HashMap<>();
-        String[] splitUpHeaders = headerInput.split("\n");
+        String[] splitUpHeaders = headerInput.split(System.lineSeparator());
         for (String headerPair : splitUpHeaders) {
             String[] separatePair = headerPair.split(":");
             String headerName = separatePair[0];

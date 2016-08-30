@@ -40,8 +40,8 @@ public class BasicHTTPResponse implements HTTPResponse {
 
     public String getStatusLineAndHeaders() {
         String result = "";
-        result += version + " " + status + " " + getStatusText() + "\n";
-        result += getFormattedHeaders() + "\n";
+        result += version + " " + status + " " + getStatusText() + System.lineSeparator();
+        result += getFormattedHeaders() + System.lineSeparator();
 
         return result;
     }
@@ -49,7 +49,7 @@ public class BasicHTTPResponse implements HTTPResponse {
     String getFormattedHeaders() {
         String result = "";
         for (Map.Entry<String, String> header : headers.entrySet()) {
-            result += header.getKey() + ": " + header.getValue() + "\n";
+            result += header.getKey() + ": " + header.getValue() + System.lineSeparator();
         }
         return result;
     }

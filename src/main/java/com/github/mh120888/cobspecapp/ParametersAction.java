@@ -40,7 +40,7 @@ public class ParametersAction implements Action {
     private String formatParametersForBody(Map<String, String> parameters) {
         String body = "";
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
-            body += entry.getKey() + " = " + entry.getValue() + "\n";
+            body += entry.getKey() + " = " + entry.getValue() + System.lineSeparator();
         }
         return body;
     }

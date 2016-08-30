@@ -130,7 +130,7 @@ public class MyServerTest {
     public void printRunningMessageDisplaysThatTheServerIsRunningOnTheCorrectPort() {
         MyServer.printRunningMessage();
 
-        assertEquals("Server running on port " + MyServer.myPort + "\n", outContent.toString());
+        assertEquals("Server running on port " + MyServer.myPort + System.lineSeparator(), outContent.toString());
     }
 
 }

@@ -22,7 +22,7 @@ public class LogsAction implements Action {
 
     private void setAuthorizedResponse(HTTPResponse response) {
         response.setStatus(200);
-        response.setBody(String.join("\n", Logger.getLog()).getBytes());
+        response.setBody(String.join(System.lineSeparator(), Logger.getLog()).getBytes());
     }
 
     private boolean isAuthorized(HTTPRequest request) {

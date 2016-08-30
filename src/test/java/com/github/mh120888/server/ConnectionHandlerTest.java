@@ -63,7 +63,7 @@ public class ConnectionHandlerTest {
     public void buildHttpRequestReturnsARequestObjectWithBody() throws IOException {
         BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1\r\n" +
                                                                 "Content-Length: 12\n" +
-                                                                "\n" +
+                                                                System.lineSeparator() +
                                                                 "body content"));
         HTTPRequest request = connectionHandler.buildHttpRequest(in);
 
