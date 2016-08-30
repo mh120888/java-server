@@ -15,13 +15,9 @@ public class StaticResourceAction implements Action {
         fileIO = new RealFileIO();
     }
 
-    private StaticResourceAction(String filepath, FileIO fileInputOutput) {
+    public StaticResourceAction(String filepath, FileIO fileInputOutput) {
         publicDirectory = filepath;
         fileIO = fileInputOutput;
-    }
-
-    public static StaticResourceAction getStaticResourceActionWithFileIO(String filepath, FileIO fileInputOutput) {
-        return new StaticResourceAction(filepath, fileInputOutput);
     }
 
     public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {

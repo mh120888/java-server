@@ -61,7 +61,7 @@ public class StaticResourceActionTest {
     public void getRequestForAnExistingFileReturnsTheContentsOfThatFile() throws IOException {
         MockFileIO fakeFileIO = new MockFileIO("Fake contents");
         fakeFileIO.respondToIsDirectoryWith(false);
-        StaticResourceAction fakeAction = StaticResourceAction.getStaticResourceActionWithFileIO(publicDirectory, fakeFileIO);
+        StaticResourceAction fakeAction = new StaticResourceAction(publicDirectory, fakeFileIO);
         MockHTTPRequest request = new MockHTTPRequest();
         request.setMethod("GET");
         request.setPathWithParams("/fake-image.png");
@@ -75,7 +75,7 @@ public class StaticResourceActionTest {
     public void getRequestWithRangeHeadersReturnsA206Response() {
         MockFileIO fakeFileIO = new MockFileIO("Fake contents");
         fakeFileIO.respondToIsDirectoryWith(false);
-        StaticResourceAction fakeAction = StaticResourceAction.getStaticResourceActionWithFileIO(publicDirectory, fakeFileIO);
+        StaticResourceAction fakeAction = new StaticResourceAction(publicDirectory, fakeFileIO);
         MockHTTPRequest request = new MockHTTPRequest();
         request.setMethod("GET");
         request.setPathWithParams("/fake-image.png");
@@ -96,7 +96,7 @@ public class StaticResourceActionTest {
 
     @Test
     public void patchRequestWithContentReturnsA204() {
-        StaticResourceAction action = StaticResourceAction.getStaticResourceActionWithFileIO(publicDirectory, new MockFileIO("default content"));
+        StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
         MockHTTPRequest request = new MockHTTPRequest();
         request.setMethod("PATCH");
         request.setPathWithParams("/partial_content.txt");
@@ -111,7 +111,7 @@ public class StaticResourceActionTest {
 
     @Test
     public void modifyResourceWillNotOverwriteContentsOfSpecifiedResourceWithoutIfMatchHeader() throws IOException {
-        StaticResourceAction action = StaticResourceAction.getStaticResourceActionWithFileIO(publicDirectory, new MockFileIO("default content"));
+        StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
         String path = publicDirectory + "/does-not-matter.txt";
         MockHTTPRequest request = new MockHTTPRequest();
         request.setMethod("PATCH");
@@ -126,7 +126,7 @@ public class StaticResourceActionTest {
 
     @Test
     public void modifyResourceWillOverwriteContentsOfSpecifiedResource() throws IOException {
-        StaticResourceAction action = StaticResourceAction.getStaticResourceActionWithFileIO(publicDirectory, new MockFileIO("default content"));
+        StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
         String path = publicDirectory + "/does-not-matter.txt";
         MockHTTPRequest request = new MockHTTPRequest();
         request.setMethod("PATCH");
