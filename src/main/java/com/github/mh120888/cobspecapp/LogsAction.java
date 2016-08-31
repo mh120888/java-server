@@ -1,5 +1,6 @@
 package com.github.mh120888.cobspecapp;
 
+import com.github.mh120888.httpmessage.HTTPHeaders;
 import com.github.mh120888.httpmessage.HTTPRequest;
 import com.github.mh120888.httpmessage.HTTPResponse;
 
@@ -17,7 +18,7 @@ public class LogsAction implements Action {
 
     private void setUnauthorizedResponse(HTTPResponse response) {
         response.setStatus(401);
-        response.addHeader("WWW-Authenticate", "Basic realm=\"User Visible Realm\"");
+        response.addHeader(HTTPHeaders.WWW_AUTHENTICATE, "Basic realm=\"User Visible Realm\"");
     }
 
     private void setAuthorizedResponse(HTTPResponse response) {
@@ -27,8 +28,8 @@ public class LogsAction implements Action {
 
     private boolean isAuthorized(HTTPRequest request) {
         String encodedCredentials = "";
-        if (request.containsHeader("Authorization")) {
-            encodedCredentials = request.getHeader("Authorization").replace("Basic ", "");
+        if (request.containsHeader(HTTPHeaders.AUTHORIZATION)) {
+            encodedCredentials = request.getHeader(HTTPHeaders.AUTHORIZATION).replace("Basic ", "");
         }
         return BasicAuthorizer.isAuthorized(encodedCredentials, correctCredentials);
     }

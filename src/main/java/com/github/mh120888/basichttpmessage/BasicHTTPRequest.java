@@ -1,7 +1,8 @@
 package com.github.mh120888.basichttpmessage;
 
-import com.github.mh120888.httpmessage.HeaderParser;
+import com.github.mh120888.httpmessage.HTTPHeaders;
 import com.github.mh120888.httpmessage.HTTPRequest;
+import com.github.mh120888.httpmessage.HeaderParser;
 
 import java.util.HashMap;
 
@@ -28,6 +29,10 @@ public class BasicHTTPRequest implements HTTPRequest {
 
     public void setHeaders(String headerInput) {
         headers = requestParser.getHeaders(headerInput);
+    }
+
+    public void addHeader(String headerName, String headerValue) {
+        headers.put(headerName, headerValue);
     }
 
     public String getMethod() {
@@ -63,7 +68,7 @@ public class BasicHTTPRequest implements HTTPRequest {
     }
 
     public String getBaseLocation() {
-        return "http://" + headers.getOrDefault("Host", "localhost:3000") + "/";
+        return "http://" + headers.getOrDefault(HTTPHeaders.HOST, "localhost:3000") + "/";
     }
 
     public String getInitialRequestLine() {

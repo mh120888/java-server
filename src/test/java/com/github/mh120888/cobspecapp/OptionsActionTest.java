@@ -1,7 +1,7 @@
 package com.github.mh120888.cobspecapp;
 
+import com.github.mh120888.httpmessage.HTTPHeaders;
 import com.github.mh120888.httpmessage.HTTPResponse;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +32,7 @@ public class OptionsActionTest {
     public void getResponseReturnsAResponseWithAnAllowHeader() {
         HTTPResponse response = ResponseGenerator.generateResponse("GET", "/pathdoesnotmatter", action);
 
-        Assert.assertTrue(response.getFormattedResponse().contains("Allow: "));
+        Assert.assertTrue(response.getFormattedResponse().contains(HTTPHeaders.ALLOW));
     }
 
     @Test

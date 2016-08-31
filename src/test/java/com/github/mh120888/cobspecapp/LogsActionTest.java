@@ -1,12 +1,13 @@
 package com.github.mh120888.cobspecapp;
 
 import com.github.mh120888.basichttpmessage.BasicHTTPMessageFactory;
+import com.github.mh120888.httpmessage.HTTPHeaders;
 import com.github.mh120888.httpmessage.HTTPResponse;
 import com.github.mh120888.mocks.MockHTTPRequest;
-
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertTrue;
 
 public class LogsActionTest {
     LogsAction action;
@@ -28,7 +29,7 @@ public class LogsActionTest {
     public void requestToLogsWithoutProperCredentialsReturnsWWWAuthenticateHeader() {
         HTTPResponse response = ResponseGenerator.generateResponse("GET", "/logs", action);
 
-        assertTrue(response.getFormattedResponse().contains("WWW-Authenticate: Basic realm=\"User Visible Realm\""));
+        assertTrue(response.getFormattedResponse().contains(HTTPHeaders.WWW_AUTHENTICATE));
     }
 
     @Test
@@ -37,7 +38,7 @@ public class LogsActionTest {
         MockHTTPRequest request = new MockHTTPRequest();
         request.setMethod("GET");
         request.setPathWithParams("/logs");
-        request.addHeader("Authorization", "Basic YWRtaW46aHVudGVyMg==");
+        request.addHeader(HTTPHeaders.AUTHORIZATION, "Basic YWRtaW46aHVudGVyMg==");
         HTTPResponse response = action.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
 
         assertTrue(response.getFormattedResponse().contains("GET / HTTP/1.1"));

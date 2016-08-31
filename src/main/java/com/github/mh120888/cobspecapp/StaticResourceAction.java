@@ -1,5 +1,6 @@
 package com.github.mh120888.cobspecapp;
 
+import com.github.mh120888.httpmessage.HTTPHeaders;
 import com.github.mh120888.httpmessage.HTTPRequest;
 import com.github.mh120888.httpmessage.HTTPResponse;
 
@@ -41,17 +42,17 @@ public class StaticResourceAction implements Action {
 
     private void setBodyAndHeadersForPartialContentRequest(HTTPResponse response) {
         byte[] fullBodyContents = getBody();
-        int[] range = request.getHeaderParser().parseRangeHeader(request.getHeader("Range"), fullBodyContents);
-        response.addHeader("Content-Range", "bytes " + range[0] + "-" + range[1] + "/" + fullBodyContents.length);
+        int[] range = request.getHeaderParser().parseRangeHeader(request.getHeader(HTTPHeaders.RANGE), fullBodyContents);
+        response.addHeader(HTTPHeaders.CONTENT_RANGE, "bytes " + range[0] + "-" + range[1] + "/" + fullBodyContents.length);
         response.setBody(getCorrectPortionOfFileContents(fullBodyContents, range));
     }
 
     private boolean isPartialContentRequest() {
-        return request.containsHeader("Range");
+        return request.containsHeader(HTTPHeaders.RANGE);
     }
 
     private boolean isValidPatchRequest() {
-        return request.getMethod().equals("PATCH") && !request.getBody().isEmpty() && request.containsHeader("If-Match");
+        return request.getMethod().equals("PATCH") && !request.getBody().isEmpty() && request.containsHeader(HTTPHeaders.IF_MATCH);
     }
 
     private boolean isAnyOtherValidRequest() {

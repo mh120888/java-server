@@ -2,12 +2,12 @@ package com.github.mh120888.cobspecapp;
 
 import com.github.mh120888.basichttpmessage.BasicHTTPMessageFactory;
 import com.github.mh120888.httpmessage.HTTPResponse;
-import com.github.mh120888.mocks.MockHTTPRequest;
 import com.github.mh120888.mocks.MockFileIO;
-
+import com.github.mh120888.mocks.MockHTTPRequest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
@@ -75,13 +75,13 @@ public class StaticResourceActionTest {
     public void getRequestWithRangeHeadersReturnsA206Response() {
         MockFileIO fakeFileIO = new MockFileIO("Fake contents");
         fakeFileIO.respondToIsDirectoryWith(false);
-        StaticResourceAction fakeAction = new StaticResourceAction(publicDirectory, fakeFileIO);
+        StaticResourceAction action = new StaticResourceAction(publicDirectory, fakeFileIO);
         MockHTTPRequest request = new MockHTTPRequest();
         request.setMethod("GET");
         request.setPathWithParams("/fake-image.png");
         request.addHeader("Range", "bytes=0-4");
 
-        HTTPResponse response = fakeAction.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
+        HTTPResponse response = action.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
 
         assertTrue(response.getFormattedResponse().contains("206 Partial Content"));
     }

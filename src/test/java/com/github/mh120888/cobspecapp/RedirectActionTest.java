@@ -1,9 +1,10 @@
 package com.github.mh120888.cobspecapp;
 
+import com.github.mh120888.httpmessage.HTTPHeaders;
 import com.github.mh120888.httpmessage.HTTPResponse;
-
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.junit.Assert.assertTrue;
 
 public class RedirectActionTest {
@@ -25,14 +26,14 @@ public class RedirectActionTest {
     public void getResponseReturnsResponseContainingLocationHeader() {
         HTTPResponse response = ResponseGenerator.generateResponse("GET", "/pathdoesnotmatter", action);
 
-        assertTrue(response.getFormattedResponse().contains("location: "));
+        assertTrue(response.getFormattedResponse().contains(HTTPHeaders.LOCATION));
     }
 
     @Test
     public void getResponseReturnsResponseContainingLocationHeaderWithCorrectValue() {
         HTTPResponse response = ResponseGenerator.generateResponse("GET", "/pathdoesnotmatter", action);
 
-        assertTrue(response.getFormattedResponse().contains("location: http://localhost:5000/"));
+        assertTrue(response.getFormattedResponse().contains(HTTPHeaders.LOCATION + ": http://localhost:5000/"));
     }
 }
 

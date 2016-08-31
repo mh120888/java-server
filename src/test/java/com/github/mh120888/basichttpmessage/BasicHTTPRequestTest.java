@@ -1,7 +1,7 @@
 package com.github.mh120888.basichttpmessage;
 
+import com.github.mh120888.httpmessage.HTTPHeaders;
 import com.github.mh120888.httpmessage.HeaderParser;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -52,6 +52,15 @@ public class BasicHTTPRequestTest {
         BasicHTTPRequest request = new BasicHTTPRequest();
         request.setRequestLine("GET /somerandompath HTTP/1.1");
         request.setHeaders("Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
+
+        Assert.assertTrue(request.containsHeader("Authorization"));
+    }
+
+    @Test
+    public void addHeaderAddsAHeaderToRequest() {
+        BasicHTTPRequest request = new BasicHTTPRequest();
+        request.setRequestLine("GET /somerandompath HTTP/1.1");
+        request.addHeader(HTTPHeaders.AUTHORIZATION, "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
 
         Assert.assertTrue(request.containsHeader("Authorization"));
     }
