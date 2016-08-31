@@ -2,14 +2,12 @@ package com.github.mh120888.cobspecapp;
 
 import com.github.mh120888.httpmessage.HTTPRequest;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.HashMap;
 
 public class Router {
     private final String publicDirectory;
     private FileIO fileIO;
-    private final static TreeMap<String, Action> ROUTES = new TreeMap<>();
+    private final static HashMap<String, Action> ROUTES = new HashMap<>();
 
     public Router(String publicDirectory, FileIO fileIO) {
         this.publicDirectory = publicDirectory;
@@ -26,13 +24,7 @@ public class Router {
 
     private Action getAction(String path) {
         path = path.equals("/") ? "/index" : path;
-        Action result = new NotFoundAction();
-        for (Map.Entry<String, Action> entry : ROUTES.entrySet()) {
-            if (path.contains(entry.getKey())) {
-                result = entry.getValue();
-            }
-        }
-        return result;
+        return ROUTES.getOrDefault(path, new NotFoundAction());
     }
 
     private void configureAllRoutes() {
@@ -47,6 +39,7 @@ public class Router {
         ROUTES.put("/logs", new LogsAction());
         ROUTES.put("/parameters", new ParametersAction());
         ROUTES.put("/method_options", new OptionsAction());
+        ROUTES.put("/method_options2", new OptionsAction());
         ROUTES.put("/redirect", new RedirectAction());
     }
 
@@ -54,7 +47,7 @@ public class Router {
         Action staticResourceAction = new StaticResourceAction(publicDirectory);
         String[] fileNames = fileIO.getFilenames(publicDirectory);
         for (String fileName : fileNames){
-            ROUTES.put(fileName, staticResourceAction);
+            ROUTES.put("/" + fileName, staticResourceAction);
         }
         ROUTES.put("/index", staticResourceAction);
     }
