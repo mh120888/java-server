@@ -7,6 +7,8 @@ import com.github.mh120888.mocks.MockFileIO;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class RouterTest {
@@ -23,7 +25,7 @@ public class RouterTest {
     @Test
     public void routeReturnsStaticResourceActionForAStaticResource() {
         request.setRequestLine("GET / HTTP/1.1");
-        Action action = Router.route(request, fileIO, publicDirectory);
+        Action action = new Router(publicDirectory, fileIO).route(request);
 
         assertTrue(action instanceof StaticResourceAction);
     }
@@ -31,7 +33,7 @@ public class RouterTest {
     @Test
     public void routeReturnsCoffeeActionWhenAppropriate() {
         request.setRequestLine("GET /coffee HTTP/1.1");
-        Action action = Router.route(request, fileIO, publicDirectory);
+        Action action = new Router(publicDirectory, fileIO).route(request);
 
         assertTrue(action instanceof CoffeeAction);
     }
@@ -39,15 +41,15 @@ public class RouterTest {
     @Test
     public void routeReturnsTeaActionWhenAppropriate() {
         request.setRequestLine("GET /tea HTTP/1.1");
-        Action action = Router.route(request, fileIO, publicDirectory);
+        Action action = new Router(publicDirectory, fileIO).route(request);
 
         assertTrue(action instanceof TeaAction);
     }
 
     @Test
     public void routeReturnsNotFoundActionWhenPathIsNotRecognized() {
-        request.setRequestLine("GET /foobar HTTP/1.1");
-        Action action = Router.route(request, fileIO, publicDirectory);
+        request.setRequestLine("GET /foobarssss HTTP/1.1");
+        Action action = new Router(publicDirectory, fileIO).route(request);
 
         assertTrue(action instanceof NotFoundAction);
     }
@@ -55,7 +57,7 @@ public class RouterTest {
     @Test
     public void routeReturnsPostableActionWhenAppropriate() {
         request.setRequestLine("POST /form HTTP/1.1");
-        Action action = Router.route(request, fileIO, publicDirectory);
+        Action action = new Router(publicDirectory, fileIO).route(request);
 
         assertTrue(action instanceof PostableAction);
     }
@@ -63,7 +65,7 @@ public class RouterTest {
     @Test
     public void routeReturnsLogsActionWhenAppropriatePathIsRequested() {
         request.setRequestLine("GET /logs HTTP/1.1");
-        Action action = Router.route(request, fileIO, publicDirectory);
+        Action action = new Router(publicDirectory, fileIO).route(request);
 
         assertTrue(action instanceof LogsAction);
     }
@@ -72,7 +74,7 @@ public class RouterTest {
     public void allRequestsAreLoggedAfterBeingRoutes() {
         String requestLine = "GET /logs HTTP/1.1";
         request.setRequestLine(requestLine);
-        Router.route(request, fileIO, publicDirectory);
+        new Router(publicDirectory, fileIO).route(request);
 
         assertTrue(Logger.getLog().contains(requestLine));
     }
@@ -80,7 +82,7 @@ public class RouterTest {
     @Test
     public void requestToParametersReturnsParametersAction() {
         request.setRequestLine("GET /parameters HTTP/1.1");
-        Action action = Router.route(request, fileIO, publicDirectory);
+        Action action = new Router(publicDirectory, fileIO).route(request);
 
         assertTrue(action instanceof ParametersAction);
     }
@@ -88,7 +90,7 @@ public class RouterTest {
     @Test
     public void routeReturnsOptionsActionWhenAppropriate() {
         request.setRequestLine("GET /method_options HTTP/1.1");
-        Action action = Router.route(request, fileIO, publicDirectory);
+        Action action = new Router(publicDirectory, fileIO).route(request);
 
         assertTrue(action instanceof OptionsAction);
     }
@@ -96,7 +98,7 @@ public class RouterTest {
     @Test
     public void routeReturnsRedirectResourceHandlerWhenAppropriate() {
         request.setRequestLine("GET /redirect HTTP/1.1");
-        Action action = Router.route(request, fileIO, publicDirectory);
+        Action action = new Router(publicDirectory, fileIO).route(request);
 
         assertTrue(action instanceof RedirectAction);
     }
