@@ -3,6 +3,7 @@ package com.github.mh120888.cobspecapp;
 import com.github.mh120888.basichttpmessage.BasicHTTPMessageFactory;
 import com.github.mh120888.httpmessage.HTTPHeaders;
 import com.github.mh120888.httpmessage.HTTPResponse;
+import com.github.mh120888.httpmessage.HTTPStatus;
 import com.github.mh120888.mocks.MockHTTPRequest;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +23,7 @@ public class LogsActionTest {
     public void getLogsWithoutCredentialsReturnsA401() {
         HTTPResponse response = ResponseGenerator.generateResponse("GET", "/logs", action);
 
-        assertTrue(response.getFormattedResponse().contains("HTTP/1.1 401"));
+        assertTrue(response.getFormattedResponse().contains(Integer.toString(HTTPStatus.NOT_AUTHORIZED)));
     }
 
     @Test

@@ -1,7 +1,9 @@
 package com.github.mh120888.cobspecapp;
 
 import com.github.mh120888.basichttpmessage.BasicHTTPMessageFactory;
+import com.github.mh120888.httpmessage.HTTPHeaders;
 import com.github.mh120888.httpmessage.HTTPResponse;
+import com.github.mh120888.httpmessage.HTTPStatus;
 import com.github.mh120888.mocks.MockFileIO;
 import com.github.mh120888.mocks.MockHTTPRequest;
 import org.junit.Assert;
@@ -26,21 +28,21 @@ public class StaticResourceActionTest {
     public void getResponseDataReturnsCorrectResponseLineForGet() {
         HTTPResponse response = ResponseGenerator.generateResponse("GET", "/", action);
 
-        assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
+        assertTrue(response.getFormattedResponse().contains(Integer.toString(HTTPStatus.OK)));
     }
 
     @Test
     public void getResponseReturns200ForHeadRequest() {
         HTTPResponse response = ResponseGenerator.generateResponse("HEAD",  "/", action);
 
-        assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
+        assertTrue(response.getFormattedResponse().contains(Integer.toString(HTTPStatus.OK)));
     }
 
     @Test
     public void getResponseReturns405ForInvalidMethods() {
         HTTPResponse response = ResponseGenerator.generateResponse("NOTAREALMETHOD", "/", action);
 
-        assertTrue(response.getFormattedResponse().contains("HTTP/1.1 405"));
+        assertTrue(response.getFormattedResponse().contains(Integer.toString(HTTPStatus.METHOD_NOT_ALLOWED)));
     }
 
     @Test
@@ -54,7 +56,7 @@ public class StaticResourceActionTest {
     public void postRequestWithNoParamsReturnsA405() {
         HTTPResponse response = ResponseGenerator.generateResponse("POST", "/", action);
 
-        assertTrue(response.getFormattedResponse().contains("HTTP/1.1 405"));
+        assertTrue(response.getFormattedResponse().contains(Integer.toString(HTTPStatus.METHOD_NOT_ALLOWED)));
     }
 
     @Test
@@ -83,7 +85,7 @@ public class StaticResourceActionTest {
 
         HTTPResponse response = action.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
 
-        assertTrue(response.getFormattedResponse().contains("206 Partial Content"));
+        assertTrue(response.getFormattedResponse().contains(Integer.toString(HTTPStatus.PARTIAL_CONTENT)));
     }
 
     @Test
@@ -106,7 +108,7 @@ public class StaticResourceActionTest {
 
         action.getResponse(request, response);
 
-        Assert.assertTrue(response.getFormattedResponse().contains("204 No Content"));
+        Assert.assertTrue(response.getFormattedResponse().contains(Integer.toString(HTTPStatus.NO_CONTENT)));
     }
 
     @Test
@@ -132,7 +134,7 @@ public class StaticResourceActionTest {
         request.setMethod("PATCH");
         request.setPathWithParams("/does-not-matter.txt");
         request.setBody("some random content");
-        request.addHeader("If-Match", "somethingGoesHere");
+        request.addHeader(HTTPHeaders.IF_MATCH, "somethingGoesHere");
 
         action.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
 

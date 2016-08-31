@@ -1,6 +1,7 @@
 package com.github.mh120888.basichttpmessage;
 
 import com.github.mh120888.httpmessage.HTTPResponse;
+import com.github.mh120888.httpmessage.HTTPStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,15 +56,6 @@ public class BasicHTTPResponse implements HTTPResponse {
     }
 
     String getStatusText() {
-        switch (status) {
-            case 200: return "OK";
-            case 204: return "No Content";
-            case 206: return "Partial Content";
-            case 302: return "Found";
-            case 401: return "Not Authorized";
-            case 404: return "Not Found";
-            case 405: return "Method Not Allowed";
-            default:  return "";
-        }
+        return HTTPStatus.getStatusText(status);
     }
 }

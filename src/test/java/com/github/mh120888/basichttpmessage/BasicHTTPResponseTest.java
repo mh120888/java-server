@@ -1,5 +1,6 @@
 package com.github.mh120888.basichttpmessage;
 
+import com.github.mh120888.httpmessage.HTTPStatus;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -8,9 +9,9 @@ public class BasicHTTPResponseTest {
     public void setStatusChangesStatusMember() {
         BasicHTTPResponse response = new BasicHTTPMessageFactory().getNewResponse();
 
-        response.setStatus(200);
+        response.setStatus(HTTPStatus.OK);
 
-        Assert.assertEquals(200, response.status);
+        Assert.assertEquals(HTTPStatus.OK, response.status);
     }
 
     @Test
@@ -53,7 +54,7 @@ public class BasicHTTPResponseTest {
     @Test
     public void getFormattedResponseReturnsAProperlyFormattedVersionOfTheResponse() {
         BasicHTTPResponse response = new BasicHTTPMessageFactory().getNewResponse();
-        response.setStatus(200);
+        response.setStatus(HTTPStatus.OK);
         response.setHTTPVersion("HTTP/1.1");
         response.setBody("Some content".getBytes());
         response.addHeader("One header", "one value");
@@ -73,7 +74,7 @@ public class BasicHTTPResponseTest {
     @Test
     public void getStatusTextReturnsOKFor200() {
         BasicHTTPResponse response = new BasicHTTPMessageFactory().getNewResponse();
-        response.setStatus(200);
+        response.setStatus(HTTPStatus.OK);
 
         Assert.assertEquals("OK", response.getStatusText());
     }
@@ -81,7 +82,7 @@ public class BasicHTTPResponseTest {
     @Test
     public void getStatusTextReturnsNotFoundFor404() {
         BasicHTTPResponse response = new BasicHTTPMessageFactory().getNewResponse();
-        response.setStatus(404);
+        response.setStatus(HTTPStatus.NOT_FOUND);
 
         Assert.assertEquals("Not Found", response.getStatusText());
     }

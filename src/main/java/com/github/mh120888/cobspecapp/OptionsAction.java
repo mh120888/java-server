@@ -2,11 +2,12 @@ package com.github.mh120888.cobspecapp;
 
 import com.github.mh120888.httpmessage.HTTPRequest;
 import com.github.mh120888.httpmessage.HTTPResponse;
+import com.github.mh120888.httpmessage.HTTPStatus;
 
 public class OptionsAction implements Action {
 
     public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {
-        response.setStatus(200);
+        response.setStatus(HTTPStatus.OK);
         response.addHeader("Allow", buildHeaders(request.getPath()));
 
         return response;

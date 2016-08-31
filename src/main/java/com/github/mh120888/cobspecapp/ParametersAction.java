@@ -2,6 +2,7 @@ package com.github.mh120888.cobspecapp;
 
 import com.github.mh120888.httpmessage.HTTPRequest;
 import com.github.mh120888.httpmessage.HTTPResponse;
+import com.github.mh120888.httpmessage.HTTPStatus;
 
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public class ParametersAction implements Action {
 
     private int getStatus() {
         if (request.getMethod().equals("GET")) {
-            return 200;
+            return HTTPStatus.OK;
         } else {
             return 405;
         }

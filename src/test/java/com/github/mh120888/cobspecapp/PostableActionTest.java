@@ -2,6 +2,7 @@ package com.github.mh120888.cobspecapp;
 
 import com.github.mh120888.basichttpmessage.BasicHTTPMessageFactory;
 import com.github.mh120888.httpmessage.HTTPResponse;
+import com.github.mh120888.httpmessage.HTTPStatus;
 import com.github.mh120888.mocks.MockHTTPRequest;
 
 import org.junit.Assert;
@@ -23,14 +24,14 @@ public class PostableActionTest {
     public void getResponseReturnsA200forPOST() {
         HTTPResponse response = ResponseGenerator.generateResponse("POST", "/form", action);
 
-        assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200 OK"));
+        assertTrue(response.getFormattedResponse().contains(Integer.toString(HTTPStatus.OK)));
     }
 
     @Test
     public void getResponseReturnsA200ForPUT() {
         HTTPResponse response = ResponseGenerator.generateResponse("PUT", "/form", action);
 
-        assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200 OK"));
+        assertTrue(response.getFormattedResponse().contains(Integer.toString(HTTPStatus.OK)));
     }
 
     @Test
@@ -38,7 +39,7 @@ public class PostableActionTest {
         action.data = "some random data";
 
         HTTPResponse response = ResponseGenerator.generateResponse("GET", "/form", action);
-        Assert.assertTrue(response.getFormattedResponse().contains("HTTP/1.1 200"));
+        Assert.assertTrue(response.getFormattedResponse().contains(Integer.toString(HTTPStatus.OK)));
     }
     @Test
     public void POSTRequestsDoNotContainStaticVarDataInBody() {

@@ -2,6 +2,7 @@ package com.github.mh120888.cobspecapp;
 
 import com.github.mh120888.httpmessage.HTTPHeaders;
 import com.github.mh120888.httpmessage.HTTPResponse;
+import com.github.mh120888.httpmessage.HTTPStatus;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,7 +20,7 @@ public class RedirectActionTest {
     public void getResponseReturnsA302Response() {
         HTTPResponse response = ResponseGenerator.generateResponse("GET", "/pathdoesnotmatter", action);
 
-        assertTrue(response.getFormattedResponse().contains("HTTP/1.1 302"));
+        assertTrue(response.getFormattedResponse().contains(Integer.toString(HTTPStatus.FOUND)));
     }
 
     @Test

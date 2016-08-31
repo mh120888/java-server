@@ -3,6 +3,7 @@ package com.github.mh120888.cobspecapp;
 import com.github.mh120888.httpmessage.HTTPHeaders;
 import com.github.mh120888.httpmessage.HTTPRequest;
 import com.github.mh120888.httpmessage.HTTPResponse;
+import com.github.mh120888.httpmessage.HTTPStatus;
 
 import java.util.Arrays;
 
@@ -31,7 +32,7 @@ public class StaticResourceAction implements Action {
             response.setStatus(204);
             overwriteFile();
         } else if (isAnyOtherValidRequest()) {
-            response.setStatus(200);
+            response.setStatus(HTTPStatus.OK);
             response.setBody(getBody());
         } else {
             response.setStatus(405);
