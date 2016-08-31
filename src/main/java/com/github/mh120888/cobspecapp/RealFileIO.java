@@ -1,6 +1,7 @@
 package com.github.mh120888.cobspecapp;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,7 +27,9 @@ public class RealFileIO implements FileIO {
             FileOutputStream fos = new FileOutputStream(myFile, false);
             fos.write(newFileContents);
             fos.close();
-        } catch (Exception e) {
+        } catch (FileNotFoundException e) {
+            System.err.println(e.getMessage());
+        } catch (IOException e) {
             System.err.println(e.getMessage());
         }
     }
