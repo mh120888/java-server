@@ -14,15 +14,24 @@ public final class HTTPStatus {
 
     public static String getStatusText(int statusCode) {
         switch (statusCode) {
-            case 200: return "OK";
-            case 204: return "No Content";
-            case 206: return "Partial Content";
-            case 302: return "Found";
-            case 401: return "Not Authorized";
-            case 404: return "Not Found";
-            case 405: return "Method Not Allowed";
-            case 418: return "I'm a teapot";
-            default:  return "";
+            case OK:
+                return "OK";
+            case NO_CONTENT:
+                return "No Content";
+            case PARTIAL_CONTENT:
+                return "Partial Content";
+            case FOUND:
+                return "Found";
+            case NOT_AUTHORIZED:
+                return "Not Authorized";
+            case NOT_FOUND:
+                return "Not Found";
+            case METHOD_NOT_ALLOWED:
+                return "Method Not Allowed";
+            case IM_A_TEAPOT:
+                return "I'm a teapot";
+            default:
+                return "";
         }
     }
 }

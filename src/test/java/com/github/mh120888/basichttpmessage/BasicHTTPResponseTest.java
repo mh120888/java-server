@@ -4,6 +4,10 @@ import com.github.mh120888.httpmessage.HTTPStatus;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 public class BasicHTTPResponseTest {
     @Test
     public void setStatusChangesStatusMember() {
@@ -72,27 +76,27 @@ public class BasicHTTPResponseTest {
     }
 
     @Test
-    public void getStatusTextReturnsOKFor200() {
+    public void getStatusTextReturnsCorrectTextForAllStatusCodes() {
         BasicHTTPResponse response = new BasicHTTPMessageFactory().getNewResponse();
-        response.setStatus(HTTPStatus.OK);
-
-        Assert.assertEquals("OK", response.getStatusText());
+        ArrayList<Integer> statusCodes = getAllStatusCodes();
+        for (Integer status : statusCodes) {
+            response.setStatus(status.intValue());
+            String expected = HTTPStatus.getStatusText(response.status);
+            Assert.assertEquals(expected, response.getStatusText());
+        }
     }
 
-    @Test
-    public void getStatusTextReturnsNotFoundFor404() {
-        BasicHTTPResponse response = new BasicHTTPMessageFactory().getNewResponse();
-        response.setStatus(HTTPStatus.NOT_FOUND);
-
-        Assert.assertEquals("Not Found", response.getStatusText());
-    }
-
-    @Test
-    public void getStatusTextReturnsMethodNotAllowedFor405() {
-        BasicHTTPResponse response = new BasicHTTPMessageFactory().getNewResponse();
-        response.setStatus(405);
-
-        Assert.assertEquals("Method Not Allowed", response.getStatusText());
+    public ArrayList<Integer> getAllStatusCodes() {
+        ArrayList<Integer> statusCodes = new ArrayList<>();
+        Field[] declaredFields = HTTPStatus.class.getDeclaredFields();
+        for (Field field : declaredFields) {
+            try {
+                statusCodes.add(field.getInt(null));
+            } catch (IllegalAccessException e) {
+                System.err.println(e.getStackTrace());
+            }
+        }
+        return statusCodes;
     }
 
     @Test
