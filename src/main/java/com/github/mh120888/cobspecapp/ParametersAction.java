@@ -24,7 +24,7 @@ public class ParametersAction implements Action {
         if (request.getMethod().equals("GET")) {
             return HTTPStatus.OK;
         } else {
-            return 405;
+            return HTTPStatus.METHOD_NOT_ALLOWED;
         }
     }
 

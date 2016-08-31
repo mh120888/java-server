@@ -70,7 +70,7 @@ public class StaticResourceActionTest {
 
         HTTPResponse response = fakeAction.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
 
-        assertEquals(true, response.getFormattedResponse().contains("Fake contents"));
+        assertTrue(response.getFormattedResponse().contains("Fake contents"));
     }
 
     @Test

@@ -52,7 +52,7 @@ public class BasicHTTPResponseTest {
 
         response.addHeader("some name", "some value");
 
-        Assert.assertEquals(response.headers.get("some name"), "some value");
+        Assert.assertEquals("some value", response.headers.get("some name"));
     }
 
     @Test

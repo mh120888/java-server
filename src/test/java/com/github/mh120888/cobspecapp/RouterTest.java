@@ -74,7 +74,7 @@ public class RouterTest {
         request.setRequestLine(requestLine);
         Router.route(request, fileIO, publicDirectory);
 
-        Assert.assertEquals(true, Logger.getLog().contains(requestLine));
+        assertTrue(Logger.getLog().contains(requestLine));
     }
 
     @Test

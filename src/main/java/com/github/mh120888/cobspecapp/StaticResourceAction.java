@@ -26,16 +26,16 @@ public class StaticResourceAction implements Action {
         this.request = request;
 
         if (isPartialContentRequest()) {
-            response.setStatus(206);
+            response.setStatus(HTTPStatus.PARTIAL_CONTENT);
             setBodyAndHeadersForPartialContentRequest(response);
         } else if (isValidPatchRequest()) {
-            response.setStatus(204);
+            response.setStatus(HTTPStatus.NO_CONTENT);
             overwriteFile();
         } else if (isAnyOtherValidRequest()) {
             response.setStatus(HTTPStatus.OK);
             response.setBody(getBody());
         } else {
-            response.setStatus(405);
+            response.setStatus(HTTPStatus.METHOD_NOT_ALLOWED);
         }
 
         return response;
