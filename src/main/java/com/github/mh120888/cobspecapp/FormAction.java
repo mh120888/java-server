@@ -4,7 +4,7 @@ import com.github.mh120888.httpmessage.HTTPRequest;
 import com.github.mh120888.httpmessage.HTTPResponse;
 import com.github.mh120888.httpmessage.HTTPStatus;
 
-public class PostableAction implements Action {
+public class FormAction implements Action {
     static String data = "default";
 
     public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {

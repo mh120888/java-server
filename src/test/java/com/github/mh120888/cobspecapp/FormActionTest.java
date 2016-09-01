@@ -12,12 +12,12 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class PostableActionTest {
-    PostableAction action;
+public class FormActionTest {
+    FormAction action;
 
     @Before
     public void setup() {
-        action = new PostableAction();
+        action = new FormAction();
     }
 
     @Test
@@ -43,7 +43,7 @@ public class PostableActionTest {
     }
     @Test
     public void POSTRequestsDoNotContainStaticVarDataInBody() {
-        PostableAction endpoint = new PostableAction();
+        FormAction endpoint = new FormAction();
         String fakeData = "some random data";
         endpoint.data = fakeData;
 

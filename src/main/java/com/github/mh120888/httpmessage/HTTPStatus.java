@@ -11,6 +11,7 @@ public final class HTTPStatus {
     public static final int NOT_FOUND = 404;
     public static final int METHOD_NOT_ALLOWED = 405;
     public static final int IM_A_TEAPOT = 418;
+    public static final int UNPROCESSABLE_ENTITY = 422;
 
     public static String getStatusText(int statusCode) {
         switch (statusCode) {
@@ -30,6 +31,8 @@ public final class HTTPStatus {
                 return "Method Not Allowed";
             case IM_A_TEAPOT:
                 return "I'm a teapot";
+            case UNPROCESSABLE_ENTITY:
+                return "Unprocessable Entity";
             default:
                 return "";
         }

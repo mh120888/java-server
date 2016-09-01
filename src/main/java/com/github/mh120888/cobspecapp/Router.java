@@ -17,14 +17,15 @@ public class Router {
 
     public Action route(HTTPRequest request) {
         Logger.addLog(request.getInitialRequestLine());
+        String method = request.getMethod();
         String path = request.getPath();
 
-        return getAction(path);
+        return getAction(method, path);
     }
 
-    private Action getAction(String path) {
+    private Action getAction(String method, String path) {
         path = path.equals("/") ? "/index" : path;
-        return ROUTES.getOrDefault(path, new NotFoundAction());
+        return ROUTES.getOrDefault(method + " " + path, new NotFoundAction());
     }
 
     private void configureAllRoutes() {
@@ -33,22 +34,42 @@ public class Router {
     }
 
     private void configureCustomRoutes() {
-        ROUTES.put("/coffee", new CoffeeAction());
-        ROUTES.put("/tea", new TeaAction());
-        ROUTES.put("/form", new PostableAction());
-        ROUTES.put("/logs", new LogsAction());
-        ROUTES.put("/parameters", new ParametersAction());
-        ROUTES.put("/method_options", new OptionsAction());
-        ROUTES.put("/method_options2", new OptionsAction());
-        ROUTES.put("/redirect", new RedirectAction());
+        ROUTES.put("GET /coffee", new CoffeeAction());
+
+        ROUTES.put("GET /tea", new TeaAction());
+
+        ROUTES.put("GET /form", new FormAction());
+        ROUTES.put("POST /form", new FormAction());
+        ROUTES.put("PUT /form", new FormAction());
+        ROUTES.put("DELETE /form", new FormAction());
+
+
+        ROUTES.put("GET /logs", new LogsAction());
+
+        ROUTES.put("GET /parameters", new ParametersAction());
+
+        ROUTES.put("GET /method_options", new OptionsAction());
+        ROUTES.put("PUT /method_options", new OptionsAction());
+        ROUTES.put("POST /method_options", new OptionsAction());
+        ROUTES.put("HEAD /method_options", new OptionsAction());
+        ROUTES.put("OPTIONS /method_options", new OptionsAction());
+
+        ROUTES.put("GET /method_options2", new OptionsAction());
+        ROUTES.put("OPTIONS /method_options2", new OptionsAction());
+
+        ROUTES.put("GET /redirect", new RedirectAction());
     }
 
     private void configureRoutesBasedOnPublicDirectory() {
         Action staticResourceAction = new StaticResourceAction(publicDirectory);
+        Action patchStaticResourceAction = new PatchStaticResourceAction(publicDirectory, fileIO);
+
         String[] fileNames = fileIO.getFilenames(publicDirectory);
         for (String fileName : fileNames){
-            ROUTES.put("/" + fileName, staticResourceAction);
+            ROUTES.put("GET /" + fileName, staticResourceAction);
+            ROUTES.put("PATCH /" + fileName, patchStaticResourceAction);
         }
-        ROUTES.put("/index", staticResourceAction);
+        ROUTES.put("GET /index", staticResourceAction);
+        ROUTES.put("HEAD /index", staticResourceAction);
     }
 }

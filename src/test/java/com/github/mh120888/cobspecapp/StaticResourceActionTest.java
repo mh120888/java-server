@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class StaticResourceActionTest {
@@ -81,7 +80,7 @@ public class StaticResourceActionTest {
         MockHTTPRequest request = new MockHTTPRequest();
         request.setMethod("GET");
         request.setPathWithParams("/fake-image.png");
-        request.addHeader("Range", "bytes=0-4");
+        request.addHeader(HTTPHeaders.RANGE, "bytes=0-4");
 
         HTTPResponse response = action.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
 
@@ -94,51 +93,5 @@ public class StaticResourceActionTest {
         int[] range = {0, 5};
 
         Assert.assertEquals("All of", new String(action.getCorrectPortionOfFileContents(fullContents, range)));
-    }
-
-    @Test
-    public void patchRequestWithContentReturnsA204() {
-        StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
-        MockHTTPRequest request = new MockHTTPRequest();
-        request.setMethod("PATCH");
-        request.setPathWithParams("/partial_content.txt");
-        request.addHeader("If-Match", "somethingGoesHere");
-        request.setBody("some random content");
-        HTTPResponse response = new BasicHTTPMessageFactory().getNewResponse();
-
-        action.getResponse(request, response);
-
-        Assert.assertTrue(response.getFormattedResponse().contains(Integer.toString(HTTPStatus.NO_CONTENT)));
-    }
-
-    @Test
-    public void modifyResourceWillNotOverwriteContentsOfSpecifiedResourceWithoutIfMatchHeader() throws IOException {
-        StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
-        String path = publicDirectory + "/does-not-matter.txt";
-        MockHTTPRequest request = new MockHTTPRequest();
-        request.setMethod("PATCH");
-        request.setPathWithParams("/does-not-matter.txt");
-        request.setBody("some random content");
-
-        action.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
-
-        String fileContentsAfterPatchRequest = new String(action.fileIO.getAllBytesFromFile(path));
-        Assert.assertEquals("default content", fileContentsAfterPatchRequest);
-    }
-
-    @Test
-    public void modifyResourceWillOverwriteContentsOfSpecifiedResource() throws IOException {
-        StaticResourceAction action = new StaticResourceAction(publicDirectory, new MockFileIO("default content"));
-        String path = publicDirectory + "/does-not-matter.txt";
-        MockHTTPRequest request = new MockHTTPRequest();
-        request.setMethod("PATCH");
-        request.setPathWithParams("/does-not-matter.txt");
-        request.setBody("some random content");
-        request.addHeader(HTTPHeaders.IF_MATCH, "somethingGoesHere");
-
-        action.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
-
-        String fileContentsAfterPatchRequest = new String(action.fileIO.getAllBytesFromFile(path));
-        Assert.assertEquals("some random content", fileContentsAfterPatchRequest);
     }
 }

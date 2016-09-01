@@ -28,9 +28,6 @@ public class StaticResourceAction implements Action {
         if (isPartialContentRequest()) {
             response.setStatus(HTTPStatus.PARTIAL_CONTENT);
             setBodyAndHeadersForPartialContentRequest(response);
-        } else if (isValidPatchRequest()) {
-            response.setStatus(HTTPStatus.NO_CONTENT);
-            overwriteFile();
         } else if (isAnyOtherValidRequest()) {
             response.setStatus(HTTPStatus.OK);
             response.setBody(getBody());
@@ -52,16 +49,8 @@ public class StaticResourceAction implements Action {
         return request.containsHeader(HTTPHeaders.RANGE);
     }
 
-    private boolean isValidPatchRequest() {
-        return request.getMethod().equals("PATCH") && !request.getBody().isEmpty() && request.containsHeader(HTTPHeaders.IF_MATCH);
-    }
-
     private boolean isAnyOtherValidRequest() {
         return isAcceptableMethodWithoutParams(request.getMethod()) || isAcceptableMethodWithParams(request.getMethod());
-    }
-
-    private void overwriteFile() {
-        fileIO.overwriteFile(publicDirectory + request.getPath(), request.getBody().getBytes());
     }
 
     private boolean isAcceptableMethodWithoutParams(String method) {

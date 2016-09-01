@@ -5,6 +5,7 @@ import com.github.mh120888.cobspecapp.FileIO;
 public class MockFileIO implements FileIO {
     byte[] fileContents;
     boolean isDirectory = false;
+    String[] fileNames = new String[0];
 
     public MockFileIO() {}
 
@@ -20,7 +21,13 @@ public class MockFileIO implements FileIO {
         fileContents = newFileContents;
     }
 
-    public String[] getFilenames(String directory) { return new String[0]; }
+    public String[] getFilenames(String directory) {
+       return fileNames;
+    }
+
+    public void setFileNames(String[] fileNames) {
+      this.fileNames = fileNames;
+    }
 
     public boolean isDirectory(String directory) { return isDirectory; }
 

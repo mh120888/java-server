@@ -4,7 +4,6 @@ import com.github.mh120888.basichttpmessage.BasicHTTPRequest;
 import com.github.mh120888.httpmessage.HTTPRequest;
 import com.github.mh120888.mocks.MockFileIO;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,20 +13,35 @@ import static org.junit.Assert.assertTrue;
 public class RouterTest {
     static String publicDirectory = "something fake";
     static HTTPRequest request;
-    static FileIO fileIO = new MockFileIO();
+    static MockFileIO fileIO = new MockFileIO();
 
     @Before
     public void setUp() throws Exception {
         Logger.clearLog();
+        fileIO.setFileNames(new String[0]);
         request = new BasicHTTPRequest();
     }
 
     @Test
     public void routeReturnsStaticResourceActionForAStaticResource() {
-        request.setRequestLine("GET / HTTP/1.1");
+        String[] fileNamesInPublicDirectory = { "fakefile" };
+        fileIO.setFileNames(fileNamesInPublicDirectory);
+        request.setRequestLine("GET /fakefile HTTP/1.1");
+
         Action action = new Router(publicDirectory, fileIO).route(request);
 
         assertTrue(action instanceof StaticResourceAction);
+    }
+
+    @Test
+    public void routeReturnsPatchStaticResourceActionForAPatchRequestForStaticResource() {
+        String[] fileNamesInPublicDirectory = { "fakefile" };
+        fileIO.setFileNames(fileNamesInPublicDirectory);
+        request.setRequestLine("PATCH /fakefile HTTP/1.1");
+
+        Action action = new Router(publicDirectory, fileIO).route(request);
+
+        assertTrue(action instanceof PatchStaticResourceAction);
     }
 
     @Test
@@ -59,7 +73,7 @@ public class RouterTest {
         request.setRequestLine("POST /form HTTP/1.1");
         Action action = new Router(publicDirectory, fileIO).route(request);
 
-        assertTrue(action instanceof PostableAction);
+        assertTrue(action instanceof FormAction);
     }
 
     @Test
