@@ -8,6 +8,7 @@ public class Router {
     private final String publicDirectory;
     private FileIO fileIO;
     private final static LinkedHashMap<MethodRoute, Action> ROUTES = new LinkedHashMap<>();
+    private MethodNotAllowedAction methodNotAllowedAction = new MethodNotAllowedAction();
 
     public Router(String publicDirectory, FileIO fileIO) {
         this.publicDirectory = publicDirectory;
@@ -34,30 +35,30 @@ public class Router {
     }
 
     private void configureCustomRoutes() {
-        ROUTES.put(new MethodRoute("GET", "/coffee"), new CoffeeAction());
-        ROUTES.put(new MethodRoute("", "/coffee"), new MethodNotAllowedAction());
+        addRoute("GET", "/coffee", new CoffeeAction());
+        disallowUndeclaredMethodsFor("/coffee");
 
-        ROUTES.put(new MethodRoute("GET", "/tea"), new TeaAction());
+        addRoute("GET", "/tea", new TeaAction());
 
-        ROUTES.put(new MethodRoute("GET", "/form"), new FormAction());
-        ROUTES.put(new MethodRoute("POST", "/form"), new FormAction());
-        ROUTES.put(new MethodRoute("PUT", "/form"), new FormAction());
-        ROUTES.put(new MethodRoute("DELETE", "/form"), new FormAction());
+        addRoute("GET", "/form", new FormAction());
+        addRoute("POST", "/form", new FormAction());
+        addRoute("PUT", "/form", new FormAction());
+        addRoute("DELETE", "/form", new FormAction());
 
-        ROUTES.put(new MethodRoute("GET", "/logs"), new LogsAction());
+        addRoute("GET", "/logs", new LogsAction());
 
-        ROUTES.put(new MethodRoute("GET", "/parameters"), new ParametersAction());
+        addRoute("GET", "/parameters", new ParametersAction());
 
-        ROUTES.put(new MethodRoute("GET", "/method_options"), new OptionsAction());
-        ROUTES.put(new MethodRoute("PUT", "/method_options"), new OptionsAction());
-        ROUTES.put(new MethodRoute("POST", "/method_options"), new OptionsAction());
-        ROUTES.put(new MethodRoute("HEAD", "/method_options"), new OptionsAction());
-        ROUTES.put(new MethodRoute("OPTIONS", "/method_options"), new OptionsAction());
+        addRoute("GET", "/method_options", new OptionsAction());
+        addRoute("PUT", "/method_options", new OptionsAction());
+        addRoute("POST", "/method_options", new OptionsAction());
+        addRoute("HEAD", "/method_options", new OptionsAction());
+        addRoute("OPTIONS", "/method_options", new OptionsAction());
 
-        ROUTES.put(new MethodRoute("GET", "/method_options2"), new OptionsAction());
-        ROUTES.put(new MethodRoute("OPTIONS", "/method_options2"), new OptionsAction());
+        addRoute("GET", "/method_options2", new OptionsAction());
+        addRoute("OPTIONS", "/method_options2", new OptionsAction());
 
-        ROUTES.put(new MethodRoute("GET", "/redirect"), new RedirectAction());
+        addRoute("GET", "/redirect", new RedirectAction());
     }
 
     private void configureRoutesBasedOnPublicDirectory() {
@@ -66,13 +67,21 @@ public class Router {
         Action patchStaticResourceAction = new PatchStaticResourceAction(publicDirectory, fileIO);
 
         String[] fileNames = fileIO.getFilenames(publicDirectory);
-        for (String fileName : fileNames){
-            ROUTES.put(new MethodRoute("GET", "/" + fileName), getStaticResourceAction);
-            ROUTES.put(new MethodRoute("HEAD", "/" + fileName), headStaticResourceAction);
-            ROUTES.put(new MethodRoute("PATCH", "/" + fileName), patchStaticResourceAction);
-            ROUTES.put(new MethodRoute("",  "/" + fileName), new MethodNotAllowedAction());
+        for (String fileName : fileNames) {
+            addRoute("GET", "/" + fileName, getStaticResourceAction);
+            addRoute("HEAD", "/" + fileName, headStaticResourceAction);
+            addRoute("PATCH", "/" + fileName, patchStaticResourceAction);
+            disallowUndeclaredMethodsFor("/" + fileName);
         }
-        ROUTES.put(new MethodRoute("GET", "/index"), getStaticResourceAction);
-        ROUTES.put(new MethodRoute("HEAD", "/index"), headStaticResourceAction);
+        addRoute("GET", "/index", getStaticResourceAction);
+        addRoute("HEAD", "/index", headStaticResourceAction);
+    }
+
+    private void addRoute(String method, String path, Action action) {
+        ROUTES.put(new MethodRoute(method, path), action);
+    }
+
+    private void disallowUndeclaredMethodsFor(String path) {
+        ROUTES.put(new MethodRoute("", path), methodNotAllowedAction);
     }
 }
