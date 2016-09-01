@@ -23,14 +23,14 @@ public class RouterTest {
     }
 
     @Test
-    public void routeReturnsStaticResourceActionForAStaticResource() {
+    public void routeReturnsGetStaticResourceActionForGETAStaticResource() {
         String[] fileNamesInPublicDirectory = { "fakefile" };
         fileIO.setFileNames(fileNamesInPublicDirectory);
         request.setRequestLine("GET /fakefile HTTP/1.1");
 
         Action action = new Router(publicDirectory, fileIO).route(request);
 
-        assertTrue(action instanceof StaticResourceAction);
+        assertTrue(action instanceof GetStatusResourceAction);
     }
 
     @Test

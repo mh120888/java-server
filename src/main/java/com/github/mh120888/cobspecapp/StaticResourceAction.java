@@ -8,8 +8,8 @@ import com.github.mh120888.httpmessage.HTTPStatus;
 import java.util.Arrays;
 
 public class StaticResourceAction implements Action {
-    private static String publicDirectory;
-    private HTTPRequest request;
+    static String publicDirectory;
+    HTTPRequest request;
     FileIO fileIO;
 
     public StaticResourceAction(String filepath) {
@@ -25,10 +25,7 @@ public class StaticResourceAction implements Action {
     public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {
         this.request = request;
 
-        if (isPartialContentRequest()) {
-            response.setStatus(HTTPStatus.PARTIAL_CONTENT);
-            setBodyAndHeadersForPartialContentRequest(response);
-        } else if (isAnyOtherValidRequest()) {
+        if (isAnyOtherValidRequest()) {
             response.setStatus(HTTPStatus.OK);
             response.setBody(getBody());
         } else {
