@@ -7,13 +7,13 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class HeadStatusResourceActionTest {
+public class HeadStaticResourceActionTest {
     public static String publicDirectory = "/Users/matthewhiggins/Desktop/cob_spec/public";
-    StaticResourceAction action;
+    HeadStaticResourceAction action;
 
     @Before
     public void setUp() throws Exception {
-        action = new HeadStatusResourceAction(publicDirectory);
+        action = new HeadStaticResourceAction(publicDirectory);
     }
 
     @Test

@@ -35,6 +35,7 @@ public class Router {
 
     private void configureCustomRoutes() {
         ROUTES.put(new MethodRoute("GET", "/coffee"), new CoffeeAction());
+        ROUTES.put(new MethodRoute("", "/coffee"), new MethodNotAllowedAction());
 
         ROUTES.put(new MethodRoute("GET", "/tea"), new TeaAction());
 
@@ -60,10 +61,8 @@ public class Router {
     }
 
     private void configureRoutesBasedOnPublicDirectory() {
-        Action staticResourceAction = new StaticResourceAction(publicDirectory);
-        Action getStaticResourceAction = new GetStatusResourceAction(publicDirectory);
-        Action headStaticResourceAction = new HeadStatusResourceAction(publicDirectory);
-
+        Action getStaticResourceAction = new GetStaticResourceAction(publicDirectory);
+        Action headStaticResourceAction = new HeadStaticResourceAction(publicDirectory);
         Action patchStaticResourceAction = new PatchStaticResourceAction(publicDirectory, fileIO);
 
         String[] fileNames = fileIO.getFilenames(publicDirectory);
@@ -71,6 +70,7 @@ public class Router {
             ROUTES.put(new MethodRoute("GET", "/" + fileName), getStaticResourceAction);
             ROUTES.put(new MethodRoute("HEAD", "/" + fileName), headStaticResourceAction);
             ROUTES.put(new MethodRoute("PATCH", "/" + fileName), patchStaticResourceAction);
+            ROUTES.put(new MethodRoute("",  "/" + fileName), new MethodNotAllowedAction());
         }
         ROUTES.put(new MethodRoute("GET", "/index"), getStaticResourceAction);
         ROUTES.put(new MethodRoute("HEAD", "/index"), headStaticResourceAction);

@@ -44,4 +44,12 @@ public class MethodRouteTest {
 
         assertFalse(methodRouteA.hashCode() == methodRouteB.hashCode());
     }
+
+    @Test
+    public void objectWithBlankMethodIsEqualToObjectWithAnyMethodAndSamePath() {
+        MethodRoute methodRouteA = new MethodRoute("", "/path");
+        MethodRoute methodRouteB = new MethodRoute("GET", "/path");
+
+        assertFalse(methodRouteA.equals(methodRouteB));
+    }
 }

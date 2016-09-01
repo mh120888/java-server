@@ -12,7 +12,7 @@ public class MethodRoute {
     @Override
     public int hashCode() {
         int hash = 1;
-        hash += method.hashCode() + path.hashCode();
+        hash += path.hashCode();
         return hash;
     }
 
@@ -25,7 +25,7 @@ public class MethodRoute {
         if (getClass() != obj.getClass())
             return false;
         MethodRoute other = (MethodRoute) obj;
-        if (!method.equals(other.method))
+        if (!method.contains(other.method))
             return false;
         if (!path.equals(other.path))
             return false;

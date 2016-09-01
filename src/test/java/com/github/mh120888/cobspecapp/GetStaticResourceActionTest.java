@@ -13,13 +13,13 @@ import java.io.IOException;
 
 import static org.junit.Assert.*;
 
-public class GetStatusResourceActionTest {
+public class GetStaticResourceActionTest {
     public static String publicDirectory = "/Users/matthewhiggins/Desktop/cob_spec/public";
-    GetStatusResourceAction action;
+    GetStaticResourceAction action;
 
     @Before
     public void setUp() throws Exception {
-        action = new GetStatusResourceAction(publicDirectory);
+        action = new GetStaticResourceAction(publicDirectory);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class GetStatusResourceActionTest {
     public void getRequestForAnExistingFileReturnsTheContentsOfThatFile() throws IOException {
         MockFileIO fakeFileIO = new MockFileIO("Fake contents");
         fakeFileIO.respondToIsDirectoryWith(false);
-        GetStatusResourceAction action = new GetStatusResourceAction(publicDirectory, fakeFileIO);
+        GetStaticResourceAction action = new GetStaticResourceAction(publicDirectory, fakeFileIO);
         MockHTTPRequest request = new MockHTTPRequest();
         request.setMethod("GET");
         request.setPathWithParams("/fake-image.png");
@@ -54,7 +54,7 @@ public class GetStatusResourceActionTest {
     public void getRequestWithRangeHeadersReturnsA206Response() {
         MockFileIO fakeFileIO = new MockFileIO("Fake contents");
         fakeFileIO.respondToIsDirectoryWith(false);
-        GetStatusResourceAction action = new GetStatusResourceAction(publicDirectory, fakeFileIO);
+        GetStaticResourceAction action = new GetStaticResourceAction(publicDirectory, fakeFileIO);
         MockHTTPRequest request = new MockHTTPRequest();
         request.setMethod("GET");
         request.setPathWithParams("/fake-image.png");

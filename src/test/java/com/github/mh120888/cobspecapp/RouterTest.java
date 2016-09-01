@@ -29,7 +29,7 @@ public class RouterTest {
 
         Action action = new Router(publicDirectory, fileIO).route(request);
 
-        assertTrue(action instanceof GetStatusResourceAction);
+        assertTrue(action instanceof GetStaticResourceAction);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class RouterTest {
 
         Action action = new Router(publicDirectory, fileIO).route(request);
 
-        assertTrue(action instanceof HeadStatusResourceAction);
+        assertTrue(action instanceof HeadStaticResourceAction);
     }
 
     @Test
@@ -60,6 +60,14 @@ public class RouterTest {
         Action action = new Router(publicDirectory, fileIO).route(request);
 
         assertTrue(action instanceof CoffeeAction);
+    }
+
+    @Test
+    public void routeReturnsMethodNotAllowedForPOSTCoffee() {
+        request.setRequestLine("POST /coffee HTTP/1.1");
+        Action action = new Router(publicDirectory, fileIO).route(request);
+
+        assertTrue(action instanceof MethodNotAllowedAction);
     }
 
     @Test
