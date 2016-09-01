@@ -2,12 +2,12 @@ package com.github.mh120888.cobspecapp;
 
 import com.github.mh120888.httpmessage.HTTPRequest;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Router {
     private final String publicDirectory;
     private FileIO fileIO;
-    private final static HashMap<String, Action> ROUTES = new HashMap<>();
+    private final static LinkedHashMap<MethodRoute, Action> ROUTES = new LinkedHashMap<>();
 
     public Router(String publicDirectory, FileIO fileIO) {
         this.publicDirectory = publicDirectory;
@@ -25,7 +25,7 @@ public class Router {
 
     private Action getAction(String method, String path) {
         path = path.equals("/") ? "/index" : path;
-        return ROUTES.getOrDefault(method + " " + path, new NotFoundAction());
+        return ROUTES.getOrDefault(new MethodRoute(method, path), new NotFoundAction());
     }
 
     private void configureAllRoutes() {
@@ -34,42 +34,43 @@ public class Router {
     }
 
     private void configureCustomRoutes() {
-        ROUTES.put("GET /coffee", new CoffeeAction());
+        ROUTES.put(new MethodRoute("GET", "/coffee"), new CoffeeAction());
 
-        ROUTES.put("GET /tea", new TeaAction());
+        ROUTES.put(new MethodRoute("GET", "/tea"), new TeaAction());
 
-        ROUTES.put("GET /form", new FormAction());
-        ROUTES.put("POST /form", new FormAction());
-        ROUTES.put("PUT /form", new FormAction());
-        ROUTES.put("DELETE /form", new FormAction());
+        ROUTES.put(new MethodRoute("GET", "/form"), new FormAction());
+        ROUTES.put(new MethodRoute("POST", "/form"), new FormAction());
+        ROUTES.put(new MethodRoute("PUT", "/form"), new FormAction());
+        ROUTES.put(new MethodRoute("DELETE", "/form"), new FormAction());
 
+        ROUTES.put(new MethodRoute("GET", "/logs"), new LogsAction());
 
-        ROUTES.put("GET /logs", new LogsAction());
+        ROUTES.put(new MethodRoute("GET", "/parameters"), new ParametersAction());
 
-        ROUTES.put("GET /parameters", new ParametersAction());
+        ROUTES.put(new MethodRoute("GET", "/method_options"), new OptionsAction());
+        ROUTES.put(new MethodRoute("PUT", "/method_options"), new OptionsAction());
+        ROUTES.put(new MethodRoute("POST", "/method_options"), new OptionsAction());
+        ROUTES.put(new MethodRoute("HEAD", "/method_options"), new OptionsAction());
+        ROUTES.put(new MethodRoute("OPTIONS", "/method_options"), new OptionsAction());
 
-        ROUTES.put("GET /method_options", new OptionsAction());
-        ROUTES.put("PUT /method_options", new OptionsAction());
-        ROUTES.put("POST /method_options", new OptionsAction());
-        ROUTES.put("HEAD /method_options", new OptionsAction());
-        ROUTES.put("OPTIONS /method_options", new OptionsAction());
+        ROUTES.put(new MethodRoute("GET", "/method_options2"), new OptionsAction());
+        ROUTES.put(new MethodRoute("OPTIONS", "/method_options2"), new OptionsAction());
 
-        ROUTES.put("GET /method_options2", new OptionsAction());
-        ROUTES.put("OPTIONS /method_options2", new OptionsAction());
-
-        ROUTES.put("GET /redirect", new RedirectAction());
+        ROUTES.put(new MethodRoute("GET", "/redirect"), new RedirectAction());
     }
 
     private void configureRoutesBasedOnPublicDirectory() {
         Action staticResourceAction = new StaticResourceAction(publicDirectory);
+        Action getStaticResourceAction = new GetStatusResourceAction(publicDirectory);
+
         Action patchStaticResourceAction = new PatchStaticResourceAction(publicDirectory, fileIO);
 
         String[] fileNames = fileIO.getFilenames(publicDirectory);
         for (String fileName : fileNames){
-            ROUTES.put("GET /" + fileName, staticResourceAction);
-            ROUTES.put("PATCH /" + fileName, patchStaticResourceAction);
+            ROUTES.put(new MethodRoute("GET", "/" + fileName), getStaticResourceAction);
+            ROUTES.put(new MethodRoute("PATCH", "/" + fileName), patchStaticResourceAction);
         }
-        ROUTES.put("GET /index", staticResourceAction);
-        ROUTES.put("HEAD /index", staticResourceAction);
+        ROUTES.put(new MethodRoute("GET", "/index"), getStaticResourceAction);
+        ROUTES.put(new MethodRoute("HEAD", "/index"), staticResourceAction);
     }
 }
