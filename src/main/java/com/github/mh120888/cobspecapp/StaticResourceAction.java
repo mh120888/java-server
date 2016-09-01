@@ -1,6 +1,5 @@
 package com.github.mh120888.cobspecapp;
 
-import com.github.mh120888.httpmessage.HTTPHeaders;
 import com.github.mh120888.httpmessage.HTTPRequest;
 import com.github.mh120888.httpmessage.HTTPResponse;
 import com.github.mh120888.httpmessage.HTTPStatus;
@@ -35,25 +34,8 @@ public class StaticResourceAction implements Action {
         return response;
     }
 
-    private void setBodyAndHeadersForPartialContentRequest(HTTPResponse response) {
-        byte[] fullBodyContents = getBody();
-        int[] range = request.getHeaderParser().parseRangeHeader(request.getHeader(HTTPHeaders.RANGE), fullBodyContents);
-        response.addHeader(HTTPHeaders.CONTENT_RANGE, "bytes " + range[0] + "-" + range[1] + "/" + fullBodyContents.length);
-        response.setBody(getCorrectPortionOfFileContents(fullBodyContents, range));
-    }
-
-    private boolean isPartialContentRequest() {
-        return request.containsHeader(HTTPHeaders.RANGE);
-    }
-
     private boolean isAnyOtherValidRequest() {
-        return isAcceptableMethodWithoutParams(request.getMethod()) || isAcceptableMethodWithParams(request.getMethod());
-    }
-
-    private boolean isAcceptableMethodWithoutParams(String method) {
-        String[] acceptableMethodsWithoutParams = {"GET", "HEAD"};
-
-        return isAcceptableMethod(method, acceptableMethodsWithoutParams);
+        return isAcceptableMethodWithParams(request.getMethod());
     }
 
     private boolean isAcceptableMethodWithParams(String method) {
@@ -66,10 +48,8 @@ public class StaticResourceAction implements Action {
         return Arrays.asList(listOfMethods).contains(method);
     }
 
-    private byte[] getBody() {
-        if (!request.getMethod().equals("GET")) {
-            return new byte[0];
-        } else if (isPathADirectory()) {
+    byte[] getBody() {
+        if (isPathADirectory()) {
             return getBodyForDirectory();
         } else {
             return getBodyDefault();

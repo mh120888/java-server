@@ -18,12 +18,12 @@ public class StaticResourceActionTest {
         action = new StaticResourceAction(publicDirectory);
     }
 
-    @Test
-    public void getResponseReturns200ForHeadRequest() {
-        HTTPResponse response = ResponseGenerator.generateResponse("HEAD",  "/", action);
-
-        assertTrue(response.getFormattedResponse().contains(Integer.toString(HTTPStatus.OK)));
-    }
+//    @Test
+//    public void getResponseReturns200ForHeadRequest() {
+//        HTTPResponse response = ResponseGenerator.generateResponse("HEAD",  "/", action);
+//
+//        assertTrue(response.getFormattedResponse().contains(Integer.toString(HTTPStatus.OK)));
+//    }
 
     @Test
     public void getResponseReturns405ForInvalidMethods() {

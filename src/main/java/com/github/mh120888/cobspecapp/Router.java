@@ -62,15 +62,17 @@ public class Router {
     private void configureRoutesBasedOnPublicDirectory() {
         Action staticResourceAction = new StaticResourceAction(publicDirectory);
         Action getStaticResourceAction = new GetStatusResourceAction(publicDirectory);
+        Action headStaticResourceAction = new HeadStatusResourceAction(publicDirectory);
 
         Action patchStaticResourceAction = new PatchStaticResourceAction(publicDirectory, fileIO);
 
         String[] fileNames = fileIO.getFilenames(publicDirectory);
         for (String fileName : fileNames){
             ROUTES.put(new MethodRoute("GET", "/" + fileName), getStaticResourceAction);
+            ROUTES.put(new MethodRoute("HEAD", "/" + fileName), headStaticResourceAction);
             ROUTES.put(new MethodRoute("PATCH", "/" + fileName), patchStaticResourceAction);
         }
         ROUTES.put(new MethodRoute("GET", "/index"), getStaticResourceAction);
-        ROUTES.put(new MethodRoute("HEAD", "/index"), staticResourceAction);
+        ROUTES.put(new MethodRoute("HEAD", "/index"), headStaticResourceAction);
     }
 }

@@ -32,23 +32,10 @@ public class GetStatusResourceAction extends StaticResourceAction {
         return request.containsHeader(HTTPHeaders.RANGE);
     }
 
-    private byte[] getBody() {
-        if (isPathADirectory()) {
-            return getBodyForDirectory();
-        } else {
-            return getBodyDefault();
-        }
-    }
-
     private void setBodyAndHeadersForPartialContentRequest(HTTPResponse response) {
         byte[] fullBodyContents = getBody();
         int[] range = request.getHeaderParser().parseRangeHeader(request.getHeader(HTTPHeaders.RANGE), fullBodyContents);
         response.addHeader(HTTPHeaders.CONTENT_RANGE, "bytes " + range[0] + "-" + range[1] + "/" + fullBodyContents.length);
         response.setBody(getCorrectPortionOfFileContents(fullBodyContents, range));
-    }
-
-    boolean isPathADirectory() {
-        String filePath = publicDirectory + request.getPath();
-        return fileIO.isDirectory(filePath);
     }
 }

@@ -7,7 +7,6 @@ import com.github.mh120888.mocks.MockFileIO;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class RouterTest {
@@ -31,6 +30,17 @@ public class RouterTest {
         Action action = new Router(publicDirectory, fileIO).route(request);
 
         assertTrue(action instanceof GetStatusResourceAction);
+    }
+
+    @Test
+    public void routeReturnsHeadStaticResourceActionForHEADRequestForAStaticResource() {
+        String[] fileNamesInPublicDirectory = { "fakefile" };
+        fileIO.setFileNames(fileNamesInPublicDirectory);
+        request.setRequestLine("HEAD /fakefile HTTP/1.1");
+
+        Action action = new Router(publicDirectory, fileIO).route(request);
+
+        assertTrue(action instanceof HeadStatusResourceAction);
     }
 
     @Test
