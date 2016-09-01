@@ -36,26 +36,26 @@ public class OptionsActionTest {
         Assert.assertTrue(response.getFormattedResponse().contains(HTTPHeaders.ALLOW));
     }
 
-    @Test
-    public void getResponseReturnsAResponseWithAllowHeaderWithMethodsAllowedForGivenPath() {
-        HTTPResponse response = ResponseGenerator.generateResponse("GET", "/method_options", action);
-
-        String[] acceptedMethods = {"GET", "HEAD", "POST", "OPTIONS", "PUT"};
-        for (String method : acceptedMethods) {
-            Assert.assertTrue(response.getFormattedResponse().contains(method));
-        }
-    }
-
-    @Test
-    public void getResponseReturnsAResponseWithAllowHeaderWithMethodsAllowedForADifferentPath() {
-        HTTPResponse response = ResponseGenerator.generateResponse("GET", "/method_options2", action);
-
-        String[] acceptedMethods = {"GET", "OPTIONS"};
-
-        for (String method : acceptedMethods) {
-            Assert.assertTrue(response.getFormattedResponse().contains(method));
-        }
-    }
+//    @Test
+//    public void getResponseReturnsAResponseWithAllowHeaderWithMethodsAllowedForGivenPath() {
+//        HTTPResponse response = ResponseGenerator.generateResponse("GET", "/method_options", action);
+//
+//        String[] acceptedMethods = {"GET", "HEAD", "POST", "OPTIONS", "PUT"};
+//        for (String method : acceptedMethods) {
+//            Assert.assertTrue(response.getFormattedResponse().contains(method));
+//        }
+//    }
+//
+//    @Test
+//    public void getResponseReturnsAResponseWithAllowHeaderWithMethodsAllowedForADifferentPath() {
+//        HTTPResponse response = ResponseGenerator.generateResponse("GET", "/method_options2", action);
+//
+//        String[] acceptedMethods = {"GET", "OPTIONS"};
+//
+//        for (String method : acceptedMethods) {
+//            Assert.assertTrue(response.getFormattedResponse().contains(method));
+//        }
+//    }
 
     @Test
     public void getResponseReturnsAResponseWithAllowHeaderWithoutMethodsNotAllowedForPath() {

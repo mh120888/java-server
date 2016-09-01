@@ -2,21 +2,25 @@ package com.github.mh120888.cobspecapp;
 
 import com.github.mh120888.httpmessage.HTTPRequest;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 public class Router {
-    private final String publicDirectory;
-    private FileIO fileIO;
+    private static String publicDirectory;
+    private static FileIO fileIO;
     private final static LinkedHashMap<MethodRoute, Action> ROUTES = new LinkedHashMap<>();
-    private MethodNotAllowedAction methodNotAllowedAction = new MethodNotAllowedAction();
+    private final static HashMap<String, List<String>> PERMITTED_METHODS_BY_ROUTE = new HashMap<>();
+    private static MethodNotAllowedAction methodNotAllowedAction = new MethodNotAllowedAction();
 
-    public Router(String publicDirectory, FileIO fileIO) {
-        this.publicDirectory = publicDirectory;
-        this.fileIO = fileIO;
+    public static void initRouter(String directory, FileIO io) {
+        publicDirectory = directory;
+        fileIO = io;
         configureAllRoutes();
     }
 
-    public Action route(HTTPRequest request) {
+    public static Action route(HTTPRequest request) {
         Logger.addLog(request.getInitialRequestLine());
         String method = request.getMethod();
         String path = request.getPath();
@@ -24,17 +28,22 @@ public class Router {
         return getAction(method, path);
     }
 
-    private Action getAction(String method, String path) {
+    public static List<String> getPermittedMethodsFor(String path) {
+        ArrayList<String> emptyList = new ArrayList<>();
+        return PERMITTED_METHODS_BY_ROUTE.getOrDefault(path, emptyList);
+    }
+
+    private static Action getAction(String method, String path) {
         path = path.equals("/") ? "/index" : path;
         return ROUTES.getOrDefault(new MethodRoute(method, path), new NotFoundAction());
     }
 
-    private void configureAllRoutes() {
+    private static void configureAllRoutes() {
         configureCustomRoutes();
         configureRoutesBasedOnPublicDirectory();
     }
 
-    private void configureCustomRoutes() {
+    private static void configureCustomRoutes() {
         addRoute("GET", "/coffee", new CoffeeAction());
         disallowUndeclaredMethodsFor("/coffee");
 
@@ -61,7 +70,7 @@ public class Router {
         addRoute("GET", "/redirect", new RedirectAction());
     }
 
-    private void configureRoutesBasedOnPublicDirectory() {
+    private static void configureRoutesBasedOnPublicDirectory() {
         Action getStaticResourceAction = new GetStaticResourceAction(publicDirectory);
         Action headStaticResourceAction = new HeadStaticResourceAction(publicDirectory);
         Action patchStaticResourceAction = new PatchStaticResourceAction(publicDirectory, fileIO);
@@ -77,11 +86,15 @@ public class Router {
         addRoute("HEAD", "/index", headStaticResourceAction);
     }
 
-    private void addRoute(String method, String path, Action action) {
+    private static void addRoute(String method, String path, Action action) {
         ROUTES.put(new MethodRoute(method, path), action);
+        List<String> list = PERMITTED_METHODS_BY_ROUTE.getOrDefault(path, new ArrayList<String>() {});
+        list.add(method);
+        PERMITTED_METHODS_BY_ROUTE.put(path, list);
     }
 
-    private void disallowUndeclaredMethodsFor(String path) {
+    private static void disallowUndeclaredMethodsFor(String path) {
         ROUTES.put(new MethodRoute("", path), methodNotAllowedAction);
     }
 }
+

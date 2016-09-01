@@ -17,39 +17,35 @@ public class RouterTest {
     @Before
     public void setUp() throws Exception {
         Logger.clearLog();
-        fileIO.setFileNames(new String[0]);
+        String[] fileNamesInPublicDirectory = { "fakefile" };
+        fileIO.setFileNames(fileNamesInPublicDirectory);
         request = new BasicHTTPRequest();
+        Router.initRouter(publicDirectory, fileIO);
     }
 
     @Test
     public void routeReturnsGetStaticResourceActionForGETAStaticResource() {
-        String[] fileNamesInPublicDirectory = { "fakefile" };
-        fileIO.setFileNames(fileNamesInPublicDirectory);
         request.setRequestLine("GET /fakefile HTTP/1.1");
 
-        Action action = new Router(publicDirectory, fileIO).route(request);
+        Action action = Router.route(request);
 
         assertTrue(action instanceof GetStaticResourceAction);
     }
 
     @Test
     public void routeReturnsHeadStaticResourceActionForHEADRequestForAStaticResource() {
-        String[] fileNamesInPublicDirectory = { "fakefile" };
-        fileIO.setFileNames(fileNamesInPublicDirectory);
         request.setRequestLine("HEAD /fakefile HTTP/1.1");
 
-        Action action = new Router(publicDirectory, fileIO).route(request);
+        Action action = Router.route(request);
 
         assertTrue(action instanceof HeadStaticResourceAction);
     }
 
     @Test
     public void routeReturnsPatchStaticResourceActionForAPatchRequestForStaticResource() {
-        String[] fileNamesInPublicDirectory = { "fakefile" };
-        fileIO.setFileNames(fileNamesInPublicDirectory);
         request.setRequestLine("PATCH /fakefile HTTP/1.1");
 
-        Action action = new Router(publicDirectory, fileIO).route(request);
+        Action action = Router.route(request);
 
         assertTrue(action instanceof PatchStaticResourceAction);
     }
@@ -57,7 +53,7 @@ public class RouterTest {
     @Test
     public void routeReturnsCoffeeActionWhenAppropriate() {
         request.setRequestLine("GET /coffee HTTP/1.1");
-        Action action = new Router(publicDirectory, fileIO).route(request);
+        Action action = Router.route(request);
 
         assertTrue(action instanceof CoffeeAction);
     }
@@ -65,7 +61,7 @@ public class RouterTest {
     @Test
     public void routeReturnsMethodNotAllowedForPOSTCoffee() {
         request.setRequestLine("POST /coffee HTTP/1.1");
-        Action action = new Router(publicDirectory, fileIO).route(request);
+        Action action = Router.route(request);
 
         assertTrue(action instanceof MethodNotAllowedAction);
     }
@@ -73,7 +69,7 @@ public class RouterTest {
     @Test
     public void routeReturnsTeaActionWhenAppropriate() {
         request.setRequestLine("GET /tea HTTP/1.1");
-        Action action = new Router(publicDirectory, fileIO).route(request);
+        Action action = Router.route(request);
 
         assertTrue(action instanceof TeaAction);
     }
@@ -81,7 +77,7 @@ public class RouterTest {
     @Test
     public void routeReturnsNotFoundActionWhenPathIsNotRecognized() {
         request.setRequestLine("GET /foobarssss HTTP/1.1");
-        Action action = new Router(publicDirectory, fileIO).route(request);
+        Action action = Router.route(request);
 
         assertTrue(action instanceof NotFoundAction);
     }
@@ -89,7 +85,7 @@ public class RouterTest {
     @Test
     public void routeReturnsPostableActionWhenAppropriate() {
         request.setRequestLine("POST /form HTTP/1.1");
-        Action action = new Router(publicDirectory, fileIO).route(request);
+        Action action = Router.route(request);
 
         assertTrue(action instanceof FormAction);
     }
@@ -97,7 +93,7 @@ public class RouterTest {
     @Test
     public void routeReturnsLogsActionWhenAppropriatePathIsRequested() {
         request.setRequestLine("GET /logs HTTP/1.1");
-        Action action = new Router(publicDirectory, fileIO).route(request);
+        Action action = Router.route(request);
 
         assertTrue(action instanceof LogsAction);
     }
@@ -106,7 +102,7 @@ public class RouterTest {
     public void allRequestsAreLoggedAfterBeingRoutes() {
         String requestLine = "GET /logs HTTP/1.1";
         request.setRequestLine(requestLine);
-        new Router(publicDirectory, fileIO).route(request);
+        Router.route(request);
 
         assertTrue(Logger.getLog().contains(requestLine));
     }
@@ -114,7 +110,7 @@ public class RouterTest {
     @Test
     public void requestToParametersReturnsParametersAction() {
         request.setRequestLine("GET /parameters HTTP/1.1");
-        Action action = new Router(publicDirectory, fileIO).route(request);
+        Action action = Router.route(request);
 
         assertTrue(action instanceof ParametersAction);
     }
@@ -122,7 +118,7 @@ public class RouterTest {
     @Test
     public void routeReturnsOptionsActionWhenAppropriate() {
         request.setRequestLine("GET /method_options HTTP/1.1");
-        Action action = new Router(publicDirectory, fileIO).route(request);
+        Action action = Router.route(request);
 
         assertTrue(action instanceof OptionsAction);
     }
@@ -130,7 +126,7 @@ public class RouterTest {
     @Test
     public void routeReturnsRedirectResourceHandlerWhenAppropriate() {
         request.setRequestLine("GET /redirect HTTP/1.1");
-        Action action = new Router(publicDirectory, fileIO).route(request);
+        Action action = Router.route(request);
 
         assertTrue(action instanceof RedirectAction);
     }
