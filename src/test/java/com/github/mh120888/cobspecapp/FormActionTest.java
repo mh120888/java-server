@@ -36,7 +36,7 @@ public class FormActionTest {
 
     @Test
     public void GETRequestsIncludeTheStaticVariableDataInBody() {
-        action.data = "some random data";
+        FormAction.data = "some random data";
 
         HTTPResponse response = ResponseGenerator.generateResponse("GET", "/form", action);
         Assert.assertTrue(response.getFormattedResponse().contains(Integer.toString(HTTPStatus.OK)));
@@ -45,7 +45,7 @@ public class FormActionTest {
     public void POSTRequestsDoNotContainStaticVarDataInBody() {
         FormAction endpoint = new FormAction();
         String fakeData = "some random data";
-        endpoint.data = fakeData;
+        FormAction.data = fakeData;
 
         HTTPResponse response = ResponseGenerator.generateResponse("POST", "/form", action);
 
@@ -61,6 +61,6 @@ public class FormActionTest {
 
         action.getResponse(request, new BasicHTTPMessageFactory().getNewResponse());
 
-        assertEquals("random stuff here", action.data);
+        assertEquals("random stuff here", FormAction.data);
     }
 }

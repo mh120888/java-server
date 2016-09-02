@@ -8,7 +8,7 @@ public class MockPrintStream extends PrintStream {
 
     public MockPrintStream(OutputStream out) throws Exception {
         super(out);
-    };
+    }
 
     public void println(String message) {
         lastMessage = message;

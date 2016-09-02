@@ -27,8 +27,6 @@ public class MethodRoute {
         MethodRoute other = (MethodRoute) obj;
         if (!method.contains(other.method))
             return false;
-        if (!path.equals(other.path))
-            return false;
-        return true;
+        return path.equals(other.path);
     }
 }

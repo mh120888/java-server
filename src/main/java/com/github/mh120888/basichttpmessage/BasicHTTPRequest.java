@@ -25,7 +25,7 @@ public class BasicHTTPRequest implements HTTPRequest {
         pathWithParams = requestParser.getPath();
         version = requestParser.getVersion();
         params = requestParser.getParams(pathWithParams);
-    };
+    }
 
     public void setHeaders(String headerInput) {
         headers = requestParser.getHeaders(headerInput);

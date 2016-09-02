@@ -14,7 +14,7 @@ public class RealFileIO implements FileIO {
     public byte[] getAllBytesFromFile(String path) {
         byte[] result = new byte[0];
         try {
-            result = Files.readAllBytes(Paths.get(path));;
+            result = Files.readAllBytes(Paths.get(path));
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
