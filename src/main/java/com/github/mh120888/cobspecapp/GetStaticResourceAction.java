@@ -8,9 +8,9 @@ import com.github.mh120888.httpmessage.HTTPStatus;
 import java.util.Arrays;
 
 public class GetStaticResourceAction implements Action {
-    static String publicDirectory;
-    HTTPRequest request;
-    FileIO fileIO;
+    private static String publicDirectory;
+    private HTTPRequest request;
+    private FileIO fileIO;
 
     public GetStaticResourceAction(String filepath) {
         publicDirectory = filepath;
@@ -25,12 +25,17 @@ public class GetStaticResourceAction implements Action {
     public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {
         this.request = request;
 
+        byte[] fullBodyContents = getBody();
+
         if (isPartialContentRequest()) {
+            int[] range = request.getHeaderParser().parseRangeHeader(request.getHeader(HTTPHeaders.RANGE), fullBodyContents);
+
             response.setStatus(HTTPStatus.PARTIAL_CONTENT);
-            setBodyAndHeadersForPartialContentRequest(response);
+            response.setBody(getCorrectPortionOfFileContents(fullBodyContents, range));
+            response.addHeader(HTTPHeaders.CONTENT_RANGE, getRangeHeaderValue(fullBodyContents));
         } else {
             response.setStatus(HTTPStatus.OK);
-            response.setBody(getBody());
+            response.setBody(fullBodyContents);
         }
 
         return response;
@@ -40,31 +45,33 @@ public class GetStaticResourceAction implements Action {
         return request.containsHeader(HTTPHeaders.RANGE);
     }
 
-    private void setBodyAndHeadersForPartialContentRequest(HTTPResponse response) {
-        byte[] fullBodyContents = getBody();
+    private String getRangeHeaderValue(byte[] fullBodyContents) {
         int[] range = request.getHeaderParser().parseRangeHeader(request.getHeader(HTTPHeaders.RANGE), fullBodyContents);
-        response.addHeader(HTTPHeaders.CONTENT_RANGE, "bytes " + range[0] + "-" + range[1] + "/" + fullBodyContents.length);
-        response.setBody(getCorrectPortionOfFileContents(fullBodyContents, range));
+        return "bytes " + range[0] + "-" + range[1] + "/" + fullBodyContents.length;
     }
 
     private byte[] getBody() {
         if (isPathADirectory()) {
             return getBodyForDirectory();
         } else {
-            return getBodyDefault();
+            return getBodyForFile();
         }
     }
 
     private byte[] getBodyForDirectory() {
         String body = "";
-        String[] filenames = fileIO.getFilenames(publicDirectory);
-        for (String fileName : filenames) {
-            body += ("<a href=\"/" + fileName + "\">" + fileName + "</a>\n");
+        String[] allFileNames = fileIO.getFilenames(publicDirectory);
+        for (String fileName : allFileNames) {
+            body += renderHTMLLinkForFile(fileName);
         }
         return body.getBytes();
     }
 
-    private byte[] getBodyDefault() {
+    private String renderHTMLLinkForFile(String fileName) {
+       return "<a href=\"/" + fileName + "\">" + fileName + "</a>\n";
+    }
+
+    private byte[] getBodyForFile() {
         String filePath = publicDirectory + request.getPath();
         return fileIO.getAllBytesFromFile(filePath);
     }
