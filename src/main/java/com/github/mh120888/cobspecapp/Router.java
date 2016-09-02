@@ -10,8 +10,9 @@ import java.util.List;
 public class Router {
     private static String publicDirectory;
     private static FileIO fileIO;
-    private final static LinkedHashMap<MethodRoute, Action> ROUTES = new LinkedHashMap<>();
-    private final static HashMap<String, List<String>> PERMITTED_METHODS_BY_ROUTE = new HashMap<>();
+    private static LinkedHashMap<MethodRoute, Action> ROUTES = new LinkedHashMap<>();
+    private static HashMap<String, List<String>> ALLOWED_METHODS_BY_ROUTE = new HashMap<>();
+    private static NotFoundAction notFoundAction = new NotFoundAction();
     private static MethodNotAllowedAction methodNotAllowedAction = new MethodNotAllowedAction();
 
     public static void initRouter(String directory, FileIO io) {
@@ -22,20 +23,17 @@ public class Router {
 
     public static Action route(HTTPRequest request) {
         Logger.addLog(request.getInitialRequestLine());
-        String method = request.getMethod();
-        String path = request.getPath();
 
-        return getAction(method, path);
+        return getAction(request.getMethod(), request.getPath());
     }
 
-    public static List<String> getPermittedMethodsFor(String path) {
-        ArrayList<String> emptyList = new ArrayList<>();
-        return PERMITTED_METHODS_BY_ROUTE.getOrDefault(path, emptyList);
+    public static List<String> getAllowedMethodsFor(String path) {
+        return ALLOWED_METHODS_BY_ROUTE.getOrDefault(path, new ArrayList<>());
     }
 
     private static Action getAction(String method, String path) {
         path = path.equals("/") ? "/index" : path;
-        return ROUTES.getOrDefault(new MethodRoute(method, path), new NotFoundAction());
+        return ROUTES.getOrDefault(new MethodRoute(method, path), notFoundAction);
     }
 
     private static void configureAllRoutes() {
@@ -70,6 +68,17 @@ public class Router {
         addRoute("GET", "/redirect", new RedirectAction());
     }
 
+    private static void addRoute(String method, String path, Action action) {
+        ROUTES.put(new MethodRoute(method, path), action);
+        List<String> list = ALLOWED_METHODS_BY_ROUTE.getOrDefault(path, new ArrayList<String>() {});
+        list.add(method);
+        ALLOWED_METHODS_BY_ROUTE.put(path, list);
+    }
+
+    private static void disallowUndeclaredMethodsFor(String path) {
+        ROUTES.put(new MethodRoute("", path), methodNotAllowedAction);
+    }
+
     private static void configureRoutesBasedOnPublicDirectory() {
         Action getStaticResourceAction = new GetStaticResourceAction(publicDirectory);
         Action headStaticResourceAction = new HeadStaticResourceAction(publicDirectory);
@@ -84,17 +93,6 @@ public class Router {
         }
         addRoute("GET", "/index", getStaticResourceAction);
         addRoute("HEAD", "/index", headStaticResourceAction);
-    }
-
-    private static void addRoute(String method, String path, Action action) {
-        ROUTES.put(new MethodRoute(method, path), action);
-        List<String> list = PERMITTED_METHODS_BY_ROUTE.getOrDefault(path, new ArrayList<String>() {});
-        list.add(method);
-        PERMITTED_METHODS_BY_ROUTE.put(path, list);
-    }
-
-    private static void disallowUndeclaredMethodsFor(String path) {
-        ROUTES.put(new MethodRoute("", path), methodNotAllowedAction);
     }
 }
 

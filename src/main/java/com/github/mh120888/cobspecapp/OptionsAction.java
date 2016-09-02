@@ -23,7 +23,7 @@ public class OptionsAction implements Action {
     }
 
     private String[] acceptedMethods(String path) {
-        List<String> listOfMethods = Router.getPermittedMethodsFor(path);
+        List<String> listOfMethods = Router.getAllowedMethodsFor(path);
 
         String[] arrayOfMethods = new String[listOfMethods.size()];
         return listOfMethods.toArray(arrayOfMethods);
