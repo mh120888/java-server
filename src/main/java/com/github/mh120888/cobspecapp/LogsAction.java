@@ -6,6 +6,8 @@ import com.github.mh120888.httpmessage.HTTPRequest;
 import com.github.mh120888.httpmessage.HTTPResponse;
 import com.github.mh120888.httpmessage.HTTPStatus;
 
+import static com.github.mh120888.httpmessage.MessageFormatting.CRLF;
+
 public class LogsAction implements Application {
     private String correctCredentials = "admin:hunter2";
 
@@ -25,7 +27,7 @@ public class LogsAction implements Application {
 
     private void setAuthorizedResponse(HTTPResponse response) {
         response.setStatus(HTTPStatus.OK);
-        response.setBody(String.join(System.lineSeparator(), Logger.getLog()).getBytes());
+        response.setBody(String.join(CRLF, Logger.getLog()).getBytes());
     }
 
     private boolean isAuthorized(HTTPRequest request) {

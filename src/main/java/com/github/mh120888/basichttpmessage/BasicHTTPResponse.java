@@ -6,6 +6,8 @@ import com.github.mh120888.httpmessage.HTTPStatus;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.github.mh120888.httpmessage.MessageFormatting.CRLF;
+
 public class BasicHTTPResponse implements HTTPResponse {
     int status;
     String version = "";
@@ -41,8 +43,8 @@ public class BasicHTTPResponse implements HTTPResponse {
 
     public String getStatusLineAndHeaders() {
         String result = "";
-        result += version + " " + status + " " + getStatusText() + System.lineSeparator();
-        result += getFormattedHeaders() + System.lineSeparator();
+        result += version + " " + status + " " + getStatusText() + CRLF;
+        result += getFormattedHeaders() + CRLF;
 
         return result;
     }
@@ -50,7 +52,7 @@ public class BasicHTTPResponse implements HTTPResponse {
     String getFormattedHeaders() {
         String result = "";
         for (Map.Entry<String, String> header : headers.entrySet()) {
-            result += header.getKey() + ": " + header.getValue() + System.lineSeparator();
+            result += header.getKey() + ": " + header.getValue() + CRLF;
         }
         return result;
     }

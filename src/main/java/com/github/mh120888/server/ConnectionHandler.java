@@ -1,15 +1,17 @@
 package com.github.mh120888.server;
 
-import com.github.mh120888.httpmessage.HTTPRequest;
-import com.github.mh120888.httpmessage.HTTPMessageFactory;
-import com.github.mh120888.httpmessage.HTTPResponse;
 import com.github.mh120888.app.Application;
+import com.github.mh120888.httpmessage.HTTPMessageFactory;
+import com.github.mh120888.httpmessage.HTTPRequest;
+import com.github.mh120888.httpmessage.HTTPResponse;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
+
+import static com.github.mh120888.httpmessage.MessageFormatting.CRLF;
 
 public class ConnectionHandler implements Runnable {
 
@@ -60,7 +62,7 @@ public class ConnectionHandler implements Runnable {
         String input = "";
         String currentLine = br.readLine();
         while (currentLine != null && !currentLine.trim().isEmpty()) {
-            input += currentLine.trim() + System.lineSeparator();
+            input += currentLine.trim() + CRLF;
             currentLine = br.readLine();
         }
         return input;

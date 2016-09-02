@@ -7,19 +7,20 @@ import java.io.*;
 import java.security.Permission;
 import java.util.HashMap;
 
+import static com.github.mh120888.httpmessage.MessageFormatting.CRLF;
 import static org.junit.Assert.assertEquals;
 
 public class MyServerTest {
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
     private SecurityManager securityManager;
-    private final int DEFAULTPORT = 3000;
-    private final String DEFAULTDIRECTORY = "/default/";
+    private final int DEFAULT_PORT = 3000;
+    private final String DEFAULT_DIRECTORY = "/default/";
 
     @org.junit.Before
     public void setUp() throws Exception {
-        MyServer.myPort = DEFAULTPORT;
-        MyServer.publicDirectory = DEFAULTDIRECTORY;
+        MyServer.myPort = DEFAULT_PORT;
+        MyServer.publicDirectory = DEFAULT_DIRECTORY;
 
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
@@ -55,7 +56,7 @@ public class MyServerTest {
 
         int port = MyServer.getPortNumber(options);
 
-        Assert.assertEquals(DEFAULTPORT, port);
+        Assert.assertEquals(DEFAULT_PORT, port);
     }
 
     @Test
@@ -75,7 +76,7 @@ public class MyServerTest {
 
         int port = MyServer.getPortNumber(options);
 
-        Assert.assertEquals(DEFAULTPORT, port);
+        Assert.assertEquals(DEFAULT_PORT, port);
     }
 
     @Test
@@ -111,8 +112,8 @@ public class MyServerTest {
         } catch (SecurityException e) {
 
         } finally {
-            assertEquals(DEFAULTDIRECTORY, MyServer.publicDirectory);
-            assertEquals(DEFAULTPORT, MyServer.myPort);
+            assertEquals(DEFAULT_DIRECTORY, MyServer.publicDirectory);
+            assertEquals(DEFAULT_PORT, MyServer.myPort);
         }
     }
 
@@ -130,7 +131,7 @@ public class MyServerTest {
     public void printRunningMessageDisplaysThatTheServerIsRunningOnTheCorrectPort() {
         MyServer.printRunningMessage();
 
-        assertEquals("Server running on port " + MyServer.myPort + System.lineSeparator(), outContent.toString());
+        assertEquals("Server running on port " + MyServer.myPort + CRLF, outContent.toString());
     }
 
 }

@@ -7,6 +7,8 @@ import com.github.mh120888.httpmessage.HTTPStatus;
 
 import java.util.Map;
 
+import static com.github.mh120888.httpmessage.MessageFormatting.CRLF;
+
 public class ParametersAction implements Application {
     private HTTPRequest request;
 
@@ -40,7 +42,7 @@ public class ParametersAction implements Application {
     private String formatParametersForBody(Map<String, String> parameters) {
         String body = "";
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
-            body += entry.getKey() + " = " + entry.getValue() + System.lineSeparator();
+            body += entry.getKey() + " = " + entry.getValue() + CRLF;
         }
         return body;
     }

@@ -69,7 +69,7 @@ public class GetStaticResourceAction implements Application {
     }
 
     private String renderHTMLLinkForFile(String fileName) {
-       return "<a href=\"/" + fileName + "\">" + fileName + "</a>\n";
+        return "<a href=\"/" + fileName + "\">" + fileName + "</a>\n";
     }
 
     private byte[] getBodyForFile() {
@@ -87,3 +87,4 @@ public class GetStaticResourceAction implements Application {
         return fileIO.isDirectory(filePath);
     }
 }
+

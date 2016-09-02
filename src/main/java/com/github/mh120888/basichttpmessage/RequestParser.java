@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.github.mh120888.httpmessage.MessageFormatting.CRLF;
+
 public class RequestParser {
     private String request;
 
@@ -45,7 +47,7 @@ public class RequestParser {
 
     public HashMap getHeaders(String headerInput) {
         HashMap<String, String> headers = new HashMap<>();
-        String[] splitUpHeaders = headerInput.split(System.lineSeparator());
+        String[] splitUpHeaders = headerInput.split(CRLF);
         for (String headerPair : splitUpHeaders) {
             String[] separatePair = headerPair.split(":");
             String headerName = separatePair[0];

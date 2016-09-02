@@ -1,6 +1,5 @@
 package com.github.mh120888.server;
 
-import com.github.mh120888.app.Application;
 import com.github.mh120888.basichttpmessage.BasicHTTPMessageFactory;
 import com.github.mh120888.httpmessage.HTTPRequest;
 import com.github.mh120888.mocks.*;
@@ -15,6 +14,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import static com.github.mh120888.httpmessage.MessageFormatting.CRLF;
 
 public class ConnectionHandlerTest {
     ConnectionHandler connectionHandler;
@@ -36,7 +37,7 @@ public class ConnectionHandlerTest {
 
     @Test
     public void buildHttpRequestReturnsARequestObjectWithAProperRequestLine() throws IOException {
-        BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1\n"));
+        BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1"));
         HTTPRequest request = connectionHandler.buildHttpRequest(in);
 
         Assert.assertEquals("GET / HTTP/1.1", request.getInitialRequestLine());
@@ -44,7 +45,7 @@ public class ConnectionHandlerTest {
 
     @Test
     public void buildHttpRequestReturnsARequestObjectWithAnEmptyBodyWhenNoneIsProvided() throws IOException {
-        BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1\n"));
+        BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1"));
         HTTPRequest request = connectionHandler.buildHttpRequest(in);
 
         Assert.assertTrue(request.getBody().isEmpty());
@@ -52,7 +53,9 @@ public class ConnectionHandlerTest {
 
     @Test
     public void buildHttpRequestReturnsARequestObjectWithCorrectHeaders() throws IOException {
-        BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1\nTest header: 29393939\nAnother test: 40223840"));
+        BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1" + CRLF +
+                                                                "Test header: 29393939" + CRLF +
+                                                                "Another test: 40223840"));
         HTTPRequest request = connectionHandler.buildHttpRequest(in);
 
         Assert.assertTrue(request.containsHeader("Another test"));
@@ -61,9 +64,9 @@ public class ConnectionHandlerTest {
 
     @Test
     public void buildHttpRequestReturnsARequestObjectWithBody() throws IOException {
-        BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1\r\n" +
-                                                                "Content-Length: 12\n" +
-                                                                System.lineSeparator() +
+        BufferedReader in = new BufferedReader(new StringReader("GET / HTTP/1.1" + CRLF +
+                                                                "Content-Length: 12" + CRLF +
+                                                                CRLF +
                                                                 "body content"));
         HTTPRequest request = connectionHandler.buildHttpRequest(in);
 
@@ -100,22 +103,23 @@ public class ConnectionHandlerTest {
         BufferedReader in = new BufferedReader(new StringReader("Some string with whitespace at the end    "));
         String result = connectionHandler.readInHeaders(in);
 
-        Assert.assertEquals("Some string with whitespace at the end\n", result);
+        Assert.assertEquals("Some string with whitespace at the end" + CRLF, result);
     }
 
     @Test
     public void readInHeadersWorksProperlyForMultiLineInput() throws Exception {
-        BufferedReader in = new BufferedReader(new StringReader("Line one\nLine two   "));
+        BufferedReader in = new BufferedReader(new StringReader("Line one" + CRLF +
+                                                                "Line two   "));
         String result = connectionHandler.readInHeaders(in);
 
-        Assert.assertEquals("Line one\nLine two\n", result);
+        Assert.assertEquals("Line one" + CRLF + "Line two" + CRLF, result);
     }
 
     @Test
     public void generateOutputWritesToOutputStream() throws Exception {
         HTTPRequest request = new MockHTTPRequest();
         MockPrintStream out = new MockPrintStream(new MockOutputStream());
-        Application app = new MockApplication("Random response");
+        new MockApplication("Random response");
         connectionHandler.generateOutput(request, out);
 
         Assert.assertTrue(out.lastMessage.contains("Random response"));

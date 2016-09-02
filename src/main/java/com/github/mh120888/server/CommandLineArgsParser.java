@@ -2,9 +2,11 @@ package com.github.mh120888.server;
 
 import java.util.HashMap;
 
+import static com.github.mh120888.httpmessage.MessageFormatting.CRLF;
+
 public class CommandLineArgsParser {
-    private final static String usage = "Usage: java -jar javaserver-1.0-SNAPSHOT.jar [-pd]" + System.lineSeparator() +
-            "\t-p <port number> {80}" + System.lineSeparator() +
+    private final static String usage = "Usage: java -jar javaserver-1.0-SNAPSHOT.jar [-pd]" + CRLF +
+            "\t-p <port number> {80}" + CRLF +
             "\t-d <public directory> {.} (required)";
 
     public static HashMap<String, String> groupOptions(String[] args) {
