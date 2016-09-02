@@ -1,5 +1,6 @@
 package com.github.mh120888.cobspecapp;
 
+import com.github.mh120888.app.Application;
 import com.github.mh120888.httpmessage.HTTPHeaders;
 import com.github.mh120888.httpmessage.HTTPRequest;
 import com.github.mh120888.httpmessage.HTTPResponse;
@@ -7,7 +8,7 @@ import com.github.mh120888.httpmessage.HTTPStatus;
 
 import java.util.List;
 
-public class OptionsAction implements Action {
+public class OptionsAction implements Application {
     public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {
         response.setStatus(HTTPStatus.OK);
         response.addHeader(HTTPHeaders.ALLOW, buildHeaders(request.getPath()));

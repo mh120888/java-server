@@ -1,5 +1,6 @@
 package com.github.mh120888.cobspecapp;
 
+import com.github.mh120888.app.Application;
 import com.github.mh120888.basichttpmessage.BasicHTTPRequest;
 import com.github.mh120888.httpmessage.HTTPRequest;
 import com.github.mh120888.mocks.MockFileIO;
@@ -27,7 +28,7 @@ public class RouterTest {
     public void routeReturnsGetStaticResourceActionForGETAStaticResource() {
         request.setRequestLine("GET /fakefile HTTP/1.1");
 
-        Action action = Router.route(request);
+        Application action = Router.route(request);
 
         assertTrue(action instanceof GetStaticResourceAction);
     }
@@ -36,7 +37,7 @@ public class RouterTest {
     public void routeReturnsHeadStaticResourceActionForHEADRequestForAStaticResource() {
         request.setRequestLine("HEAD /fakefile HTTP/1.1");
 
-        Action action = Router.route(request);
+        Application action = Router.route(request);
 
         assertTrue(action instanceof HeadStaticResourceAction);
     }
@@ -45,7 +46,7 @@ public class RouterTest {
     public void routeReturnsPatchStaticResourceActionForAPatchRequestForStaticResource() {
         request.setRequestLine("PATCH /fakefile HTTP/1.1");
 
-        Action action = Router.route(request);
+        Application action = Router.route(request);
 
         assertTrue(action instanceof PatchStaticResourceAction);
     }
@@ -53,7 +54,7 @@ public class RouterTest {
     @Test
     public void routeReturnsCoffeeActionWhenAppropriate() {
         request.setRequestLine("GET /coffee HTTP/1.1");
-        Action action = Router.route(request);
+        Application action = Router.route(request);
 
         assertTrue(action instanceof CoffeeAction);
     }
@@ -61,7 +62,7 @@ public class RouterTest {
     @Test
     public void routeReturnsMethodNotAllowedForPOSTCoffee() {
         request.setRequestLine("POST /coffee HTTP/1.1");
-        Action action = Router.route(request);
+        Application action = Router.route(request);
 
         assertTrue(action instanceof MethodNotAllowedAction);
     }
@@ -69,7 +70,7 @@ public class RouterTest {
     @Test
     public void routeReturnsTeaActionWhenAppropriate() {
         request.setRequestLine("GET /tea HTTP/1.1");
-        Action action = Router.route(request);
+        Application action = Router.route(request);
 
         assertTrue(action instanceof TeaAction);
     }
@@ -77,7 +78,7 @@ public class RouterTest {
     @Test
     public void routeReturnsNotFoundActionWhenPathIsNotRecognized() {
         request.setRequestLine("GET /foobarssss HTTP/1.1");
-        Action action = Router.route(request);
+        Application action = Router.route(request);
 
         assertTrue(action instanceof NotFoundAction);
     }
@@ -85,7 +86,7 @@ public class RouterTest {
     @Test
     public void routeReturnsPostableActionWhenAppropriate() {
         request.setRequestLine("POST /form HTTP/1.1");
-        Action action = Router.route(request);
+        Application action = Router.route(request);
 
         assertTrue(action instanceof FormAction);
     }
@@ -93,7 +94,7 @@ public class RouterTest {
     @Test
     public void routeReturnsLogsActionWhenAppropriatePathIsRequested() {
         request.setRequestLine("GET /logs HTTP/1.1");
-        Action action = Router.route(request);
+        Application action = Router.route(request);
 
         assertTrue(action instanceof LogsAction);
     }
@@ -110,7 +111,7 @@ public class RouterTest {
     @Test
     public void requestToParametersReturnsParametersAction() {
         request.setRequestLine("GET /parameters HTTP/1.1");
-        Action action = Router.route(request);
+        Application action = Router.route(request);
 
         assertTrue(action instanceof ParametersAction);
     }
@@ -118,7 +119,7 @@ public class RouterTest {
     @Test
     public void routeReturnsOptionsActionWhenAppropriate() {
         request.setRequestLine("GET /method_options HTTP/1.1");
-        Action action = Router.route(request);
+        Application action = Router.route(request);
 
         assertTrue(action instanceof OptionsAction);
     }
@@ -126,7 +127,7 @@ public class RouterTest {
     @Test
     public void routeReturnsRedirectResourceHandlerWhenAppropriate() {
         request.setRequestLine("GET /redirect HTTP/1.1");
-        Action action = Router.route(request);
+        Application action = Router.route(request);
 
         assertTrue(action instanceof RedirectAction);
     }

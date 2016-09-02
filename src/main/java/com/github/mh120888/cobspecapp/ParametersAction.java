@@ -1,18 +1,17 @@
 package com.github.mh120888.cobspecapp;
 
+import com.github.mh120888.app.Application;
 import com.github.mh120888.httpmessage.HTTPRequest;
 import com.github.mh120888.httpmessage.HTTPResponse;
 import com.github.mh120888.httpmessage.HTTPStatus;
 
 import java.util.Map;
 
-public class ParametersAction implements Action {
+public class ParametersAction implements Application {
     private HTTPRequest request;
-    private HTTPResponse response;
 
     public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {
         this.request = request;
-        this.response = response;
 
         response.setStatus(getStatus());
         response.setBody(getBody());

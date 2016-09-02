@@ -14,7 +14,7 @@ public class CobSpecApp implements Application {
     public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {
         response.setHTTPVersion(request.getVersion());
         Router.initRouter(publicDirectory, new RealFileIO());
-        Action action = Router.route(request);
+        Application action = Router.route(request);
         return action.getResponse(request, response);
     }
 }

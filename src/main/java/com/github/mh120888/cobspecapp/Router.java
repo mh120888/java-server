@@ -1,5 +1,6 @@
 package com.github.mh120888.cobspecapp;
 
+import com.github.mh120888.app.Application;
 import com.github.mh120888.httpmessage.HTTPRequest;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
 public class Router {
     private static String publicDirectory;
     private static FileIO fileIO;
-    private static LinkedHashMap<MethodRoute, Action> ROUTES = new LinkedHashMap<>();
+    private static LinkedHashMap<MethodRoute, Application> ROUTES = new LinkedHashMap<>();
     private static HashMap<String, List<String>> ALLOWED_METHODS_BY_ROUTE = new HashMap<>();
     private static NotFoundAction notFoundAction = new NotFoundAction();
     private static MethodNotAllowedAction methodNotAllowedAction = new MethodNotAllowedAction();
@@ -21,7 +22,7 @@ public class Router {
         configureAllRoutes();
     }
 
-    public static Action route(HTTPRequest request) {
+    public static Application route(HTTPRequest request) {
         Logger.addLog(request.getInitialRequestLine());
 
         return getAction(request.getMethod(), request.getPath());
@@ -31,7 +32,7 @@ public class Router {
         return ALLOWED_METHODS_BY_ROUTE.getOrDefault(path, new ArrayList<>());
     }
 
-    private static Action getAction(String method, String path) {
+    private static Application getAction(String method, String path) {
         path = path.equals("/") ? "/index" : path;
         return ROUTES.getOrDefault(new MethodRoute(method, path), notFoundAction);
     }
@@ -68,7 +69,7 @@ public class Router {
         addRoute("GET", "/redirect", new RedirectAction());
     }
 
-    private static void addRoute(String method, String path, Action action) {
+    private static void addRoute(String method, String path, Application action) {
         ROUTES.put(new MethodRoute(method, path), action);
         List<String> list = ALLOWED_METHODS_BY_ROUTE.getOrDefault(path, new ArrayList<String>() {});
         list.add(method);
@@ -80,9 +81,9 @@ public class Router {
     }
 
     private static void configureRoutesBasedOnPublicDirectory() {
-        Action getStaticResourceAction = new GetStaticResourceAction(publicDirectory);
-        Action headStaticResourceAction = new HeadStaticResourceAction(publicDirectory);
-        Action patchStaticResourceAction = new PatchStaticResourceAction(publicDirectory, fileIO);
+        Application getStaticResourceAction = new GetStaticResourceAction(publicDirectory);
+        Application headStaticResourceAction = new HeadStaticResourceAction(publicDirectory);
+        Application patchStaticResourceAction = new PatchStaticResourceAction(publicDirectory, fileIO);
 
         String[] fileNames = fileIO.getFilenames(publicDirectory);
         for (String fileName : fileNames) {
