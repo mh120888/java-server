@@ -5,17 +5,9 @@ import com.github.mh120888.httpmessage.HTTPRequest;
 import com.github.mh120888.httpmessage.HTTPResponse;
 import com.github.mh120888.httpmessage.HTTPStatus;
 
-import java.util.HashMap;
+import java.util.List;
 
 public class OptionsAction implements Action {
-
-    private final static String[] defaultMethods = new String[0];
-    private final static HashMap<String, String[]> permittedMethods = new HashMap<>();
-    static {
-        permittedMethods.put("/method_options", new String[] {"GET","HEAD","POST","OPTIONS","PUT"});
-        permittedMethods.put("/method_options2", new String[] {"GET","OPTIONS"});
-    }
-
     public HTTPResponse getResponse(HTTPRequest request, HTTPResponse response) {
         response.setStatus(HTTPStatus.OK);
         response.addHeader(HTTPHeaders.ALLOW, buildHeaders(request.getPath()));
@@ -25,11 +17,15 @@ public class OptionsAction implements Action {
 
     private String buildHeaders(String path) {
         String header = "";
-        header += String.join(",", acceptedMethods(path));
+        String[] methods = acceptedMethods(path);
+        header += String.join(",", methods);
         return header;
     }
 
     private String[] acceptedMethods(String path) {
-        return permittedMethods.getOrDefault(path, defaultMethods);
+        List<String> listOfMethods = Router.getAllowedMethodsFor(path);
+
+        String[] arrayOfMethods = new String[listOfMethods.size()];
+        return listOfMethods.toArray(arrayOfMethods);
     }
 }
